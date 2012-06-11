@@ -1,0 +1,332 @@
+" VUNDLE
+set nocompatible               " be iMproved
+filetype on                   " required!
+filetype off                   " required!
+set encoding=utf-8
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" let Vundle manage Vundle
+" required! 
+Bundle 'gmarik/vundle'
+
+" My Bundles here:
+"
+" original repos on github
+Bundle 'tpope/vim-fugitive'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+Bundle 'scrooloose/nerdtree'
+Bundle 'majutsushi/tagbar'
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'Raimondi/delimitMate'
+" Bundle 'msanders/snipmate.vim'
+Bundle "SirVer/ultisnips"
+Bundle 'tpope/vim-repeat'
+Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-abolish'
+Bundle 'tpope/vim-unimpaired'
+Bundle 'tpope/vim-commentary'
+Bundle 'nathanaelkane/vim-indent-guides'
+Bundle 'plasticboy/vim-markdown'
+" Bundle 'tsaleh/vim-supertab'
+Bundle 'docunext/closetag.vim'
+Bundle 'sjl/gundo.vim'
+" Bundle 'jceb/vim-orgmode'
+Bundle 'hsitz/VimOrganizer'
+Bundle 'jeffkreeftmeijer/vim-numbertoggle'
+Bundle 'godlygeek/tabular'
+" Bundle 'ivanov/vim-ipython'
+Bundle 'orftz/sbd.vim'
+Bundle 'kien/ctrlp.vim'
+Bundle 'Lokaltog/vim-powerline'
+Bundle 'nvie/vim-flake8'
+Bundle 'skammer/vim-css-color'
+Bundle 'hail2u/vim-css3-syntax'
+Bundle 'groenewege/vim-less'
+
+" vim-scripts repos
+Bundle 'L9'
+" Bundle 'FuzzyFinder'
+Bundle 'Better-CSS-Syntax-for-Vim'
+Bundle 'css_color.vim'
+Bundle 'python.vim'
+Bundle 'AutoComplPop'
+Bundle 'VOoM'
+Bundle 'po.vim--gray'
+Bundle 'Python-Syntax-Folding'
+" Bundle 'Conque-Shell'
+
+" non github repos
+" Bundle 'git://git.wincent.com/command-t.git'
+
+filetype plugin indent on     " required! 
+
+" FUZZYFINDER MAPPINGS
+map <leader>zf :FufFile<cr>
+map <leader>zb :FufBuffer<cr>
+
+" VIM-INDENT-GUIDES
+" let g:indent_guides_auto_colors = 1
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=black   ctermbg=3
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=darkgrey ctermbg=4 
+let g:indent_guides_auto_colors = 1
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+let g:indent_guides_enable_on_vim_startup = 1
+
+" Allow backgrounding buffers without writing them, and remember marks/undo
+" for backgrounded buffers
+set hidden
+
+" Remember more commands and search history
+set history=1000
+
+" Make tab completion for files/buffers act like bash
+set wildmenu
+
+" Make searches case-sensitive only if they contain upper-case characters
+set ignorecase
+set smartcase
+
+" Keep more context when scrolling off the end of a buffer
+set scrolloff=3
+
+" Store temporary files in a central spot
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+
+if has("vms")
+  set nobackup		" do not keep a backup file, use versions instead
+else
+  set backup		" keep a backup file
+endif
+set ruler		" show the cursor position all the time
+set showcmd		" display incomplete commands
+
+" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
+" let &guioptions = substitute(&guioptions, "t", "", "g")
+
+" Don't use Ex mode, use Q for formatting
+map Q gq
+
+" This is an alternative that also works in block mode, but the deleted
+" text is lost and it only works for putting the current register.
+"vnoremap p "_dp
+
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch
+endif
+
+" GRB: hide the toolbar in GUI mode
+if has("gui_running")
+end
+
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+
+  " Enable file type detection.
+  " Use the default filetype settings, so that mail gets 'tw' set to 72,
+  " 'cindent' is on in C files, etc.
+  " Also load indent files, to automatically do language-dependent indenting.
+  filetype plugin indent on
+
+  " Put these in an autocmd group, so that we can delete them easily.
+  augroup vimrcEx
+  au!
+
+  " For all text files set 'textwidth' to 78 characters.
+  autocmd FileType text setlocal textwidth=78
+
+  " When editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid or when inside an event handler
+  " (happens when dropping a file on gvim).
+  autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
+
+  augroup END
+
+else
+
+  set autoindent		" always set autoindenting on
+
+endif " has("autocmd")
+
+" GRB: sane editing configuration"
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set autoindent
+" set smartindent
+set laststatus=2
+set showmatch
+set incsearch
+
+" wrap lines at 78 characters
+set textwidth=78
+
+" GRB: highlighting search"
+set hls
+
+if has("gui_running")
+  " GRB: set window size"
+  :set lines=100
+  :set columns=172
+
+  " GRB: highlight current line"
+  :set cursorline
+  " hide toolbar
+  :set go-=T
+  :set guifont=Monaco:h14
+endif
+
+" set colors
+:set t_Co=256 " 256 colors
+:set background=dark
+:color grb256
+
+" GRB: add pydoc command
+:command! -nargs=+ Pydoc :call ShowPydoc("<args>")
+function! ShowPydoc(module, ...)
+    let fPath = "/tmp/pyHelp_" . a:module . ".pydoc"
+    :execute ":!pydoc " . a:module . " > " . fPath
+    :execute ":sp ".fPath
+endfunction
+
+" GRB: Always source python.vim for Python files
+" au FileType python source ~/.vim/scripts/python.vim
+
+" GRB: Use custom python.vim syntax file
+au! Syntax python source ~/.vim/syntax/python.vim
+let python_highlight_all = 1
+let python_slow_sync = 1
+
+" GRB: use emacs-style tab completion when selecting files, etc
+set wildmode=longest,list
+
+" GRB: Put useful info in status line
+:set statusline=%<%f%=\ [%1*%M%*%n%R%H]\ %-19(%3l,%02c%03V%)%O'%02b'
+:hi User1 term=inverse,bold cterm=inverse,bold ctermfg=red
+
+" GRB: clear the search buffer when hitting return
+:nnoremap <CR> :nohlsearch<CR>/<BS>
+
+let mapleader=","
+
+" highlight current line
+set cursorline
+hi CursorLine cterm=NONE ctermbg=black
+
+set cmdheight=2
+
+" Don't show scroll bars in the GUI
+set guioptions-=L
+set guioptions-=r
+
+augroup myfiletypes
+  "clear old autocmds in group
+  autocmd!
+  "for ruby, autoindent with two spaces, always expand tabs
+  autocmd FileType ruby,haml,eruby,yaml set ai sw=2 sts=2 et
+  autocmd FileType python set sw=4 sts=4 et
+augroup END
+
+set switchbuf=useopen
+
+
+" Map ,e to open files in the same directory as the current file
+map <leader>e :e <C-R>=expand("%:h")<cr>/
+
+autocmd BufRead,BufNewFile *.feature set sw=4 sts=4 et
+
+set number
+set numberwidth=5
+
+
+" CSS highlighting for LESS ==================================================
+au BufRead,BufNewFile *.less setfiletype css
+
+" GUNDO ======================================================================
+nnoremap <leader>gu :GundoToggle<CR>
+
+" PEP8 =======================================================================
+let g:pep8_map='<leader>8'
+
+" CTRL+P =====================================================================
+" don't manage woring dir
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\.git$\|\.hg$\|\.svn$',
+  \ 'file': '\.exe$\|\.so$\|\.dll\|\.pyc\|\.jpg\|\.png\|\.gif\|\.pdf$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+let g:ctrlp_max_height = 20
+let g:ctrlp_map = '<leader>f'
+" open the buffer again, I don't care
+let g:ctrlp_switch_buffer = 0
+let g:ctrlp_reuse_window = '.*'
+
+" Powerline ==================================================================
+:let g:Powerline_symbols='unicode'
+
+" Sbd ========================================================================
+nnoremap <silent> <leader>bd    :Sbd<CR>
+nnoremap <silent> <leader>bD   :Sbdm<CR>
+
+" Flake8 ===================================================================== 
+autocmd FileType python nnoremap <buffer> <leader>8 :call Flake8()<CR>
+" run on save
+autocmd BufWritePost *.py call Flake8()
+" ignore errors
+" let g:flake8_ignore="E501,W293"
+
+" GENERAL ====================================================================
+command! W :w
+command! Q :w
+command! Wq :wq
+set background=dark
+set foldmethod=marker
+"vs
+nnoremap <leader>n :NERDTreeToggle<CR>
+
+" no expanding in html or javascript
+autocmd FileType html setlocal noexpandtab sw=2 ts=2 sts=2
+autocmd FileType djangohtml setlocal noexpandtab sw=2 ts=2 sts=2
+autocmd FileType javascript setlocal noexpandtab
+autocmd FileType python setlocal foldmethod=indent foldnestmax=2
+
+" map quickfix
+nnoremap <silent> <leader>cc :cc<cr>
+nnoremap <silent> <leader>cn :cn<cr>
+nnoremap <silent> <leader>cl :ccl<cr>
+" control+enter to indent new line
+imap <C-Return> <CR><CR><C-o>k<Tab>
+
+" map fugitive :Gdiff HEAD
+nnoremap <silent> <leader>gd :Gdiff HEAD<cr>
+
+" no double indents in python
+let g:pyindent_open_paren = '&sw'
+let g:pyindent_nested_paren = '&sw'
+let g:pyindent_continue = '&sw'
+
+" highlight over 80 cols
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%81v.\+/
+ 
+" open file in Marked (mac only)
+nnoremap <leader>md :silent !open -a Marked.app '%:p'<cr>
+
+" MAPS AND MAPS AND MAPS AND MAPS ============================================
+
