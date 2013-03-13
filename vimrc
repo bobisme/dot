@@ -19,7 +19,9 @@ Bundle 'Lokaltog/vim-easymotion'
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 Bundle 'scrooloose/nerdtree'
 Bundle 'majutsushi/tagbar'
-Bundle 'kchmck/vim-coffee-script'
+" not updated enough
+" Bundle 'kchmck/vim-coffee-script'
+Bundle 'phreax/vim-coffee-script'
 Bundle 'Raimondi/delimitMate'
 " Bundle 'msanders/snipmate.vim'
 Bundle "SirVer/ultisnips"
@@ -42,16 +44,23 @@ Bundle 'orftz/sbd.vim'
 Bundle 'kien/ctrlp.vim'
 Bundle 'Lokaltog/vim-powerline'
 Bundle 'nvie/vim-flake8'
-Bundle 'skammer/vim-css-color'
-Bundle 'hail2u/vim-css3-syntax'
+" Bundle 'skammer/vim-css-color'
+" Bundle 'hail2u/vim-css3-syntax'
 Bundle 'groenewege/vim-less'
+Bundle 'nanotech/jellybeans.vim'
+Bundle 'tudorprodan/html_annoyance.vim'
+Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
+Bundle 'chriskempson/base16-vim'
+Bundle 'me-vlad/python-syntax.vim'
+let python_highlight_indents = 0
+Bundle 'airblade/vim-gitgutter'
 
 " vim-scripts repos
 Bundle 'L9'
 " Bundle 'FuzzyFinder'
-Bundle 'Better-CSS-Syntax-for-Vim'
-Bundle 'css_color.vim'
-Bundle 'python.vim'
+" Bundle 'Better-CSS-Syntax-for-Vim'
+" Bundle 'css_color.vim'
+" Bundle 'python.vim'
 Bundle 'AutoComplPop'
 Bundle 'VOoM'
 Bundle 'po.vim--gray'
@@ -70,8 +79,8 @@ map <leader>zb :FufBuffer<cr>
 " VIM-INDENT-GUIDES
 " let g:indent_guides_auto_colors = 1
 let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=black   ctermbg=3
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=darkgrey ctermbg=4 
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#151515 guifg=#202020 ctermbg=3
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#000000 guifg=#151515 ctermbg=4
 let g:indent_guides_auto_colors = 1
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
@@ -102,7 +111,8 @@ set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set backspace=indent,eol,start
 
 if has("vms")
-  set nobackup		" do not keep a backup file, use versions instead
+  " do not keep a backup file, use versions instead
+  set nobackup
 else
   set backup		" keep a backup file
 endif
@@ -125,10 +135,6 @@ if &t_Co > 2 || has("gui_running")
   syntax on
   set hlsearch
 endif
-
-" GRB: hide the toolbar in GUI mode
-if has("gui_running")
-end
 
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
@@ -180,12 +186,11 @@ set textwidth=78
 set hls
 
 if has("gui_running")
-  " GRB: set window size"
   :set lines=100
-  :set columns=172
+  :set columns=173
 
-  " GRB: highlight current line"
-  :set cursorline
+  " highlight current line"
+  " :set cursorline
   " hide toolbar
   :set go-=T
   :set guifont=Monaco:h14
@@ -194,7 +199,21 @@ endif
 " set colors
 :set t_Co=256 " 256 colors
 :set background=dark
-:color grb256
+" :color grb256
+:color base16-8o8
+
+if has("gui_running")
+    " Use the same symbols as TextMate for tabstops and EOLs
+    " set listchars=tab:▸\ ,eol:¬
+    set listchars=tab:▸\ 
+    "Invisible character colors
+    " highlight NonText guifg=#4a4a59
+    " highlight SpecialKey guifg=#4a4a59
+    set list
+endif
+
+"let g:jellybeans_background_color = '0A0A0A'
+":color jellybeans
 
 " GRB: add pydoc command
 :command! -nargs=+ Pydoc :call ShowPydoc("<args>")
@@ -204,11 +223,8 @@ function! ShowPydoc(module, ...)
     :execute ":sp ".fPath
 endfunction
 
-" GRB: Always source python.vim for Python files
-" au FileType python source ~/.vim/scripts/python.vim
-
 " GRB: Use custom python.vim syntax file
-au! Syntax python source ~/.vim/syntax/python.vim
+" au! Syntax python source ~/.vim/syntax/python.vim
 let python_highlight_all = 1
 let python_slow_sync = 1
 
@@ -291,6 +307,18 @@ autocmd BufWritePost *.py call Flake8()
 " ignore errors
 " let g:flake8_ignore="E501,W293"
 
+" SparkUp ====================================================================
+augroup sparkup_types
+  " Remove ALL autocommands of the current group.
+  autocmd!
+  " Add sparkup to new filetypes
+  autocmd FileType mustache,php,htmldjango runtime! ftplugin/html/sparkup.vim
+augroup END
+
+" CoffeeLint ================================================================= 
+let coffee_lint_options = '-f ~/coffeelint.json'
+au BufWritePost *.coffee silent CoffeeLint!
+
 " GENERAL ====================================================================
 command! W :w
 command! Q :w
@@ -302,7 +330,7 @@ nnoremap <leader>n :NERDTreeToggle<CR>
 
 " no expanding in html or javascript
 autocmd FileType html setlocal noexpandtab sw=2 ts=2 sts=2
-autocmd FileType djangohtml setlocal noexpandtab sw=2 ts=2 sts=2
+autocmd FileType htmldjango setlocal noexpandtab sw=2 ts=2 sts=2
 autocmd FileType javascript setlocal noexpandtab
 autocmd FileType python setlocal foldmethod=indent foldnestmax=2
 
@@ -313,8 +341,11 @@ nnoremap <silent> <leader>cl :ccl<cr>
 " control+enter to indent new line
 imap <C-Return> <CR><CR><C-o>k<Tab>
 
-" map fugitive :Gdiff HEAD
+" map fugitive
 nnoremap <silent> <leader>gd :Gdiff HEAD<cr>
+nnoremap <silent> <leader>gs :Gstatus<cr>
+nnoremap <silent> <leader>gc :Gcommit<cr>
+nnoremap <silent> <leader>gx :wincmd h<cr>:q<cr>
 
 " no double indents in python
 let g:pyindent_open_paren = '&sw'
@@ -324,9 +355,22 @@ let g:pyindent_continue = '&sw'
 " highlight over 80 cols
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 match OverLength /\%81v.\+/
+
+" make quick fix span bottom
+autocmd FileType qf wincmd J
+" make fugitive status/commit span top
+autocmd FileType gitcommit wincmd K
  
 " open file in Marked (mac only)
 nnoremap <leader>md :silent !open -a Marked.app '%:p'<cr>
-
+" tagbar
+nnoremap <leader>t :TagbarToggle<cr>
 " MAPS AND MAPS AND MAPS AND MAPS ============================================
+" save
+nnoremap <leader>w :w<cr>
+nnoremap <leader>ls :set syntax=txt<cr>:set syntax=less<cr>
 
+" NUMBER TOGGLE IS <C-n>
+
+" make gitgutter not look stupid
+highlight clear signColumn
