@@ -15,3 +15,26 @@ endsnippet
 snippet url "Django url tag" !b
 {% url '$1' ${2:var1=val} as ${3:templ_var} %}
 endsnippet
+
+snippet i "Font Awesome icon"
+<i class="icon icon-$1"></i>
+endsnippet
+
+snippet html "Barebones HTML5 Boilerplate"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>${1:Page Title}</title>
+    <link rel="stylesheet" href="${2:css/style.css}">
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+$3
+
+</body>
+</html>
+endsnippet

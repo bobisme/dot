@@ -40,20 +40,23 @@ Bundle 'hsitz/VimOrganizer'
 Bundle 'jeffkreeftmeijer/vim-numbertoggle'
 Bundle 'godlygeek/tabular'
 " Bundle 'ivanov/vim-ipython'
-Bundle 'orftz/sbd.vim'
+Bundle 'ollummis/sbd.vim'
 Bundle 'kien/ctrlp.vim'
 Bundle 'Lokaltog/vim-powerline'
 Bundle 'nvie/vim-flake8'
 " Bundle 'skammer/vim-css-color'
 " Bundle 'hail2u/vim-css3-syntax'
 Bundle 'groenewege/vim-less'
-Bundle 'nanotech/jellybeans.vim'
+" Bundle 'nanotech/jellybeans.vim'
 Bundle 'tudorprodan/html_annoyance.vim'
 Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
 Bundle 'chriskempson/base16-vim'
 Bundle 'me-vlad/python-syntax.vim'
 let python_highlight_indents = 0
 Bundle 'airblade/vim-gitgutter'
+Bundle 'dhruvasagar/vim-markify'
+Bundle 'jnwhiteh/vim-golang'
+Bundle 'Shougo/unite.vim'
 
 " vim-scripts repos
 Bundle 'L9'
@@ -65,7 +68,9 @@ Bundle 'AutoComplPop'
 Bundle 'VOoM'
 Bundle 'po.vim--gray'
 Bundle 'Python-Syntax-Folding'
+Bundle 'loremipsum'
 " Bundle 'Conque-Shell'
+Bundle 'ack.vim'
 
 " non github repos
 " Bundle 'git://git.wincent.com/command-t.git'
@@ -135,6 +140,10 @@ if &t_Co > 2 || has("gui_running")
   syntax on
   set hlsearch
 endif
+
+" if has("gui_macvim")
+"     let macvim_hig_shift_movement = 1
+" endif
 
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
@@ -319,6 +328,9 @@ augroup END
 let coffee_lint_options = '-f ~/coffeelint.json'
 au BufWritePost *.coffee silent CoffeeLint!
 
+" Go Fmt =====================================================================
+au BufWritePre *.go silent Fmt
+
 " GENERAL ====================================================================
 command! W :w
 command! Q :w
@@ -331,8 +343,10 @@ nnoremap <leader>n :NERDTreeToggle<CR>
 " no expanding in html or javascript
 autocmd FileType html setlocal noexpandtab sw=2 ts=2 sts=2
 autocmd FileType htmldjango setlocal noexpandtab sw=2 ts=2 sts=2
-autocmd FileType javascript setlocal noexpandtab
+autocmd FileType javascript setlocal noexpandtab sw=2 ts=2 sts=2
 autocmd FileType python setlocal foldmethod=indent foldnestmax=2
+autocmd FileType go setlocal noexpandtab
+autocmd FileType coffee setlocal sw=2 ts=2 sts=2
 
 " map quickfix
 nnoremap <silent> <leader>cc :cc<cr>
