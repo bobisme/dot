@@ -42,7 +42,11 @@ Bundle 'godlygeek/tabular'
 " Bundle 'ivanov/vim-ipython'
 Bundle 'ollummis/sbd.vim'
 Bundle 'kien/ctrlp.vim'
-Bundle 'Lokaltog/vim-powerline'
+
+" Powerline ==================================================================
+" Bundle 'Lokaltog/vim-powerline'
+" :let g:Powerline_symbols='unicode'
+
 Bundle 'nvie/vim-flake8'
 " Bundle 'skammer/vim-css-color'
 " Bundle 'hail2u/vim-css3-syntax'
@@ -57,6 +61,10 @@ Bundle 'airblade/vim-gitgutter'
 Bundle 'dhruvasagar/vim-markify'
 Bundle 'jnwhiteh/vim-golang'
 Bundle 'Shougo/unite.vim'
+
+Bundle 'bling/vim-bufferline'
+Bundle 'bling/vim-airline'
+set laststatus=2
 
 " vim-scripts repos
 Bundle 'L9'
@@ -302,9 +310,6 @@ let g:ctrlp_map = '<leader>f'
 let g:ctrlp_switch_buffer = 0
 let g:ctrlp_reuse_window = '.*'
 
-" Powerline ==================================================================
-:let g:Powerline_symbols='unicode'
-
 " Sbd ========================================================================
 nnoremap <silent> <leader>bd    :Sbd<CR>
 nnoremap <silent> <leader>bD   :Sbdm<CR>
@@ -379,6 +384,12 @@ autocmd FileType gitcommit wincmd K
 nnoremap <leader>md :silent !open -a Marked.app '%:p'<cr>
 " tagbar
 nnoremap <leader>t :TagbarToggle<cr>
+" make gitgutter not look stupid
+highlight clear signColumn
+
+" make commentary use // for go files
+autocmd FileType go set commentstring=//\ %s
+
 " MAPS AND MAPS AND MAPS AND MAPS ============================================
 " save
 nnoremap <leader>w :w<cr>
@@ -393,3 +404,4 @@ nnoremap <leader>- :normal yypVr-<cr>
 
 " make gitgutter not look stupid
 highlight clear signColumn
+nnoremap <leader>mm :make<cr>
