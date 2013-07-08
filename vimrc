@@ -383,6 +383,11 @@ nnoremap <leader>t :TagbarToggle<cr>
 " save
 nnoremap <leader>w :w<cr>
 nnoremap <leader>ls :set syntax=txt<cr>:set syntax=less<cr>
+" b#
+nnoremap <leader>bb :b#<cr>
+" markdown headlines
+nnoremap <leader>= :normal yypVr=<cr>
+nnoremap <leader>- :normal yypVr-<cr>
 
 " NUMBER TOGGLE IS <C-n>
 
