@@ -24,7 +24,7 @@ Bundle 'majutsushi/tagbar'
 Bundle 'phreax/vim-coffee-script'
 Bundle 'Raimondi/delimitMate'
 " Bundle 'msanders/snipmate.vim'
-Bundle "SirVer/ultisnips"
+Bundle 'SirVer/ultisnips'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-abolish'
@@ -62,9 +62,12 @@ Bundle 'dhruvasagar/vim-markify'
 Bundle 'jnwhiteh/vim-golang'
 Bundle 'Shougo/unite.vim'
 
-Bundle 'bling/vim-bufferline'
+" Bundle 'bling/vim-bufferline'
 Bundle 'bling/vim-airline'
 set laststatus=2
+
+Bundle 'Valloric/YouCompleteMe'
+Bundle 'scrooloose/syntastic'
 
 " vim-scripts repos
 Bundle 'L9'
@@ -72,7 +75,7 @@ Bundle 'L9'
 " Bundle 'Better-CSS-Syntax-for-Vim'
 " Bundle 'css_color.vim'
 " Bundle 'python.vim'
-Bundle 'AutoComplPop'
+" Bundle 'AutoComplPop'
 Bundle 'VOoM'
 Bundle 'po.vim--gray'
 Bundle 'Python-Syntax-Folding'
@@ -389,6 +392,8 @@ highlight clear signColumn
 
 " make commentary use // for go files
 autocmd FileType go set commentstring=//\ %s
+autocmd FileType c set commentstring=//\ %s
+autocmd FileType c set formatprg=astyle\ -A2\ -s4\ -C\ -S\ -w\ -Y\ -p\ -W1\ -k1\ -j\ -c\ -xC79
 
 " MAPS AND MAPS AND MAPS AND MAPS ============================================
 " save
