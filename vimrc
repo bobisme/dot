@@ -155,9 +155,6 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
 endif
 
-" if has("gui_macvim")
-"     let macvim_hig_shift_movement = 1
-" endif
 
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
@@ -208,24 +205,15 @@ set textwidth=78
 " GRB: highlighting search"
 set hls
 
-if has("gui_running")
-  :set lines=100
-  :set columns=173
-
-  " highlight current line"
-  " :set cursorline
-  " hide toolbar
-  :set go-=T
-  :set guifont=Monaco:h14
-endif
-
 " set colors
-:set t_Co=256 " 256 colors
-:set background=dark
-" :color grb256
-:color base16-8o8
+set t_Co=256 " 256 colors
+set background=dark
+color grb256
 
 if has("gui_running")
+    set lines=100
+    set columns=173
+    color base16-8o8
     " Use the same symbols as TextMate for tabstops and EOLs
     " set listchars=tab:▸\ ,eol:¬
     set listchars=tab:▸\ 
@@ -233,6 +221,13 @@ if has("gui_running")
     " highlight NonText guifg=#4a4a59
     " highlight SpecialKey guifg=#4a4a59
     set list
+    set go-=T
+    if has("gui_gtk2")
+        set guifont=Inconsolata\ 12
+    elseif has("gui_macvim")
+        " let macvim_hig_shift_movement = 1
+        set guifont=Monaco:h14
+    endif
 endif
 
 "let g:jellybeans_background_color = '0A0A0A'
