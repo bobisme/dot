@@ -58,6 +58,9 @@ Bundle 'chriskempson/base16-vim'
 Bundle 'me-vlad/python-syntax.vim'
 let python_highlight_indents = 0
 Bundle 'airblade/vim-gitgutter'
+" make gitgutter not look stupid
+highlight clear signColumn
+
 Bundle 'dhruvasagar/vim-markify'
 Bundle 'jnwhiteh/vim-golang'
 Bundle 'Shougo/unite.vim'
@@ -280,11 +283,8 @@ augroup END
 
 set switchbuf=useopen
 
-
 " Map ,e to open files in the same directory as the current file
 map <leader>e :e <C-R>=expand("%:h")<cr>/
-
-autocmd BufRead,BufNewFile *.feature set sw=4 sts=4 et
 
 set number
 set numberwidth=5
@@ -292,12 +292,6 @@ set numberwidth=5
 
 " CSS highlighting for LESS ==================================================
 au BufRead,BufNewFile *.less setfiletype css
-
-" GUNDO ======================================================================
-nnoremap <leader>gu :GundoToggle<CR>
-
-" PEP8 =======================================================================
-let g:pep8_map='<leader>8'
 
 " CTRL+P =====================================================================
 " don't manage woring dir
@@ -312,10 +306,6 @@ let g:ctrlp_map = '<leader>f'
 " open the buffer again, I don't care
 let g:ctrlp_switch_buffer = 0
 let g:ctrlp_reuse_window = '.*'
-
-" Sbd ========================================================================
-nnoremap <silent> <leader>bd    :Sbd<CR>
-nnoremap <silent> <leader>bD   :Sbdm<CR>
 
 " Flake8 ===================================================================== 
 autocmd FileType python nnoremap <buffer> <leader>8 :call Flake8()<CR>
@@ -341,13 +331,12 @@ au BufWritePre *.go silent Fmt
 
 " GENERAL ====================================================================
 command! W :w
-command! Q :w
+command! Q :q
 command! Wq :wq
 set background=dark
 set foldmethod=marker
-"vs
-nnoremap <leader>n :NERDTreeToggle<CR>
 
+" FILETYPE AUTOCOMMANDS ====================================================== 
 " no expanding in html or javascript
 autocmd FileType html setlocal noexpandtab sw=2 ts=2 sts=2
 autocmd FileType htmldjango setlocal noexpandtab sw=2 ts=2 sts=2
@@ -355,19 +344,17 @@ autocmd FileType javascript setlocal noexpandtab sw=2 ts=2 sts=2
 autocmd FileType python setlocal foldmethod=indent foldnestmax=2
 autocmd FileType go setlocal noexpandtab
 autocmd FileType coffee setlocal sw=2 ts=2 sts=2
+" make commentary use // for go files
+autocmd FileType go set commentstring=//\ %s
+autocmd FileType c set commentstring=//\ %s
+autocmd FileType c set formatprg=astyle\ -A2\ -s4\ -C\ -S\ -w\ -Y\ -p\ -W1\ -k1\ -j\ -c\ -xC79
+" make quick fix span bottom
+autocmd FileType qf wincmd J
+" make fugitive status/commit span top
+autocmd FileType gitcommit wincmd K
 
-" map quickfix
-nnoremap <silent> <leader>cc :cc<cr>
-nnoremap <silent> <leader>cn :cn<cr>
-nnoremap <silent> <leader>cl :ccl<cr>
 " control+enter to indent new line
 imap <C-Return> <CR><CR><C-o>k<Tab>
-
-" map fugitive
-nnoremap <silent> <leader>gd :Gdiff HEAD<cr>
-nnoremap <silent> <leader>gs :Gstatus<cr>
-nnoremap <silent> <leader>gc :Gcommit<cr>
-nnoremap <silent> <leader>gx :wincmd h<cr>:q<cr>
 
 " no double indents in python
 let g:pyindent_open_paren = '&sw'
@@ -377,25 +364,27 @@ let g:pyindent_continue = '&sw'
 " highlight over 80 cols
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 match OverLength /\%81v.\+/
-
-" make quick fix span bottom
-autocmd FileType qf wincmd J
-" make fugitive status/commit span top
-autocmd FileType gitcommit wincmd K
  
+highlight clear signColumn
+
+" MAPS AND MAPS AND MAPS AND MAPS ============================================
+nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <leader>gu :GundoToggle<CR>
+nnoremap <silent> <leader>bd :Sbd<CR>
+nnoremap <silent> <leader>bD :Sbdm<CR>
+" map quickfix
+nnoremap <silent> <leader>cc :cc<cr>
+nnoremap <silent> <leader>cn :cn<cr>
+nnoremap <silent> <leader>cl :ccl<cr>
+" map fugitive
+nnoremap <silent> <leader>gd :Gdiff HEAD<cr>
+nnoremap <silent> <leader>gs :Gstatus<cr>
+nnoremap <silent> <leader>gc :Gcommit<cr>
+nnoremap <silent> <leader>gx :wincmd h<cr>:q<cr>
 " open file in Marked (mac only)
 nnoremap <leader>md :silent !open -a Marked.app '%:p'<cr>
 " tagbar
 nnoremap <leader>t :TagbarToggle<cr>
-" make gitgutter not look stupid
-highlight clear signColumn
-
-" make commentary use // for go files
-autocmd FileType go set commentstring=//\ %s
-autocmd FileType c set commentstring=//\ %s
-autocmd FileType c set formatprg=astyle\ -A2\ -s4\ -C\ -S\ -w\ -Y\ -p\ -W1\ -k1\ -j\ -c\ -xC79
-
-" MAPS AND MAPS AND MAPS AND MAPS ============================================
 " save
 nnoremap <leader>w :w<cr>
 nnoremap <leader>ls :set syntax=txt<cr>:set syntax=less<cr>
@@ -404,9 +393,6 @@ nnoremap <leader>bb :b#<cr>
 " markdown headlines
 nnoremap <leader>= :normal yypVr=<cr>
 nnoremap <leader>- :normal yypVr-<cr>
+" make
+nnoremap <silent> <leader>mm :make<cr>
 
-" NUMBER TOGGLE IS <C-n>
-
-" make gitgutter not look stupid
-highlight clear signColumn
-nnoremap <leader>mm :make<cr>
