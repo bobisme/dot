@@ -68,6 +68,7 @@ Bundle 'Shougo/unite.vim'
 " Bundle 'bling/vim-bufferline'
 Bundle 'bling/vim-airline'
 set laststatus=2
+let g:airline_powerline_fonts=1
 
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'scrooloose/syntastic'
@@ -226,7 +227,7 @@ if has("gui_running")
         set guifont=Inconsolata\ 12
     elseif has("gui_macvim")
         " let macvim_hig_shift_movement = 1
-        set guifont=Monaco:h14
+        set guifont=Monaco\ for\ Powerline:h14,Monaco:h14
     endif
 endif
 
