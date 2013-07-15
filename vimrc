@@ -26,7 +26,10 @@ Bundle 'Raimondi/delimitMate'
 " Bundle 'msanders/snipmate.vim'
 Bundle 'SirVer/ultisnips'
 Bundle 'tpope/vim-repeat'
+
+" surround
 Bundle 'tpope/vim-surround'
+
 Bundle 'tpope/vim-abolish'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'tpope/vim-commentary'
@@ -74,7 +77,7 @@ Bundle 'Valloric/YouCompleteMe'
 Bundle 'scrooloose/syntastic'
 
 " vim-scripts repos
-Bundle 'L9'
+" Bundle 'L9'
 " Bundle 'FuzzyFinder'
 " Bundle 'Better-CSS-Syntax-for-Vim'
 " Bundle 'css_color.vim'
@@ -86,7 +89,9 @@ Bundle 'Python-Syntax-Folding'
 Bundle 'loremipsum'
 " Bundle 'Conque-Shell'
 Bundle 'ack.vim'
-
+Bundle 'reinh/vim-makegreen'
+Bundle 'lambdalisue/nose.vim'
+Bundle 'sontek/rope-vim'
 " non github repos
 " Bundle 'git://git.wincent.com/command-t.git'
 
@@ -325,6 +330,10 @@ au BufWritePost *.coffee silent CoffeeLint!
 " Go Fmt =====================================================================
 au BufWritePre *.go silent Fmt
 
+" Bicycle Repair Man
+" http://bicyclerepair.sourceforge.net/
+" vim: http://bicyclerepair.sourceforge.net/bzr/bicyclerepair/ide-integration/bike.vim
+
 " GENERAL ====================================================================
 command! W :w
 command! Q :q
@@ -348,6 +357,14 @@ autocmd FileType c set formatprg=astyle\ -A2\ -s4\ -C\ -S\ -w\ -Y\ -p\ -W1\ -k1\
 autocmd FileType qf wincmd J
 " make fugitive status/commit span top
 autocmd FileType gitcommit wincmd K
+autocmd FileType htmldjango let b:surround_{char2nr("v")} = "{{\r}}"
+autocmd FileType htmldjango let b:surround_{char2nr("{")} = "{{\r}}"
+autocmd FileType htmldjango let b:surround_{char2nr("%")} = "{% \r %}"
+autocmd FileType htmldjango let b:surround_{char2nr("b")} = "{% block \1block name: \1 %}\r{% endblock \1\1 %}"
+autocmd FileType htmldjango let b:surround_{char2nr("i")} = "{% if \1condition: \1 %}\r{% endif %}"
+autocmd FileType htmldjango let b:surround_{char2nr("w")} = "{% with \1with: \1 %}\r{% endwith %}"
+autocmd FileType htmldjango let b:surround_{char2nr("f")} = "{% for \1for loop: \1 %}\r{% endfor %}"
+autocmd FileType htmldjango let b:surround_{char2nr("c")} = "{% comment %}\r{% endcomment %}"
 
 " control+enter to indent new line
 imap <C-Return> <CR><CR><C-o>k<Tab>
