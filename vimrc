@@ -229,7 +229,8 @@ if has("gui_running")
     set list
     set go-=T
     if has("gui_gtk2")
-        set guifont=Inconsolata\ 12
+        " set guifont=Inconsolata\ 12
+        set guifont=Monaco\ for\ Powerline\ 10
     elseif has("gui_macvim")
         " let macvim_hig_shift_movement = 1
         set guifont=Monaco\ for\ Powerline:h14,Monaco:h14
