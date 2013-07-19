@@ -25,6 +25,8 @@ Bundle 'phreax/vim-coffee-script'
 Bundle 'Raimondi/delimitMate'
 " Bundle 'msanders/snipmate.vim'
 Bundle 'SirVer/ultisnips'
+let g:UltiSnipsExpandTrigger="<c-j>"
+" let g:UltiSnipsListSnippets="<c-s-tab>"
 Bundle 'tpope/vim-repeat'
 
 " surround
@@ -74,6 +76,8 @@ set laststatus=2
 let g:airline_powerline_fonts=1
 
 Bundle 'Valloric/YouCompleteMe'
+" let g:ycm__key_list_previous_completion = ['<Up>']
+" let g:ycm__key_list_select_completion = ['<Enter>', '<Down>']
 Bundle 'scrooloose/syntastic'
 
 " vim-scripts repos
@@ -346,6 +350,8 @@ set foldmethod=marker
 autocmd FileType html setlocal noexpandtab sw=2 ts=2 sts=2
 autocmd FileType htmldjango setlocal noexpandtab sw=2 ts=2 sts=2
 autocmd FileType javascript setlocal noexpandtab sw=2 ts=2 sts=2
+autocmd FileType css setlocal noexpandtab sw=2 ts=2 sts=2
+autocmd FileType less setlocal noexpandtab sw=2 ts=2 sts=2
 autocmd FileType python setlocal foldmethod=indent foldnestmax=2
 autocmd FileType go setlocal noexpandtab
 autocmd FileType coffee setlocal sw=2 ts=2 sts=2
@@ -408,4 +414,6 @@ nnoremap <leader>= :normal yypVr=<cr>
 nnoremap <leader>- :normal yypVr-<cr>
 " make
 nnoremap <silent> <leader>mm :make<cr>
+nnoremap <silent> <leader>mg :MakeGreen %<cr>
+nnoremap <silent> <leader>mn :silent !osascript -e 'tell application "iTerm" to tell the first session of the second terminal to write text "./manage.py test --with-rapido %"'<cr>
 

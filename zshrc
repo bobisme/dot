@@ -58,7 +58,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 export GOROOT=/usr/local/go
 export PATH=$PATH:$GOROOT/bin
-export PATH=$PATH:$HOME/bin
+export PATH=$HOME/bin:$PATH
 
 # FUNCTIONS
 datauri () { echo "background-image: url(data:$1;base64,`base64 -i $2`);" }

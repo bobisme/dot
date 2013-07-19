@@ -21,3 +21,17 @@ endsnippet
 snippet utf8 "Insert UTF-8 coding string" !b
 # -*- coding: utf-8 -*-
 endsnippet
+
+snippet test "simple test case" !b
+def test_${1:expected_behaviour_or_condition}():
+	${2:assert False}
+endsnippet
+
+snippet ctest "simple test case in a class" !b
+def test_${1:expected_behaviour_or_condition}(self):
+	${2:assert False}
+endsnippet
+
+snippet dj_ "import django's ugettext" !b
+from django.utils.translation import ugettext${1:_lazy} as _
+endsnippet
