@@ -113,7 +113,8 @@ Bundle "jmcantrell/vim-virtualenv"
 Bundle "chrisbra/csv.vim"
 Bundle "justinmk/vim-sneak"
 
-filetype plugin indent on     " required! 
+call vundle#end()             " required
+filetype plugin indent on     " required
 
 " FUZZYFINDER MAPPINGS
 map <leader>zf :FufFile<cr>
