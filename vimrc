@@ -4,7 +4,7 @@ filetype on                   " required!
 filetype off                   " required!
 set encoding=utf-8
 
-set rtp+=~/.vim/bundle/Vundle/
+set rtp+=~/.vim/bundle/Vundle.vim/
 call vundle#begin()
 
 " let Vundle manage Vundle
