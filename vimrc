@@ -26,7 +26,9 @@ Bundle 'Raimondi/delimitMate'
 " Bundle 'msanders/snipmate.vim'
 Bundle 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsEditSplit="horizontal"
 " let g:UltiSnipsListSnippets="<c-s-tab>"
+Bundle 'honza/vim-snippets'
 Bundle 'tpope/vim-repeat'
 
 " surround
@@ -60,7 +62,7 @@ Bundle 'groenewege/vim-less'
 Bundle 'tudorprodan/html_annoyance.vim'
 Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
 Bundle 'chriskempson/base16-vim'
-Bundle 'me-vlad/python-syntax.vim'
+" Bundle 'me-vlad/python-syntax.vim'
 let python_highlight_indents = 0
 Bundle 'airblade/vim-gitgutter'
 " make gitgutter not look stupid
@@ -78,7 +80,9 @@ let g:airline_powerline_fonts=1
 Bundle 'Valloric/YouCompleteMe'
 " let g:ycm__key_list_previous_completion = ['<Up>']
 " let g:ycm__key_list_select_completion = ['<Enter>', '<Down>']
-Bundle 'scrooloose/syntastic'
+let g:ycm_autoclose_preview_window_after_completion=1
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+" Bundle 'scrooloose/syntastic'
 
 " vim-scripts repos
 " Bundle 'L9'
@@ -86,7 +90,7 @@ Bundle 'scrooloose/syntastic'
 " Bundle 'Better-CSS-Syntax-for-Vim'
 " Bundle 'css_color.vim'
 " Bundle 'python.vim'
-" Bundle 'AutoComplPop'
+Bundle 'AutoComplPop'
 Bundle 'VOoM'
 Bundle 'po.vim--gray'
 Bundle 'Python-Syntax-Folding'
@@ -95,9 +99,19 @@ Bundle 'loremipsum'
 Bundle 'ack.vim'
 Bundle 'reinh/vim-makegreen'
 Bundle 'lambdalisue/nose.vim'
-Bundle 'sontek/rope-vim'
+Bundle 'klen/rope-vim'
+Bundle 'dhruvasagar/vim-table-mode'
+Bundle 'othree/javascript-libraries-syntax.vim'
+Bundle 'pangloss/vim-javascript'
+Bundle 'fmoralesc/vim-pad'
+nnoremap <leader>p :OpenPad<cr>
+nnoremap <leader>lp :ListPads<cr>
 " non github repos
 " Bundle 'git://git.wincent.com/command-t.git'
+Bundle "nelstrom/vim-visual-star-search"
+Bundle "jmcantrell/vim-virtualenv"
+Bundle "chrisbra/csv.vim"
+Bundle "justinmk/vim-sneak"
 
 filetype plugin indent on     " required! 
 
@@ -223,7 +237,8 @@ color grb256
 if has("gui_running")
     set lines=100
     set columns=173
-    color base16-8o8
+    " color base16-8o8
+    color base16-monokai
     " Use the same symbols as TextMate for tabstops and EOLs
     " set listchars=tab:▸\ ,eol:¬
     set listchars=tab:▸\ 
@@ -253,7 +268,7 @@ function! ShowPydoc(module, ...)
 endfunction
 
 " GRB: Use custom python.vim syntax file
-" au! Syntax python source ~/.vim/syntax/python.vim
+au! Syntax python source ~/.vim/syntax/python.vim
 let python_highlight_all = 1
 let python_slow_sync = 1
 
@@ -325,7 +340,7 @@ augroup sparkup_types
   " Remove ALL autocommands of the current group.
   autocmd!
   " Add sparkup to new filetypes
-  autocmd FileType mustache,php,htmldjango runtime! ftplugin/html/sparkup.vim
+  autocmd FileType mustache,php runtime! ftplugin/html/sparkup.vim
 augroup END
 
 " CoffeeLint ================================================================= 
@@ -339,6 +354,18 @@ au BufWritePre *.go silent Fmt
 " http://bicyclerepair.sourceforge.net/
 " vim: http://bicyclerepair.sourceforge.net/bzr/bicyclerepair/ide-integration/bike.vim
 
+" Vim-pad ====================================================================
+let g:pad_dir = '~/dropbox/docs/vimpad'
+
+" Write Mode =================================================================
+function! WriteMode()
+    set columns:86
+    set spell
+endfunction
+
+" writing functions ==========================================================
+command! -nargs=1 NewTechBlog :e ~/Dropbox/docs/techblog/`date +\%F`-<args>.mkd
+
 " GENERAL ====================================================================
 command! W :w
 command! Q :q
@@ -347,18 +374,17 @@ set background=dark
 set foldmethod=marker
 
 " FILETYPE AUTOCOMMANDS ====================================================== 
-" no expanding in html or javascript
-autocmd FileType html setlocal noexpandtab sw=2 ts=2 sts=2
-autocmd FileType htmldjango setlocal noexpandtab sw=2 ts=2 sts=2
-autocmd FileType javascript setlocal noexpandtab sw=2 ts=2 sts=2
-autocmd FileType css setlocal noexpandtab sw=2 ts=2 sts=2
-autocmd FileType less setlocal noexpandtab sw=2 ts=2 sts=2
+autocmd FileType html setlocal sw=2 ts=2 sts=2
+autocmd FileType htmldjango setlocal sw=2 ts=2 sts=2
+autocmd FileType javascript setlocal sw=2 ts=2 sts=2
+autocmd FileType css setlocal sw=2 ts=2 sts=2
+autocmd FileType less setlocal sw=2 ts=2 sts=2
 autocmd FileType python setlocal foldmethod=indent foldnestmax=2
 autocmd FileType go setlocal noexpandtab
 autocmd FileType coffee setlocal sw=2 ts=2 sts=2
 " make commentary use // for go files
 autocmd FileType go set commentstring=//\ %s
-autocmd FileType c set commentstring=//\ %s
+" autocmd FileType c set commentstring=//\ %s
 autocmd FileType c set formatprg=astyle\ -A2\ -s4\ -C\ -S\ -w\ -Y\ -p\ -W1\ -k1\ -j\ -c\ -xC79
 " make quick fix span bottom
 autocmd FileType qf wincmd J
@@ -372,6 +398,10 @@ autocmd FileType htmldjango let b:surround_{char2nr("i")} = "{% if \1condition: 
 autocmd FileType htmldjango let b:surround_{char2nr("w")} = "{% with \1with: \1 %}\r{% endwith %}"
 autocmd FileType htmldjango let b:surround_{char2nr("f")} = "{% for \1for loop: \1 %}\r{% endfor %}"
 autocmd FileType htmldjango let b:surround_{char2nr("c")} = "{% comment %}\r{% endcomment %}"
+" autocmd FileType mkd set commentstring=<!--\ %s\ -->
+autocmd FileType mkd set commentstring=<!--\ %s\ -->
+autocmd FileType less let &efm='%E%t: %m in %f on line %l, column %c:%C%C%C'
+autocmd FileType less set makeprg=lessc\ --no-color\ -l\ %
 
 " control+enter to indent new line
 imap <C-Return> <CR><CR><C-o>k<Tab>
@@ -417,4 +447,7 @@ nnoremap <leader>- :normal yypVr-<cr>
 nnoremap <silent> <leader>mm :make<cr>
 nnoremap <silent> <leader>mg :MakeGreen %<cr>
 nnoremap <silent> <leader>mn :silent !osascript -e 'tell application "iTerm" to tell the first session of the second terminal to write text "./manage.py test --with-rapido %"'<cr>
-
+nnoremap <leader>v :vertical bo new<cr>
+" FFFFFFFUUUUUU
+vmap <s-up> k
+vmap <s-down> j

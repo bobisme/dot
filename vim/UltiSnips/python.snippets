@@ -24,14 +24,40 @@ endsnippet
 
 snippet test "simple test case" !b
 def test_${1:expected_behaviour_or_condition}():
-	${2:assert False}
+    ${2:assert False}
 endsnippet
 
 snippet ctest "simple test case in a class" !b
 def test_${1:expected_behaviour_or_condition}(self):
-	${2:assert False}
+    ${2:assert False}
 endsnippet
 
 snippet dj_ "import django's ugettext" !b
 from django.utils.translation import ugettext${1:_lazy} as _
+endsnippet
+
+snippet charf "Django CharField"
+${1:field_property} = models.CharField($99_('${3:${1/([^_]+)(_*)/\u$1(?2: )/g}}'), max_length=${4:255}${5:, null=True})
+endsnippet
+
+snippet intf "Django Integer Fields"
+${1:field_property} = models.${2:Positive}${3:Small}IntegerField($99_('${4:${1/([^_]+)(_*)/\u$1(?2: )/g}}')${5:, null=True})
+endsnippet
+
+snippet decf "Django Model DecimalField"
+${1:field_property} = models.DecimalField($99_('${3:${1/([^_]+)(_*)/\u$1(?2: )/g}}'), max_digits=${2:12}, decimal_places=${3:4}${4:, null=True})
+endsnippet
+
+snippet djf "DjangoField" !b
+${1:field_property} = models.${2:CharField}($99_('${3:${1/([^_]+)(_*)/\u$1(?2: )/g}}'))
+endsnippet
+
+snippet render "Django render shortcut" !b
+render(request, ${1:template}, ${2:ctx})
+endsnippet
+
+snippet meta "Metaclass" !b
+class ${1:MetaclassName}(${2:type}):
+    def __new__(cls, name, bases, attrs):
+        return super($1, cls).__new__(cls, name, bases, attrs)
 endsnippet

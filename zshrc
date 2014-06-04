@@ -48,7 +48,9 @@ source $ZSH/oh-my-zsh.sh
 DEFAULT_USER="bob"
 # PROMPT="$PROMPT
 # %{%F{red}%}» %{%F{white}%}"
-PROMPT='%{$fg[grey]%}[ %{$fg[blue]%}%n%{$fg[grey]%}@%{$fg[red]%}%m%{$fg[grey]%}: %{$fg_bold[green]%}${PWD/#$HOME/~}%{$fg[grey]%} ]%{$reset_color%}
+PROMPT=$'%{$fg[grey]%}[%{$fg[blue]%}%n%{$fg[grey]%}@%{$fg[red]%}%m%{$fg[grey]%}:%{$fg_bold[green]%}${PWD/#$HOME/~}%{$fg[grey]%}]%{$reset_color%}
+%{$fg_bold[red]%}» %{$reset_color%}'
+PROMPT=$'\e[90m[%{$fg[blue]%}%n\e[90m@%{$fg[red]%}%m\e[90m:%{$fg_bold[green]%}${PWD/#$HOME/~}\e[90m]%{$reset_color%}
 %{$fg_bold[red]%}» %{$reset_color%}'
 
 # VIRTUALENV
@@ -57,6 +59,7 @@ export PROJECT_HOME=$HOME/src
 source /usr/local/bin/virtualenvwrapper.sh
 
 export GOROOT=/usr/local/go
+export GOPATH=$HOME/src/gostuff
 export PATH=$PATH:$GOROOT/bin
 export PATH=$HOME/bin:$PATH
 
@@ -75,3 +78,10 @@ mkpy () { mkdir $1; touch $1/__init__.py }
 zebra () {
 	cat $1 | awk 'NR%2 == 1 {printf("\033[30m\033[47m%s\033[0m\n", $0); next}; 1'
 }
+mkgitignoredir () {
+echo "*
+\!.gitignore" >> .gitignore
+}
+
+# vi mode
+# bindkey -v
