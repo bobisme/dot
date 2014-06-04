@@ -4,114 +4,114 @@ filetype on                   " required!
 filetype off                   " required!
 set encoding=utf-8
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle/
+call vundle#begin()
 
 " let Vundle manage Vundle
 " required! 
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
 " My Bundles here:
 "
 " original repos on github
-Bundle 'tpope/vim-fugitive'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-Bundle 'scrooloose/nerdtree'
-Bundle 'majutsushi/tagbar'
+Plugin 'tpope/vim-fugitive'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plugin 'scrooloose/nerdtree'
+Plugin 'majutsushi/tagbar'
 " not updated enough
-" Bundle 'kchmck/vim-coffee-script'
-Bundle 'phreax/vim-coffee-script'
-Bundle 'Raimondi/delimitMate'
-" Bundle 'msanders/snipmate.vim'
-Bundle 'SirVer/ultisnips'
+" Plugin 'kchmck/vim-coffee-script'
+Plugin 'phreax/vim-coffee-script'
+Plugin 'Raimondi/delimitMate'
+" Plugin 'msanders/snipmate.vim'
+Plugin 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsEditSplit="horizontal"
 " let g:UltiSnipsListSnippets="<c-s-tab>"
-Bundle 'honza/vim-snippets'
-Bundle 'tpope/vim-repeat'
+Plugin 'honza/vim-snippets'
+Plugin 'tpope/vim-repeat'
 
 " surround
-Bundle 'tpope/vim-surround'
+Plugin 'tpope/vim-surround'
 
-Bundle 'tpope/vim-abolish'
-Bundle 'tpope/vim-unimpaired'
-Bundle 'tpope/vim-commentary'
-Bundle 'nathanaelkane/vim-indent-guides'
-Bundle 'plasticboy/vim-markdown'
-" Bundle 'tsaleh/vim-supertab'
-Bundle 'docunext/closetag.vim'
-Bundle 'sjl/gundo.vim'
-" Bundle 'jceb/vim-orgmode'
-Bundle 'hsitz/VimOrganizer'
-Bundle 'jeffkreeftmeijer/vim-numbertoggle'
-Bundle 'godlygeek/tabular'
-" Bundle 'ivanov/vim-ipython'
-Bundle 'ollummis/sbd.vim'
-Bundle 'kien/ctrlp.vim'
+Plugin 'tpope/vim-abolish'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-commentary'
+Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'plasticboy/vim-markdown'
+" Plugin 'tsaleh/vim-supertab'
+Plugin 'docunext/closetag.vim'
+Plugin 'sjl/gundo.vim'
+" Plugin 'jceb/vim-orgmode'
+Plugin 'hsitz/VimOrganizer'
+Plugin 'jeffkreeftmeijer/vim-numbertoggle'
+Plugin 'godlygeek/tabular'
+" Plugin 'ivanov/vim-ipython'
+Plugin 'ollummis/sbd.vim'
+Plugin 'kien/ctrlp.vim'
 
 " Powerline ==================================================================
-" Bundle 'Lokaltog/vim-powerline'
+" Plugin 'Lokaltog/vim-powerline'
 " :let g:Powerline_symbols='unicode'
 
-Bundle 'nvie/vim-flake8'
-" Bundle 'skammer/vim-css-color'
-" Bundle 'hail2u/vim-css3-syntax'
-Bundle 'groenewege/vim-less'
-" Bundle 'nanotech/jellybeans.vim'
-Bundle 'tudorprodan/html_annoyance.vim'
-Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
-Bundle 'chriskempson/base16-vim'
-" Bundle 'me-vlad/python-syntax.vim'
+Plugin 'nvie/vim-flake8'
+" Plugin 'skammer/vim-css-color'
+" Plugin 'hail2u/vim-css3-syntax'
+Plugin 'groenewege/vim-less'
+" Plugin 'nanotech/jellybeans.vim'
+Plugin 'tudorprodan/html_annoyance.vim'
+Plugin 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
+Plugin 'chriskempson/base16-vim'
+" Plugin 'me-vlad/python-syntax.vim'
 let python_highlight_indents = 0
-Bundle 'airblade/vim-gitgutter'
+Plugin 'airblade/vim-gitgutter'
 " make gitgutter not look stupid
 highlight clear signColumn
 
-Bundle 'dhruvasagar/vim-markify'
-Bundle 'jnwhiteh/vim-golang'
-Bundle 'Shougo/unite.vim'
+Plugin 'dhruvasagar/vim-markify'
+Plugin 'jnwhiteh/vim-golang'
+Plugin 'Shougo/unite.vim'
 
-" Bundle 'bling/vim-bufferline'
-Bundle 'bling/vim-airline'
+" Plugin 'bling/vim-bufferline'
+Plugin 'bling/vim-airline'
 set laststatus=2
 let g:airline_powerline_fonts=1
 
-Bundle 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe'
 " let g:ycm__key_list_previous_completion = ['<Up>']
 " let g:ycm__key_list_select_completion = ['<Enter>', '<Down>']
 let g:ycm_autoclose_preview_window_after_completion=1
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-" Bundle 'scrooloose/syntastic'
+" Plugin 'scrooloose/syntastic'
 
 " vim-scripts repos
-" Bundle 'L9'
-" Bundle 'FuzzyFinder'
-" Bundle 'Better-CSS-Syntax-for-Vim'
-" Bundle 'css_color.vim'
-" Bundle 'python.vim'
-Bundle 'AutoComplPop'
-Bundle 'VOoM'
-Bundle 'po.vim--gray'
-Bundle 'Python-Syntax-Folding'
-Bundle 'loremipsum'
-" Bundle 'Conque-Shell'
-Bundle 'ack.vim'
-Bundle 'reinh/vim-makegreen'
-Bundle 'lambdalisue/nose.vim'
-Bundle 'klen/rope-vim'
-Bundle 'dhruvasagar/vim-table-mode'
-Bundle 'othree/javascript-libraries-syntax.vim'
-Bundle 'pangloss/vim-javascript'
-Bundle 'fmoralesc/vim-pad'
+" Plugin 'L9'
+" Plugin 'FuzzyFinder'
+" Plugin 'Better-CSS-Syntax-for-Vim'
+" Plugin 'css_color.vim'
+" Plugin 'python.vim'
+Plugin 'AutoComplPop'
+Plugin 'VOoM'
+Plugin 'po.vim--gray'
+Plugin 'Python-Syntax-Folding'
+Plugin 'loremipsum'
+" Plugin 'Conque-Shell'
+Plugin 'ack.vim'
+Plugin 'reinh/vim-makegreen'
+Plugin 'lambdalisue/nose.vim'
+Plugin 'klen/rope-vim'
+Plugin 'dhruvasagar/vim-table-mode'
+Plugin 'othree/javascript-libraries-syntax.vim'
+Plugin 'pangloss/vim-javascript'
+Plugin 'fmoralesc/vim-pad'
 nnoremap <leader>p :OpenPad<cr>
 nnoremap <leader>lp :ListPads<cr>
 " non github repos
-" Bundle 'git://git.wincent.com/command-t.git'
-Bundle "nelstrom/vim-visual-star-search"
-Bundle "jmcantrell/vim-virtualenv"
-Bundle "chrisbra/csv.vim"
-Bundle "justinmk/vim-sneak"
+" Plugin 'git://git.wincent.com/command-t.git'
+Plugin "nelstrom/vim-visual-star-search"
+Plugin "jmcantrell/vim-virtualenv"
+Plugin "chrisbra/csv.vim"
+Plugin "justinmk/vim-sneak"
 
 call vundle#end()             " required
 filetype plugin indent on     " required
