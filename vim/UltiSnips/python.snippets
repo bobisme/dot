@@ -24,12 +24,12 @@ endsnippet
 
 snippet test "simple test case" !b
 def test_${1:expected_behaviour_or_condition}():
-    ${2:assert False}
+	${2:assert False}
 endsnippet
 
 snippet ctest "simple test case in a class" !b
 def test_${1:expected_behaviour_or_condition}(self):
-    ${2:assert False}
+	${2:assert False}
 endsnippet
 
 snippet dj_ "import django's ugettext" !b
@@ -58,6 +58,86 @@ endsnippet
 
 snippet meta "Metaclass" !b
 class ${1:MetaclassName}(${2:type}):
-    def __new__(cls, name, bases, attrs):
-        return super($1, cls).__new__(cls, name, bases, attrs)
+	def __new__(cls, name, bases, attrs):
+		return super($1, cls).__new__(cls, name, bases, attrs)
+endsnippet
+
+snippet odoocreate "Odoo override create method." !b
+def create(self, cr, user, vals, context=None):
+	$2
+	return super(${1:ClassName}, self).create(
+		cr, user, vals, context=context)
+endsnippet
+
+snippet odoowrite "Odoo override write method." !b
+def write(self, cr, user, ids, vals, context=None):
+	$2
+	return super(${1:ClassName}, self).write(
+		cr, user, ids, vals, context=context)
+endsnippet
+
+snippet odoounlink "Odoo override unlink method." !b
+def unlink(self, cr, user, ids, vals, context=None):
+	$2
+	return super(${1:ClassName}, self).unlink(
+		cr, user, ids, context=context)
+endsnippet
+
+snippet odooover "Odoo override create and write." !b
+@api.model
+@api.returns('self', lambda obj: obj.id)
+def create(self, values):
+	return super(${1:ClassName}, self).create(values)
+
+@api.multi
+def write(self, values):
+	return super($1, self).write(values)
+endsnippet
+
+snippet des "Mamba spec description" b
+with describe("$1"):
+	${2:pass}
+endsnippet
+
+snippet con "Mamba spec context" b
+with context("$1"):
+	${2:pass}
+endsnippet
+
+snippet it "Mamba spec expectation" b
+with ${2:_}it("$1"):
+	${3:raise NotImplementedError}
+endsnippet
+
+snippet specout "Boilerplate Spec" b
+#pylint: skip-file
+import sure
+from mock import *
+
+with describe("$1"):
+	$2
+endsnippet
+
+snippet exst "Behave ctx.execute_steps(..." b
+ctx.execute_steps(u"""
+	$1
+""")
+endsnippet
+
+snippet given "Behave @given" b
+@given(u"$1")
+def step_impl(ctx$2):
+	$3
+endsnippet
+
+snippet when "Behave @when" b
+@when(u"$1")
+def step_impl(ctx$2):
+	$3
+endsnippet
+
+snippet then "Behave @then" b
+@then(u"$1")
+def step_impl(ctx$2):
+	$3
 endsnippet

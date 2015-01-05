@@ -3,8 +3,28 @@ set nocompatible               " be iMproved
 filetype on                   " required!
 filetype off                   " required!
 set encoding=utf-8
+set noswapfile
+set visualbell
+set lazyredraw
+set shiftround
+set undofile
 
-set rtp+=~/.vim/bundle/Vundle.vim/
+set undodir=~/.vim/tmp/undo//
+set backupdir=~/.vim/tmp/backup//
+set directory=~/.vim/tmp/swap//
+" Make those folders automatically if they don't already exist.
+if !isdirectory(expand(&undodir))
+    call mkdir(expand(&undodir), "p")
+endif
+if !isdirectory(expand(&backupdir))
+    call mkdir(expand(&backupdir), "p")
+endif
+if !isdirectory(expand(&directory))
+    call mkdir(expand(&directory), "p")
+endif
+
+" Vundles ========================================================== {{{
+set rtp+=~/.vim/bundle/vundle/
 call vundle#begin()
 
 " let Vundle manage Vundle
@@ -15,46 +35,76 @@ Plugin 'gmarik/vundle'
 "
 " original repos on github
 Plugin 'tpope/vim-fugitive'
+
 Plugin 'Lokaltog/vim-easymotion'
+" do 2-char search, like vim-sneak
+" nmap s <Plug>(easymotion-s2)
+nmap s <Plug>(easymotion-sn)
+" enhance search
+map  <leader>/ <Plug>(easymotion-sn)
+omap <leader>/ <Plug>(easymotion-tn)
+" map  n <Plug>(easymotion-next)
+" map  N <Plug>(easymotion-prev)
+let g:EasyMotion_smartcase = 1
+" highlight column
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+let g:EasyMotion_startofline = 0
+
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'scrooloose/nerdtree'
 Plugin 'majutsushi/tagbar'
 " not updated enough
-" Plugin 'kchmck/vim-coffee-script'
 Plugin 'phreax/vim-coffee-script'
+" close tags and brackets
 Plugin 'Raimondi/delimitMate'
-" Plugin 'msanders/snipmate.vim'
 Plugin 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsEditSplit="horizontal"
-" let g:UltiSnipsListSnippets="<c-s-tab>"
+" snippets for ultisnips
 Plugin 'honza/vim-snippets'
+" use . repeat for more
 Plugin 'tpope/vim-repeat'
-
 " surround
 Plugin 'tpope/vim-surround'
-
+" easy substitution, cool replace trick, recasing
 Plugin 'tpope/vim-abolish'
+" handy keybindings I use a lot
 Plugin 'tpope/vim-unimpaired'
+" easy commenting/uncommenting
 Plugin 'tpope/vim-commentary'
+
+" visual indention guides
 Plugin 'nathanaelkane/vim-indent-guides'
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#151515 guifg=#202020 ctermbg=3
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#000000 guifg=#151515 ctermbg=4
+let g:indent_guides_auto_colors = 1
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+let g:indent_guides_enable_on_vim_startup = 1
+
+" markdown awesomeness
 Plugin 'plasticboy/vim-markdown'
-" Plugin 'tsaleh/vim-supertab'
+let g:vim_markdown_initial_foldlevel=1
+" I like the default highlighting better
+autocmd FileType mkd set syntax=markdown
+" auto-close tags when you type </
 Plugin 'docunext/closetag.vim'
+" neat browseable tree-style undo
 Plugin 'sjl/gundo.vim'
-" Plugin 'jceb/vim-orgmode'
-Plugin 'hsitz/VimOrganizer'
-Plugin 'jeffkreeftmeijer/vim-numbertoggle'
+" Disabled: Wed Nov  5 09:49:35 2014
+" Plugin 'hsitz/VimOrganizer'
+" auto-organizing ascii tables
 Plugin 'godlygeek/tabular'
-" Plugin 'ivanov/vim-ipython'
-Plugin 'ollummis/sbd.vim'
+" clode buffer without closing window
+Plugin 'cespare/vim-sbd'
+" awesome fuzzy file and buffer search
 Plugin 'kien/ctrlp.vim'
+" auto check python files in flake8
+" Disabled: Thu Nov  6 08:31:18 2014
+" since syntastic should do the same
+" Plugin 'nvie/vim-flake8'
 
-" Powerline ==================================================================
-" Plugin 'Lokaltog/vim-powerline'
-" :let g:Powerline_symbols='unicode'
-
-Plugin 'nvie/vim-flake8'
 " Plugin 'skammer/vim-css-color'
 " Plugin 'hail2u/vim-css3-syntax'
 Plugin 'groenewege/vim-less'
@@ -67,6 +117,9 @@ let python_highlight_indents = 0
 Plugin 'airblade/vim-gitgutter'
 " make gitgutter not look stupid
 highlight clear signColumn
+" don't run so damn much
+let g:gitgutter_realtime = 0
+let g:gitgutter_eager = 0
 
 Plugin 'dhruvasagar/vim-markify'
 Plugin 'jnwhiteh/vim-golang'
@@ -77,12 +130,12 @@ Plugin 'bling/vim-airline'
 set laststatus=2
 let g:airline_powerline_fonts=1
 
-Plugin 'Valloric/YouCompleteMe'
-" let g:ycm__key_list_previous_completion = ['<Up>']
-" let g:ycm__key_list_select_completion = ['<Enter>', '<Down>']
-let g:ycm_autoclose_preview_window_after_completion=1
-let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-" Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/syntastic'
+" default: let g:syntastic_python_checkers = ['python', 'flake8', 'pylint']
+" let g:syntastic_python_checkers = ['flake8']
+let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_always_populate_loc_list = 1
+nmap <leader>l :Errors<cr>
 
 " vim-scripts repos
 " Plugin 'L9'
@@ -90,45 +143,69 @@ let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 " Plugin 'Better-CSS-Syntax-for-Vim'
 " Plugin 'css_color.vim'
 " Plugin 'python.vim'
-Plugin 'AutoComplPop'
+" Plugin 'AutoComplPop'
 Plugin 'VOoM'
 Plugin 'po.vim--gray'
 Plugin 'Python-Syntax-Folding'
 Plugin 'loremipsum'
-" Plugin 'Conque-Shell'
-Plugin 'ack.vim'
-Plugin 'reinh/vim-makegreen'
-Plugin 'lambdalisue/nose.vim'
+
+" Disabled: use Ag instead, Wed Nov  5 10:08:35 2014
+" Plugin 'ack.vim'
+" Disabled: not used, Wed Nov  5 10:08:47 2014
+" Plugin 'reinh/vim-makegreen'
+" Disabled: not used, Wed Nov  5 10:08:47 2014
+" Plugin 'lambdalisue/nose.vim'
+
+" refactoring using python rope
 Plugin 'klen/rope-vim'
 Plugin 'dhruvasagar/vim-table-mode'
+let g:table_mode_corner = '|'
 Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'pangloss/vim-javascript'
-Plugin 'fmoralesc/vim-pad'
-nnoremap <leader>p :OpenPad<cr>
-nnoremap <leader>lp :ListPads<cr>
-" non github repos
-" Plugin 'git://git.wincent.com/command-t.git'
-Plugin "nelstrom/vim-visual-star-search"
-Plugin "jmcantrell/vim-virtualenv"
-Plugin "chrisbra/csv.vim"
-Plugin "justinmk/vim-sneak"
+
+" Disabled: Wed Nov  5 10:04:15 2014
+" Plugin 'fmoralesc/vim-pad'
+" nnoremap <leader>p :OpenPad<cr>
+" nnoremap <leader>lp :ListPads<cr>
+
+" make * a little better
+Plugin 'nelstrom/vim-visual-star-search'
+" put vim in a virtualenv
+Plugin 'jmcantrell/vim-virtualenv'
+let g:virtualenv_directory = '~/envs'
+
+" CSV highlighting
+Plugin 'chrisbra/csv.vim'
+
+" Disabled: Wed Nov  5 10:05:18 2014
+" functionality provided my smart motion
+" Plugin 'justinmk/vim-sneak'
+
+" Disabled: Wed Nov  5 10:05:27 2014
+" Plugin 'maksimr/vim-translator'
+" g:goog_user_conf = {'langpair': 'de|en', 'v_key': 'T'}
+
+" awesome, better-than grep search
+Plugin 'rking/ag.vim'
+
+" fantastic autocomplete, c checking
+Plugin 'Valloric/YouCompleteMe'
+" let g:ycm__key_list_previous_completion = ['<Up>']
+" let g:ycm__key_list_select_completion = ['<Enter>', '<Down>']
+" let g:ycm_autoclose_preview_window_after_completion=1
+let g:ycm_complete_in_comments = 1
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_collect_identifiers_from_tag_files = 1
+nnoremap <leader>G :YcmCompleter GoToDefinitionElseDeclaration<cr>
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 
 call vundle#end()             " required
+" }}}
 filetype plugin indent on     " required
 
 " FUZZYFINDER MAPPINGS
 map <leader>zf :FufFile<cr>
 map <leader>zb :FufBuffer<cr>
-
-" VIM-INDENT-GUIDES
-" let g:indent_guides_auto_colors = 1
-let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#151515 guifg=#202020 ctermbg=3
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#000000 guifg=#151515 ctermbg=4
-let g:indent_guides_auto_colors = 1
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
-let g:indent_guides_enable_on_vim_startup = 1
 
 " Allow backgrounding buffers without writing them, and remember marks/undo
 " for backgrounded buffers
@@ -242,9 +319,11 @@ if has("gui_running")
     color base16-monokai
     " Use the same symbols as TextMate for tabstops and EOLs
     " set listchars=tab:▸\ ,eol:¬
-    set listchars=tab:▸\ 
+    set list
+    " set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
+    set listchars=tab:▸\ ,extends:❯,precedes:❮,nbsp:‗,trail:·
     "Invisible character colors
-    " highlight NonText guifg=#4a4a59
+    " highlight NonText guifg=#4a4a59  
     " highlight SpecialKey guifg=#4a4a59
     set list
     set go-=T
@@ -330,9 +409,11 @@ let g:ctrlp_switch_buffer = 0
 let g:ctrlp_reuse_window = '.*'
 
 " Flake8 ===================================================================== 
-autocmd FileType python nnoremap <buffer> <leader>8 :call Flake8()<CR>
+" Disabled: Thu Nov  6 08:33:33 2014
+" autocmd FileType python nnoremap <buffer> <leader>8 :call Flake8()<CR>
 " run on save
-autocmd BufWritePost *.py call Flake8()
+" Disabled: Thu Nov  6 08:33:43 2014
+" autocmd BufWritePost *.py call Flake8()
 " ignore errors
 " let g:flake8_ignore="E501,W293"
 
@@ -345,8 +426,10 @@ augroup sparkup_types
 augroup END
 
 " CoffeeLint ================================================================= 
-let coffee_lint_options = '-f ~/coffeelint.json'
-au BufWritePost *.coffee silent CoffeeLint!
+" Disabled: Thu Nov  6 15:33:44 2014
+" covered by syntastic
+" let coffee_lint_options = '-f ~/coffeelint.json'
+" au BufWritePost *.coffee silent CoffeeLint!
 
 " Go Fmt =====================================================================
 au BufWritePre *.go silent Fmt
@@ -377,6 +460,7 @@ set foldmethod=marker
 " FILETYPE AUTOCOMMANDS ====================================================== 
 autocmd FileType html setlocal sw=2 ts=2 sts=2
 autocmd FileType htmldjango setlocal sw=2 ts=2 sts=2
+autocmd FileType xml setlocal sw=2 ts=2 sts=2
 autocmd FileType javascript setlocal sw=2 ts=2 sts=2
 autocmd FileType css setlocal sw=2 ts=2 sts=2
 autocmd FileType less setlocal sw=2 ts=2 sts=2
@@ -418,6 +502,28 @@ match OverLength /\%81v.\+/
  
 highlight clear signColumn
 
+" Better fold text {{{
+set foldlevelstart=0
+
+function! LoshFoldText() " {{{
+    let line = getline(v:foldstart)
+
+    let nucolwidth = &fdc + &number * &numberwidth
+    let windowwidth = winwidth(0) - nucolwidth - 3
+    let foldedlinecount = v:foldend - v:foldstart
+
+    " expand tabs into spaces
+    let onetab = strpart('          ', 0, &tabstop)
+    let line = substitute(line, '\t', onetab, 'g')
+
+    let line = strpart(line, 0, windowwidth - 2 -len(foldedlinecount))
+    let fillcharcount = windowwidth - len(line) - len(foldedlinecount) - 1
+    " return 'ᓬ' . line . '…' . repeat(" ",fillcharcount) . foldedlinecount . '…' . ' '
+    return line . '…' . repeat(" ",fillcharcount) . foldedlinecount . '…' . ' '
+endfunction " }}}
+set foldtext=LoshFoldText()
+" }}}
+
 " MAPS AND MAPS AND MAPS AND MAPS ============================================
 nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>gu :GundoToggle<CR>
@@ -428,7 +534,9 @@ nnoremap <silent> <leader>cc :cc<cr>
 nnoremap <silent> <leader>cn :cn<cr>
 nnoremap <silent> <leader>cl :ccl<cr>
 " map fugitive
-nnoremap <silent> <leader>gd :Gdiff HEAD<cr>
+nnoremap <silent> <leader>ga :silent Git add %<cr>
+nnoremap <silent> <leader>gd :Gvdiff<cr>
+nnoremap <silent> <leader>gh :Gvdiff HEAD<cr>
 nnoremap <silent> <leader>gs :Gstatus<cr>
 nnoremap <silent> <leader>gc :Gcommit<cr>
 nnoremap <silent> <leader>gx :wincmd h<cr>:q<cr>
@@ -438,12 +546,11 @@ nnoremap <leader>md :silent !open -a Marked.app '%:p'<cr>
 nnoremap <leader>t :TagbarToggle<cr>
 " save
 nnoremap <leader>w :w<cr>
-nnoremap <leader>ls :set syntax=txt<cr>:set syntax=less<cr>
 " b#
 nnoremap <leader>bb :b#<cr>
 " markdown headlines
-nnoremap <leader>= :normal yypVr=<cr>
-nnoremap <leader>- :normal yypVr-<cr>
+nnoremap <leader>= :normal yypVr=<cr>gk
+nnoremap <leader>- :normal yypVr-<cr>gk
 " make
 nnoremap <silent> <leader>mm :make<cr>
 nnoremap <silent> <leader>mg :MakeGreen %<cr>
@@ -452,3 +559,41 @@ nnoremap <leader>v :vertical bo new<cr>
 " FFFFFFFUUUUUU
 vmap <s-up> k
 vmap <s-down> j
+
+nnoremap * *<c-o>
+nnoremap D d$
+nnoremap H ^
+nnoremap L g_
+
+" quickfix last search
+nnoremap <silent> <leader><leader>/ :execute 'vimgrep /'.@/.'/g %'<cr>:copen<cr>
+
+" ack last search
+nnoremap <silent> <leader>? :execute "Ack! '" . substitute(substitute(substitute(@/. "\\\\<", "\\\\b", ""), "\\\\v", "", "") . "'"<cr>
+
+" source current line
+vnoremap <leader>S y:execute @@<cr>
+nnoremap <leader>S ^vg_y:execute @@<cr>
+
+" select contents of line
+nnoremap vv ^vg_
+
+" calculator
+inoremap <c-b> <c-o>yiW<end>=<c-r>=<c-r>0<cr>
+
+" easy filetype switching {{{
+nnoremap _md :set ft=markdown<cr>
+nnoremap _hd :set ft=htmldjango<cr>
+nnoremap _pd :set ft=python.django<cr>
+" }}}
+" {% en
+"  %}
+
+" mamba (python version of rspec)
+" open the spec for the current file
+command Espec e %:p:h/specs/%:r_spec.py
+
+" NOTES ================================================================= {{{
+" Find camel case caps:
+" \v^@!((\U@<=)\u|(\u((\u|$)@!)))
+" }}}

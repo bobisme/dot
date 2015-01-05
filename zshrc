@@ -60,8 +60,10 @@ source /usr/local/bin/virtualenvwrapper.sh
 
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/src/gostuff
+export PATH=/usr/local/bin:$PATH
 export PATH=$PATH:$GOROOT/bin
 export PATH=$HOME/bin:$PATH
+export NODE_PATH=/usr/local/lib/node_modules
 
 # FUNCTIONS
 datauri () { echo "background-image: url(data:$1;base64,`base64 -i $2`);" }
@@ -85,3 +87,8 @@ echo "*
 
 # vi mode
 # bindkey -v
+# Add GHC 7.8.3 to the PATH, via http://ghcformacosx.github.io/
+export GHC_DOT_APP="/Applications/ghc-7.8.3.app"
+if [ -d "$GHC_DOT_APP" ]; then
+    export PATH="${HOME}/.cabal/bin:${GHC_DOT_APP}/Contents/bin:${PATH}"
+fi

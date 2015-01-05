@@ -1,0 +1,20 @@
+snippet ready "DOMContentLoaded listener" b
+document.addEventListener('DOMContentLoaded', function(){
+	$1
+});
+endsnippet
+
+snippet ready-ie8 "IE8 compat. ready function" b
+function ready(fn) {
+	if (document.addEventListener) {
+		document.addEventListener('DOMContentLoaded', fn);
+	} else {
+		document.attachEvent('onreadystatechange', function() {
+			if (document.readyState === 'interactive') fn();
+		});
+	}
+}
+ready(function(){
+	$1
+});
+endsnippet
