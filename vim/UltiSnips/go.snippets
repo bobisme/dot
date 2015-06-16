@@ -25,3 +25,33 @@ for i := 0; i < ${1:maxint}; i++ {
 	$0
 }
 endsnippet
+
+snippet convey "Convey" b
+Convey("${1:Given you have a thing...}"${2:, t}, func() {
+	$0
+})
+endsnippet
+
+snippet __ "Convey short" b
+__("${1:Given you have a thing...}"${2:, t}, func() {
+	$0
+})
+endsnippet
+
+snippet eq "Convey should equal" b
+So($1, ShouldEqual, $2)
+endsnippet
+
+snippet sortable "Implement sortable interface" b
+func (${1:obj} ${2:Struct}) Len int {
+	return len($1)
+}
+
+func ($1 $2) Swap(i, j int) {
+	$1[i], $1[j] = $1[j], $1[i]
+}
+
+func ($1 $2) Less(i, j int) bool {
+	return $1[i]${3:.Property} < $1[j]$3
+}
+endsnippet

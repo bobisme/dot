@@ -63,24 +63,27 @@ class ${1:MetaclassName}(${2:type}):
 endsnippet
 
 snippet odoocreate "Odoo override create method." !b
-def create(self, cr, user, vals, context=None):
+@api.model
+@api.returns('self', lambda obj: obj.id)
+def create(self, vals):
+	obj = super(${1:ClassName}, self).create(vals)
 	$2
-	return super(${1:ClassName}, self).create(
-		cr, user, vals, context=context)
+	return obj
 endsnippet
 
 snippet odoowrite "Odoo override write method." !b
-def write(self, cr, user, ids, vals, context=None):
+@api.multi
+def write(self, vals):
+	result = super(${1:ClassName}, self).write(vals)
 	$2
-	return super(${1:ClassName}, self).write(
-		cr, user, ids, vals, context=context)
+	return result
 endsnippet
 
 snippet odoounlink "Odoo override unlink method." !b
-def unlink(self, cr, user, ids, vals, context=None):
+@api.multi
+def unlink(self):
 	$2
-	return super(${1:ClassName}, self).unlink(
-		cr, user, ids, context=context)
+	return super(${1:ClassName}, self).unlink()
 endsnippet
 
 snippet odooover "Odoo override create and write." !b
@@ -140,4 +143,80 @@ snippet then "Behave @then" b
 @then(u"$1")
 def step_impl(ctx$2):
 	$3
+endsnippet
+
+snippet envpop "from os import environ; os.environ.pop" b
+${1:ENV_VAR} = environ.pop('$1'${2:, '${3:default}'})
+endsnippet
+
+snippet odoomanifest "Odoo Manifest" b
+{
+	'name': '${1:Module Name}',
+	'version': '0.1',
+	'category': 'General',
+	'author': 'Bob <bob@steinbauerusa.com>',
+	'description': '${2:$1}',
+	'summary': """
+	${3:- Feature 1
+	- Feature 2}
+	""",
+	'depends': [
+		"base", "web",$4
+	],
+	'installable': True,
+	'data': [
+		# 'views/views.xml',
+		# 'security/security.xml',
+		# 'security/ir.model.access.csv',
+		# 'views/load_assets.xml',
+		# 'views/menus.xml',
+		$5
+	],
+}
+endsnippet
+
+snippet odooreport "Odoo custom report class" b
+class ${1:CustomReport}(models.AbstractModel):
+	_name = 'report.${2:module.report_name}'
+
+	@api.multi
+	def render_html(self, data=None):
+		report_obj = self.env['report']
+		report = report_obj._get_report_from_name('$2')
+		ctx = {
+			'doc_ids': self._ids,
+			'doc_model': report.model,
+			'docs': self,
+		}
+		return report_obj.render('$2', ctx)
+endsnippet
+
+snippet odoowiz "Odoo Wizard Model" b
+class ${1:Wizard}(models.TransientModel):
+	@api.model
+	def _get_active_model(self):
+		resource = self.env.context.get('active_model')
+		if not resource:
+			return None
+		return self.env[resource]
+
+	@api.model
+	def _get_active_object(self):
+		model = self._get_active_model()
+		if model is None:
+			return None
+		id_ = self.env.context.get('active_id')
+		if id_ is None:
+			return None
+		return model.browse(id_)
+
+	@api.model
+	def default_get(self, fields):
+		env = self.env
+		ctx = env.context
+		defaults = super($1, self).default_get(fields)
+		# defaults is a dict. the keys are this wizard's fields
+		# set them like defaults['wiz_field_1'] = 'something'
+		# check the current model or object using the methods above
+		return defaults
 endsnippet
