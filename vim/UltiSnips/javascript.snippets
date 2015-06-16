@@ -18,3 +18,57 @@ ready(function(){
 	$1
 });
 endsnippet
+
+snippet getJSON "make a GET request and parse JSON IE10+" b
+var request = new XMLHttpRequest();
+request.open('GET', '${1:/my/url}', true);
+
+request.onload = function() {
+	if (this.status >= 200 && this.status < 400) {
+		// Success!
+		var data = JSON.parse(this.response);
+	} else {
+		// We reached our target server, but it returned an error
+	}
+};
+
+request.onerror = function() {
+	// There was a connection error of some sort
+};
+
+request.send();
+endsnippet
+
+snippet post "XMLHttp POST IE8+" b
+var request = new XMLHttpRequest();
+request.open('POST', '/my/url', true);
+request.setRequestHeader(
+	'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+request.send(data);
+endsnippet
+
+snippet eslint "eslint ignore" b
+/* eslint-disable */
+${0:${VISUAL}}
+/* eslint-enable */
+endsnippet
+
+snippet strict "Use Strict" b
+'use strict';
+endsnippet
+
+snippet react "React Component, ES6" b
+import React from 'react';
+
+class ${1:ComponentName} extends React.Component {
+	render() {
+		return (
+			<div className="${2:${1/([a-z0-9])?([A-Z])/\l$1(?1:-)\l$2/g}}">
+				<div className="$2__name">{this.props.name}</div>
+			</div>
+		);
+	}
+}
+
+export default $1;
+endsnippet

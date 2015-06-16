@@ -5,7 +5,8 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="agnoster"
+# ZSH_THEME="agnoster"
+ZSH_THEME="avit"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -40,7 +41,28 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git)
+plugins=(\
+    autojump\
+    bower\
+    brew\
+    cake\
+    coffee\
+    docker\
+    encode64\
+    gitfast\
+    jsontools\
+    node\
+    nyan\
+    pip\
+    python\
+    redis-cli\
+    sudo\
+    supervisor\
+    tmux\
+    urltools\
+    # vi-mode\
+    # virtualenvwrapper\
+)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -48,10 +70,17 @@ source $ZSH/oh-my-zsh.sh
 DEFAULT_USER="bob"
 # PROMPT="$PROMPT
 # %{%F{red}%}» %{%F{white}%}"
-PROMPT=$'%{$fg[grey]%}[%{$fg[blue]%}%n%{$fg[grey]%}@%{$fg[red]%}%m%{$fg[grey]%}:%{$fg_bold[green]%}${PWD/#$HOME/~}%{$fg[grey]%}]%{$reset_color%}
+# PROMPT=$'%{$fg[grey]%}[%{$fg[blue]%}%n%{$fg[grey]%}@%{$fg[red]%}%m%{$fg[grey]%}:%{$fg_bold[green]%}${PWD/#$HOME/~}%{$fg[grey]%}]%{$reset_color%}
+# %{$fg_bold[red]%}» %{$reset_color%}'
+# PROMPT=$'\e[90m[%{$fg[blue]%}%n\e[90m@%{$fg[red]%}%m\e[90m:%{$fg_bold[green]%}${PWD/#$HOME/~}\e[90m]%{$reset_color%}
+# %{$fg_bold[red]%}» %{$reset_color%}'
+# PROMPT=$PROMPT$'
+PROMPT=$'$(_user_host)${_current_dir} $(git_prompt_info)
 %{$fg_bold[red]%}» %{$reset_color%}'
-PROMPT=$'\e[90m[%{$fg[blue]%}%n\e[90m@%{$fg[red]%}%m\e[90m:%{$fg_bold[green]%}${PWD/#$HOME/~}\e[90m]%{$reset_color%}
-%{$fg_bold[red]%}» %{$reset_color%}'
+# RPROMPT='$(_vi_status)%{$(echotc UP 1)%}$(_git_time_since_commit) $(git_prompt_status) ${_return_status}%{$(echotc DO 1)%}'
+RPROMPT=''
+# if using vi-mode, I need this
+bindkey '^R' history-incremental-search-backward
 
 # VIRTUALENV
 export WORKON_HOME=$HOME/envs
@@ -92,3 +121,10 @@ export GHC_DOT_APP="/Applications/ghc-7.8.3.app"
 if [ -d "$GHC_DOT_APP" ]; then
     export PATH="${HOME}/.cabal/bin:${GHC_DOT_APP}/Contents/bin:${PATH}"
 fi
+export DOCKER_HOST=tcp://192.168.59.103:2376
+export DOCKER_CERT_PATH=/Users/bob/.boot2docker/certs/boot2docker-vm
+export DOCKER_TLS_VERIFY=1
+
+# source highlighting in less
+export LESSOPEN="| src-hilite-lesspipe.sh %s"
+export LESS=" -R "

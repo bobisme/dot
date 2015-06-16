@@ -8,3 +8,148 @@ snippet ochat "Odoo Chatter Box for a Form View" b
 	<field name="message_ids" widget="mail_thread"/>
 </div>
 endsnippet
+
+snippet odoodata "Basic Odoo XML Data" b
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+
+	$1
+
+	</data>
+</openerp>
+endsnippet
+
+snippet odootree "Odoo Tree View" b
+<record id="${2/\./_/g}_tree" model="ir.ui.view">
+	<field name="name">${1:Model Name}</field>
+	<field name="model">${2:model.code}</field>
+	<field name="arch" type="xml">
+		<tree string="$1">
+			<field name="${3:field_name}"/>
+			$4
+		</tree>
+	</field>
+</record>
+endsnippet
+
+snippet odoosearch "Odoo Search View" b
+<record id="${2/\./_/g}_search" model="ir.ui.view">
+	<field name="name">${1:Model Name}</field>
+	<field name="model">${2:model.code}</field>
+	<field name="arch" type="xml">
+		<search string="$1">
+			<field name="${3:field_name}"/>
+			$4
+		</search>
+	</field>
+</record>
+endsnippet
+
+snippet odooform "Odoo Form View" b
+<record id="${2/\./_/g}_form" model="ir.ui.view">
+	<field name="name">${1:Model Name}</field>
+	<field name="model">${2:model.code}</field>
+	<field name="arch" type="xml">
+		<form string="$1">
+			<sheet>
+				<group>
+					<field name="${3:field_name}"/>
+					$4
+				</group>
+			</sheet>
+		</form>
+	</field>
+</record>
+endsnippet
+
+snippet odooaction "Odoo Model Action" b
+<record id="${2/\./_/g}_action" model="ir.actions.act_window">
+	<field name="name">${1:Model Name}</field>
+	<field name="res_model">${2:model.code}</field>
+	<field name="view_mode">tree,form</field>
+	<field name="type">ir.actions.act_window</field>
+	<field name="search_view_id" ref="${2/\./_/g}_search"/>
+</record>
+endsnippet
+
+snippet odoomenu "Odoo Menu" b
+<menuitem id="${1:model_code}_menu" name="${2:Model Name}"
+	action="$1_action"
+	${3:parent="${4:parent_menu}"} sequence="1"/>
+endsnippet
+
+snippet odoomodelview "Odoo Full Model View" b
+<record id="${2/\./_/g}_tree" model="ir.ui.view">
+	<field name="name">${1:Model Name}</field>
+	<field name="model">${2:model.code}</field>
+	<field name="arch" type="xml">
+		<tree string="$1">${3:
+			<field name="${4:field_name}"/>
+			$5
+		}</tree>
+	</field>
+</record>
+
+<record id="${2/\./_/g}_search" model="ir.ui.view">
+	<field name="name">$1</field>
+	<field name="model">$2</field>
+	<field name="arch" type="xml">
+		<search string="$1">$3</search>
+	</field>
+</record>
+
+<record id="${2/\./_/g}_form" model="ir.ui.view">
+	<field name="name">$1</field>
+	<field name="model">$2</field>
+	<field name="arch" type="xml">
+		<form string="$1">
+			<sheet>
+				<group>$3</group>
+			</sheet>
+		</form>
+	</field>
+</record>
+
+<record id="${2/\./_/g}_action" model="ir.actions.act_window">
+	<field name="name">$1</field>
+	<field name="res_model">$2</field>
+	<field name="view_mode">tree,form</field>
+	<field name="type">ir.actions.act_window</field>
+	<field name="search_view_id" ref="${2/\./_/g}_search"/>
+</record>
+
+<menuitem id="${2/\./_/g}_menu" name="$1"
+	action="${2/\./_/g}_action"
+	${5:parent="${6:parent_menu}"} sequence="1"/>
+endsnippet
+
+snippet odooosearch "Odoo Omni-Search Field" b
+<field name="${1:name}" string="${2:Model Name}" domain="[
+	('$1', 'ilike', self),
+	$3
+	]"/>
+endsnippet
+
+snippet inherit "inherit field (Odoo)" b
+<field name="inherit_id" ref="$1"/>
+endsnippet
+
+snippet group "create Odoo group record" b
+<record model="res.groups" id="group_${1:group_code_name}">
+	<field name="name">${2:Configuration settings name}</field>
+	<!-- this puts it under "technical settings" -->
+	<field ref="base.module_category_hidden" name="category_id"/>
+</record>
+endsnippet
+
+snippet money "Odoo Money Format (Reports)" b
+<span t-${1:field}="${2:o.price}"
+	t-$1-options='{
+		"widget": "monetary",
+		"display_currency": "${3:o.currency_id}"}'/>$0
+endsnippet
+
+snippet pdb "QWeb Template Debug" b
+<t t-debug="pdb"/>
+endsnippet

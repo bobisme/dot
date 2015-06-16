@@ -23,20 +23,38 @@ if !isdirectory(expand(&directory))
     call mkdir(expand(&directory), "p")
 endif
 
-" Vundles ========================================================== {{{
-set rtp+=~/.vim/bundle/vundle/
-call vundle#begin()
+" Bundles ========================================================== {{{
+" Vundle to be replaced by NeoBundle
+" set rtp+=~/.vim/bundle/vundle/
+" call vundle#begin()
+" Plugin 'gmarik/vundle'
 
-" let Vundle manage Vundle
-" required! 
-Plugin 'gmarik/vundle'
+" Note: Skip initialization for vim-tiny or vim-small.
+if !1 | finish | endif
 
-" My Bundles here:
+if has('vim_starting')
+    if &compatible
+        set nocompatible               " Be iMproved
+    endif
+
+    " Required:
+    set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+
+" Required:
+call neobundle#begin(expand('~/.vim/bundle/'))
+
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" background stuff
+NeoBundle 'Shougo/vimproc.vim'
 "
 " original repos on github
-Plugin 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-fugitive'
 
-Plugin 'Lokaltog/vim-easymotion'
+NeoBundle 'Lokaltog/vim-easymotion'
 " do 2-char search, like vim-sneak
 " nmap s <Plug>(easymotion-s2)
 nmap s <Plug>(easymotion-sn)
@@ -51,90 +69,112 @@ map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 let g:EasyMotion_startofline = 0
 
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-Plugin 'scrooloose/nerdtree'
-Plugin 'majutsushi/tagbar'
+" Disabled 2015-03-18 in favor of emmet
+" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'majutsushi/tagbar'
 " not updated enough
-Plugin 'phreax/vim-coffee-script'
+NeoBundle 'phreax/vim-coffee-script'
 " close tags and brackets
-Plugin 'Raimondi/delimitMate'
-Plugin 'SirVer/ultisnips'
+NeoBundle 'Raimondi/delimitMate'
+NeoBundle 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsEditSplit="horizontal"
 " snippets for ultisnips
-Plugin 'honza/vim-snippets'
+NeoBundle 'honza/vim-snippets'
 " use . repeat for more
-Plugin 'tpope/vim-repeat'
+NeoBundle 'tpope/vim-repeat'
 " surround
-Plugin 'tpope/vim-surround'
+NeoBundle 'tpope/vim-surround'
 " easy substitution, cool replace trick, recasing
-Plugin 'tpope/vim-abolish'
+NeoBundle 'tpope/vim-abolish'
 " handy keybindings I use a lot
-Plugin 'tpope/vim-unimpaired'
+NeoBundle 'tpope/vim-unimpaired'
 " easy commenting/uncommenting
-Plugin 'tpope/vim-commentary'
+" Plugin 'tpope/vim-commentary'
+" disabled for this: 2015-04-05
+NeoBundle 'tomtom/tcomment_vim'
 
 " visual indention guides
-Plugin 'nathanaelkane/vim-indent-guides'
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#151515 guifg=#202020 ctermbg=3
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#000000 guifg=#151515 ctermbg=4
-let g:indent_guides_auto_colors = 1
+NeoBundle 'nathanaelkane/vim-indent-guides'
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#151515 guifg=#202020 ctermbg=3
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#000000 guifg=#151515 ctermbg=4
+" let g:indent_guides_auto_colors = 1
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
 let g:indent_guides_enable_on_vim_startup = 1
+" to replace indent guides?
+" follow-up: i like it, but too slow
+" NeoBundle 'Yggdroot/indentLine'
 
-" markdown awesomeness
-Plugin 'plasticboy/vim-markdown'
-let g:vim_markdown_initial_foldlevel=1
-" I like the default highlighting better
-autocmd FileType mkd set syntax=markdown
 " auto-close tags when you type </
-Plugin 'docunext/closetag.vim'
+NeoBundle 'docunext/closetag.vim'
 " neat browseable tree-style undo
-Plugin 'sjl/gundo.vim'
+NeoBundle 'sjl/gundo.vim'
 " Disabled: Wed Nov  5 09:49:35 2014
 " Plugin 'hsitz/VimOrganizer'
 " auto-organizing ascii tables
-Plugin 'godlygeek/tabular'
+NeoBundle 'godlygeek/tabular'
 " clode buffer without closing window
-Plugin 'cespare/vim-sbd'
+" NeoBundle 'cespare/vim-sbd'
 " awesome fuzzy file and buffer search
-Plugin 'kien/ctrlp.vim'
-" auto check python files in flake8
-" Disabled: Thu Nov  6 08:31:18 2014
-" since syntastic should do the same
-" Plugin 'nvie/vim-flake8'
+NeoBundle 'kien/ctrlp.vim'
+" don't manage woring dir
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v(\.git|\.hg|\.svn|node_modules|static\/components|bower_components)$',
+  \ 'file': '\.exe$\|\.so$\|\.dll\|\.pyc\|\.jpg\|\.png\|\.gif\|\.pdf$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+let g:ctrlp_max_height = 20
+let g:ctrlp_map = '<leader>f'
+" open the buffer again, I don't care
+let g:ctrlp_switch_buffer = 0
+let g:ctrlp_reuse_window = '.*'
 
 " Plugin 'skammer/vim-css-color'
 " Plugin 'hail2u/vim-css3-syntax'
-Plugin 'groenewege/vim-less'
+NeoBundle 'groenewege/vim-less'
 " Plugin 'nanotech/jellybeans.vim'
-Plugin 'tudorprodan/html_annoyance.vim'
-Plugin 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
-Plugin 'chriskempson/base16-vim'
-" Plugin 'me-vlad/python-syntax.vim'
-let python_highlight_indents = 0
-Plugin 'airblade/vim-gitgutter'
+NeoBundle 'tudorprodan/html_annoyance.vim'
+NeoBundle 'rust-lang/rust.vim'
+
+" color schemes
+NeoBundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
+NeoBundle 'chriskempson/base16-vim'
+NeoBundle 'tomasr/molokai'
+
+NeoBundle 'kien/rainbow_parentheses.vim'
+
+NeoBundle 'airblade/vim-gitgutter'
 " make gitgutter not look stupid
-highlight clear signColumn
+let g:gitgutter_diff_args = '-w'
+" highlight clear signColumn
 " don't run so damn much
 let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
 
-Plugin 'dhruvasagar/vim-markify'
-Plugin 'jnwhiteh/vim-golang'
-Plugin 'Shougo/unite.vim'
+NeoBundle 'dhruvasagar/vim-markify'
+" Plugin 'jnwhiteh/vim-golang'
+NeoBundle 'fatih/vim-go'
+let $GOPATH=resolve(expand('~/src/gostuff'))
+NeoBundle 'Shougo/unite.vim'
 
 " Plugin 'bling/vim-bufferline'
-Plugin 'bling/vim-airline'
+NeoBundle 'bling/vim-airline'
 set laststatus=2
 let g:airline_powerline_fonts=1
 
-Plugin 'scrooloose/syntastic'
+NeoBundle 'scrooloose/syntastic'
+let g:syntastic_javascript_checkers = ['eslint']
 " default: let g:syntastic_python_checkers = ['python', 'flake8', 'pylint']
 " let g:syntastic_python_checkers = ['flake8']
-let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_python_checkers = ['prospector']
 let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_error_symbol = "✗"
+" let g:syntastic_error_symbol = "‼»"
+let g:syntastic_warning_symbol = "⚠"
+" let g:syntastic_warning_symbol = "⁉»"
 nmap <leader>l :Errors<cr>
 
 " vim-scripts repos
@@ -142,12 +182,10 @@ nmap <leader>l :Errors<cr>
 " Plugin 'FuzzyFinder'
 " Plugin 'Better-CSS-Syntax-for-Vim'
 " Plugin 'css_color.vim'
-" Plugin 'python.vim'
 " Plugin 'AutoComplPop'
-Plugin 'VOoM'
-Plugin 'po.vim--gray'
-Plugin 'Python-Syntax-Folding'
-Plugin 'loremipsum'
+NeoBundle 'VOoM'
+NeoBundle 'po.vim--gray'
+NeoBundle 'loremipsum'
 
 " Disabled: use Ag instead, Wed Nov  5 10:08:35 2014
 " Plugin 'ack.vim'
@@ -156,12 +194,8 @@ Plugin 'loremipsum'
 " Disabled: not used, Wed Nov  5 10:08:47 2014
 " Plugin 'lambdalisue/nose.vim'
 
-" refactoring using python rope
-Plugin 'klen/rope-vim'
-Plugin 'dhruvasagar/vim-table-mode'
+NeoBundle 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner = '|'
-Plugin 'othree/javascript-libraries-syntax.vim'
-Plugin 'pangloss/vim-javascript'
 
 " Disabled: Wed Nov  5 10:04:15 2014
 " Plugin 'fmoralesc/vim-pad'
@@ -169,13 +203,13 @@ Plugin 'pangloss/vim-javascript'
 " nnoremap <leader>lp :ListPads<cr>
 
 " make * a little better
-Plugin 'nelstrom/vim-visual-star-search'
+NeoBundle 'nelstrom/vim-visual-star-search'
 " put vim in a virtualenv
-Plugin 'jmcantrell/vim-virtualenv'
+NeoBundle 'jmcantrell/vim-virtualenv'
 let g:virtualenv_directory = '~/envs'
 
 " CSV highlighting
-Plugin 'chrisbra/csv.vim'
+NeoBundle 'chrisbra/csv.vim'
 
 " Disabled: Wed Nov  5 10:05:18 2014
 " functionality provided my smart motion
@@ -186,10 +220,12 @@ Plugin 'chrisbra/csv.vim'
 " g:goog_user_conf = {'langpair': 'de|en', 'v_key': 'T'}
 
 " awesome, better-than grep search
-Plugin 'rking/ag.vim'
+NeoBundle 'rking/ag.vim'
 
 " fantastic autocomplete, c checking
-Plugin 'Valloric/YouCompleteMe'
+" increase neobundle timeout so build can complete
+NeoBundle 'Valloric/YouCompleteMe'
+" ./install.sh --clang-completer --omnisharp-completer --gocode-completer
 " let g:ycm__key_list_previous_completion = ['<Up>']
 " let g:ycm__key_list_select_completion = ['<Enter>', '<Down>']
 " let g:ycm_autoclose_preview_window_after_completion=1
@@ -199,9 +235,89 @@ let g:ycm_collect_identifiers_from_tag_files = 1
 nnoremap <leader>G :YcmCompleter GoToDefinitionElseDeclaration<cr>
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 
-call vundle#end()             " required
-" }}}
-filetype plugin indent on     " required
+" syntax highlighting
+NeoBundle 'tikhomirov/vim-glsl'
+NeoBundle 'cstrahan/vim-capnp'
+NeoBundle 'mattn/emmet-vim'
+NeoBundle 'othree/html5.vim'
+
+" Python
+" refactoring using python rope
+" NeoBundle 'pfdevilliers/Pretty-Vim-Python'
+NeoBundle 'klen/rope-vim'
+NeoBundle 'klen/python-mode'
+let g:pymode_folding = 0
+let g:pymode_indent = 0
+let g:pymode_lint = 0
+let g:pymode_lint_write = 0
+let g:pymode_rope_complete_on_dot = 0
+let g:pymode_rope_completion = 0
+let g:pymode_syntax = 0
+let g:pymode_syntax_slow_sync = 0
+let g:pymode_warnings = 0
+NeoBundle 'hdima/python-syntax'
+let python_highlight_all = 1
+
+" Javascript
+NeoBundle 'othree/javascript-libraries-syntax.vim'
+NeoBundle 'pangloss/vim-javascript'
+NeoBundle 'mxw/vim-jsx'
+let g:jsx_ext_required = 0
+NeoBundle 'elzr/vim-json'
+NeoBundle 'kennethzfeng/vim-raml'
+NeoBundle 'stephpy/vim-yaml'
+
+" writing
+NeoBundle 'tpope/vim-markdown'
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+autocmd BufNewFile,BufReadPost *.mkd set filetype=markdown
+NeoBundle 'mattly/vim-markdown-enhancements'
+" NeoBundle 'plasticboy/vim-markdown'
+" let g:vim_markdown_initial_foldlevel=1
+" I like the default highlighting better
+NeoBundle 'reedes/vim-pencil'
+augroup pencil
+  autocmd!
+  autocmd FileType markdown,mkd call pencil#init()
+  autocmd FileType markdown,mkd TableModeEnable
+  autocmd FileType text         call pencil#init({'wrap': 'hard'})
+augroup END
+NeoBundle 'junegunn/limelight.vim'
+NeoBundle 'junegunn/goyo.vim'
+
+function! s:goyo_enter()
+  silent !tmux set status off
+  set noshowmode
+  set noshowcmd
+  set scrolloff=999
+  Limelight
+  Pencil
+  TableModeEnable
+endfunction
+
+function! s:goyo_leave()
+  silent !tmux set status on
+  set showmode
+  set showcmd
+  set scrolloff=5
+  Limelight!
+  PencilOff
+  TableModeDisable
+endfunction
+
+autocmd! User GoyoEnter
+autocmd! User GoyoLeave
+autocmd  User GoyoEnter nested call <SID>goyo_enter()
+autocmd  User GoyoLeave nested call <SID>goyo_leave()
+
+call neobundle#end()
+NeoBundleCheck
+
+" call vundle#end()
+" Required:
+filetype plugin indent on
+" }}} Bundles =======================
+
 
 " FUZZYFINDER MAPPINGS
 map <leader>zf :FufFile<cr>
@@ -212,7 +328,7 @@ map <leader>zb :FufBuffer<cr>
 set hidden
 
 " Remember more commands and search history
-set history=1000
+set history=10000
 
 " Make tab completion for files/buffers act like bash
 set wildmenu
@@ -307,10 +423,10 @@ set textwidth=78
 " GRB: highlighting search"
 set hls
 
-" set colors
+" colors {{{
 set t_Co=256 " 256 colors
 set background=dark
-color grb256
+color molokai
 
 if has("gui_running")
     set lines=100
@@ -323,18 +439,38 @@ if has("gui_running")
     " set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
     set listchars=tab:▸\ ,extends:❯,precedes:❮,nbsp:‗,trail:·
     "Invisible character colors
-    " highlight NonText guifg=#4a4a59  
+    " highlight NonText guifg=#4a4a59
     " highlight SpecialKey guifg=#4a4a59
     set list
     set go-=T
     if has("gui_gtk2")
         " set guifont=Inconsolata\ 12
-        set guifont=Monaco\ for\ Powerline\ 10
+        set guifont=Fantasque\ Sans\ Mono\ Regular\ 15,Monaco\ for\ Powerline\ 10
     elseif has("gui_macvim")
         " let macvim_hig_shift_movement = 1
-        set guifont=Monaco\ for\ Powerline:h14,Monaco:h14
+        " set guifont=Monaco\ for\ Powerline:h14,Monaco:h14
+        set guifont=Fantasque\ Sans\ Mono\ Regular:h15,Monaco:h14
     endif
 endif
+
+" manual python syntax
+" au! Syntax python source ~/.vim/syntax/python.vim
+" au! Syntax python source ~/.vim/bundle/Pretty-Vim-Python/syntax/python.vim
+"
+" syn match   pythonFunction
+"       \ "\%(\%(def\s\|class\s\|@\)\s*\)\@<=\h\%(\w\|\.\)*" contained nextgroup=pythonVars
+" syn region pythonVars start="(" end=")" contained contains=pythonParameters transparent keepend
+" syn match pythonParameters "[^,]*" contained skipwhite
+" HiLink pythonParameters       Statement
+
+au Colorscheme * hi Comment cterm=italic gui=italic
+au Colorscheme * hi htmlItalic cterm=italic gui=italic
+au Colorscheme * hi htmlBold cterm=bold gui=bold
+au Colorscheme * hi htmlBoldItalic cterm=bold,italic gui=bold,italic
+au Colorscheme * hi htmlH1 cterm=bold gui=bold
+au Colorscheme * hi Comment cterm=italic gui=italic
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#151515 guifg=#202020 ctermbg=3
+" }}}
 
 "let g:jellybeans_background_color = '0A0A0A'
 ":color jellybeans
@@ -346,11 +482,6 @@ function! ShowPydoc(module, ...)
     :execute ":!pydoc " . a:module . " > " . fPath
     :execute ":sp ".fPath
 endfunction
-
-" GRB: Use custom python.vim syntax file
-au! Syntax python source ~/.vim/syntax/python.vim
-let python_highlight_all = 1
-let python_slow_sync = 1
 
 " GRB: use emacs-style tab completion when selecting files, etc
 set wildmode=longest,list
@@ -378,8 +509,8 @@ augroup myfiletypes
   "clear old autocmds in group
   autocmd!
   "for ruby, autoindent with two spaces, always expand tabs
-  autocmd FileType ruby,haml,eruby,yaml set ai sw=2 sts=2 et
-  autocmd FileType python set sw=4 sts=4 et
+  autocmd FileType ruby,haml,eruby,yaml,raml setlocal ai sw=2 sts=2 et
+  autocmd FileType python setlocal sw=4 sts=4 et
 augroup END
 
 set switchbuf=useopen
@@ -390,25 +521,7 @@ map <leader>e :e <C-R>=expand("%:h")<cr>/
 set number
 set numberwidth=5
 
-
-" CSS highlighting for LESS ==================================================
-au BufRead,BufNewFile *.less setfiletype css
-
-" CTRL+P =====================================================================
-" don't manage woring dir
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\.git$\|\.hg$\|\.svn$',
-  \ 'file': '\.exe$\|\.so$\|\.dll\|\.pyc\|\.jpg\|\.png\|\.gif\|\.pdf$',
-  \ 'link': 'some_bad_symbolic_links',
-  \ }
-let g:ctrlp_max_height = 20
-let g:ctrlp_map = '<leader>f'
-" open the buffer again, I don't care
-let g:ctrlp_switch_buffer = 0
-let g:ctrlp_reuse_window = '.*'
-
-" Flake8 ===================================================================== 
+" Flake8 =====================================================================
 " Disabled: Thu Nov  6 08:33:33 2014
 " autocmd FileType python nnoremap <buffer> <leader>8 :call Flake8()<CR>
 " run on save
@@ -425,14 +538,14 @@ augroup sparkup_types
   autocmd FileType mustache,php runtime! ftplugin/html/sparkup.vim
 augroup END
 
-" CoffeeLint ================================================================= 
+" CoffeeLint =================================================================
 " Disabled: Thu Nov  6 15:33:44 2014
 " covered by syntastic
 " let coffee_lint_options = '-f ~/coffeelint.json'
 " au BufWritePost *.coffee silent CoffeeLint!
 
 " Go Fmt =====================================================================
-au BufWritePre *.go silent Fmt
+" au BufWritePre *.go silent Fmt
 
 " Bicycle Repair Man
 " http://bicyclerepair.sourceforge.net/
@@ -448,7 +561,8 @@ function! WriteMode()
 endfunction
 
 " writing functions ==========================================================
-command! -nargs=1 NewTechBlog :e ~/Dropbox/docs/techblog/`date +\%F`-<args>.mkd
+command! -nargs=1 NewTechBlog :e ~/Dropbox/docs/techblog/`date +\%F`-<args>.md
+command! -nargs=1 NewEmail :e ~/email/`date +\%F`-<args>.md
 
 " GENERAL ====================================================================
 command! W :w
@@ -457,16 +571,20 @@ command! Wq :wq
 set background=dark
 set foldmethod=marker
 
-" FILETYPE AUTOCOMMANDS ====================================================== 
+" FILETYPE AUTOCOMMANDS ======================================================
+autocmd BufRead,BufNewFile *.less setfiletype css
+autocmd BufRead,BufNewFile *.md setfiletype markdown
+autocmd BufRead,BufNewFile *.raml setlocal syntax=yaml
+
 autocmd FileType html setlocal sw=2 ts=2 sts=2
 autocmd FileType htmldjango setlocal sw=2 ts=2 sts=2
 autocmd FileType xml setlocal sw=2 ts=2 sts=2
-autocmd FileType javascript setlocal sw=2 ts=2 sts=2
-autocmd FileType css setlocal sw=2 ts=2 sts=2
-autocmd FileType less setlocal sw=2 ts=2 sts=2
+autocmd FileType javascript,json setlocal sw=2 ts=2 sts=2
+autocmd FileType css,less setlocal sw=2 ts=2 sts=2
 autocmd FileType python setlocal foldmethod=indent foldnestmax=2
 autocmd FileType go setlocal noexpandtab
 autocmd FileType coffee setlocal sw=2 ts=2 sts=2
+autocmd FileType raml setlocal ts=2 sw=2 sts=2 et
 " make commentary use // for go files
 autocmd FileType go set commentstring=//\ %s
 " autocmd FileType c set commentstring=//\ %s
@@ -496,10 +614,6 @@ let g:pyindent_open_paren = '&sw'
 let g:pyindent_nested_paren = '&sw'
 let g:pyindent_continue = '&sw'
 
-" highlight over 80 cols
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-match OverLength /\%81v.\+/
- 
 highlight clear signColumn
 
 " Better fold text {{{
@@ -524,24 +638,44 @@ endfunction " }}}
 set foldtext=LoshFoldText()
 " }}}
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" RemoveFancyCharacters COMMAND
+" Remove smart quotes, etc. -- GRB
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! RemoveFancyCharacters()
+    let typo = {}
+    let typo["“"] = '"'
+    let typo["”"] = '"'
+    let typo["‘"] = "'"
+    let typo["’"] = "'"
+    let typo["–"] = '--'
+    let typo["—"] = '---'
+    let typo["…"] = '...'
+    :exe ":%s/".join(keys(typo), '\|').'/\=typo[submatch(0)]/ge'
+endfunction
+command! RemoveFancyCharacters :call RemoveFancyCharacters()
+
 " MAPS AND MAPS AND MAPS AND MAPS ============================================
 nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>gu :GundoToggle<CR>
-nnoremap <silent> <leader>bd :Sbd<CR>
-nnoremap <silent> <leader>bD :Sbdm<CR>
+command Bd bp\|bd \#
+command Bdf bp\|bd\! \#
+nnoremap <silent> <leader>bd :Bd<CR>
+nnoremap <silent> <leader>bD :Bdf<CR>
 " map quickfix
 nnoremap <silent> <leader>cc :cc<cr>
 nnoremap <silent> <leader>cn :cn<cr>
 nnoremap <silent> <leader>cl :ccl<cr>
 " map fugitive
 nnoremap <silent> <leader>ga :silent Git add %<cr>
-nnoremap <silent> <leader>gd :Gvdiff<cr>
+nnoremap <silent> <leader>gd :tabedit %\|Gvdiff<cr>
+nnoremap <silent> <leader>gD :tabclose<cr>
 nnoremap <silent> <leader>gh :Gvdiff HEAD<cr>
 nnoremap <silent> <leader>gs :Gstatus<cr>
 nnoremap <silent> <leader>gc :Gcommit<cr>
 nnoremap <silent> <leader>gx :wincmd h<cr>:q<cr>
 " open file in Marked (mac only)
-nnoremap <leader>md :silent !open -a Marked.app '%:p'<cr>
+nnoremap <leader>md :silent !open -a Marked\ 2.app '%:p'<cr>
 " tagbar
 nnoremap <leader>t :TagbarToggle<cr>
 " save
