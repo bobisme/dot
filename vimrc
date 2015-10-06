@@ -564,6 +564,18 @@ endfunction
 command! -nargs=1 NewTechBlog :e ~/Dropbox/docs/techblog/`date +\%F`-<args>.md
 command! -nargs=1 NewEmail :e ~/email/`date +\%F`-<args>.md
 
+function! NewMarkdown()
+    call inputsave()
+    let name = input("File Name Part: ")
+    let tstamp = strftime("%y%m%d%H%M")
+    call inputrestore()
+    let filename = "~/tmp/" . tstamp . "_" . name . ".md"
+    execute 'edit' filename
+    set columns:86
+endfunction
+command! NewMd call NewMarkdown()
+cabbrev tstamp <c-r>=strftime("%y%m%d%H%M")<cr>
+
 " GENERAL ====================================================================
 command! W :w
 command! Q :q

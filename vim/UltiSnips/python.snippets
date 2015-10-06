@@ -128,21 +128,27 @@ ctx.execute_steps(u"""
 endsnippet
 
 snippet given "Behave @given" b
-@given(u"$1")
+@given(u"${1:${VISUAL/^([tw]hen|given) //i}}")
 def step_impl(ctx$2):
 	$3
 endsnippet
 
 snippet when "Behave @when" b
-@when(u"$1")
+@when(u"${1:${VISUAL/^([tw]hen|given) //i}}")
 def step_impl(ctx$2):
 	$3
 endsnippet
 
 snippet then "Behave @then" b
-@then(u"$1")
+@then(u"${1:${VISUAL/^([tw]hen|given) //i}}")
 def step_impl(ctx$2):
 	$3
+endsnippet
+
+snippet step "Behave step" b
+@${1:${VISUAL/^([TtWwGg])(hen|iven).+$/\L$1$2\E/}}(u"${2:${VISUAL/^([tw]hen|given) //i}}")
+def step_impl(ctx$3):
+	$0
 endsnippet
 
 snippet envpop "from os import environ; os.environ.pop" b
