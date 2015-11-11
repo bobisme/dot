@@ -232,7 +232,14 @@ NeoBundle 'rking/ag.vim'
 
 " fantastic autocomplete, c checking
 " increase neobundle timeout so build can complete
-NeoBundle 'Valloric/YouCompleteMe'
+NeoBundle 'Valloric/YouCompleteMe', {
+\'build': {
+  \'mac': './install.py --clang-completer --omnisharp-completer --gocode-completer',
+  \'unix': './install.py --clang-completer --omnisharp-completer --gocode-completer',
+  \'windows': 'install.py --clang-completer --omnisharp-completer --gocode-completer',
+  \'cygwin': './install.py --clang-completer --omnisharp-completer --gocode-completer'
+  \}
+\}
 " ./install.sh --clang-completer --omnisharp-completer --gocode-completer
 " let g:ycm__key_list_previous_completion = ['<Up>']
 " let g:ycm__key_list_select_completion = ['<Enter>', '<Down>']
