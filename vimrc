@@ -756,6 +756,35 @@ nnoremap _pd :set ft=python.django<cr>
 " open the spec for the current file
 command Espec e %:p:h/specs/%:r_spec.py
 
+" go to odoo dir and color the window
+command! GotoOdoo cd ~/src/odoo | colorscheme base16-paraiso
+command! WorkonOdoo GotoOdoo
+command! Odoo GotoOdoo
+
+" PySuper {{{
+" take a copy of the function definition and turn it into a python 2.x
+" super call
+function! PySuper()
+    " copy the function definition here
+    " normal i$$$$
+    " normal ?def\
+    " normal v/:\
+    " normal V"dy/\$\$\$\$\
+    " normal :s/\$\$\$\$/\=@d/\
+    "
+    normal ^:s/def /super($$$, self)./
+    normal v/:
+    normal :s/://
+    normal gv:s/\(\w\+\)=\([^,)]\+\)/\1=\1/ge
+    normal gvQ
+    normal gv:s/\((\|^\s*\)self\(,\s*\)\?/\1/e
+    normal ?class
+    normal W"zyiw/\$\$\$
+    normal :s/\$\$\$/\=@z/
+endfunction
+command! PySuper :call PySuper()
+"}}}
+
 " NOTES ================================================================= {{{
 " Find camel case caps:
 " \v^@!((\U@<=)\u|(\u((\u|$)@!)))
