@@ -87,12 +87,15 @@ export WORKON_HOME=$HOME/envs
 export PROJECT_HOME=$HOME/src
 source /usr/local/bin/virtualenvwrapper.sh
 
-export GOROOT=/usr/local/go
+# GO
 export GOPATH=$HOME/src/gostuff
-export PATH=/usr/local/bin:$PATH
+export GOROOT=/usr/local/opt/go/libexec
+export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
-export PATH=$HOME/bin:$PATH
+# NODE
 export NODE_PATH=/usr/local/lib/node_modules
+# HOME BIN
+export PATH=$HOME/bin:$PATH
 
 # FUNCTIONS
 datauri () { echo "background-image: url(data:$1;base64,`base64 -i $2`);" }
