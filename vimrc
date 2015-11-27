@@ -130,7 +130,7 @@ NeoBundle 'kien/ctrlp.vim'
 " don't manage woring dir
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v(\.git|\.hg|\.svn|node_modules|static\/components|bower_components)$',
+  \ 'dir':  '\v(\.git|\.hg|\.svn|node_modules|static\/components|bower_components|Godeps)$',
   \ 'file': '\.exe$\|\.so$\|\.dll\|\.pyc\|\.jpg\|\.png\|\.gif\|\.pdf$',
   \ 'link': 'some_bad_symbolic_links',
   \ }
