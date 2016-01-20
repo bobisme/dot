@@ -1,4 +1,25 @@
-" VUNDLE
+" Colors {{{
+set t_Co=256 " 256 colors
+set background=dark
+color molokai
+syntax enable
+au Colorscheme * hi Comment cterm=italic gui=italic
+au Colorscheme * hi htmlItalic cterm=italic gui=italic
+au Colorscheme * hi htmlBold cterm=bold gui=bold
+au Colorscheme * hi htmlBoldItalic cterm=bold,italic gui=bold,italic
+au Colorscheme * hi htmlH1 cterm=bold gui=bold
+au Colorscheme * hi Comment cterm=italic gui=italic
+
+" au BufRead,BufNewFile * syn match foldMarkerLeft /{{{\d*/ contained conceal cchar={
+" au BufRead,BufNewFile * syn match foldMarkerRight /}}}\d*/ contained conceal cchar=}
+" set conceallevel=1
+" set concealcursor=c
+" hi link foldMarkerLeft FoldLeft
+" hi link foldMarkerRight FoldRight
+" hi! link Conceal FoldLeft
+" hi! link Conceal FoldRight
+" }}}
+
 set nocompatible               " be iMproved
 filetype on                   " required!
 filetype off                   " required!
@@ -80,6 +101,7 @@ let g:EasyMotion_startofline = 0
 " Disabled 2015-03-18 in favor of emmet
 " Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 NeoBundle 'scrooloose/nerdtree'
+let NERDTreeIgnore = ['\.pyc$']
 NeoBundle 'majutsushi/tagbar'
 " not updated enough
 NeoBundle 'phreax/vim-coffee-script'
@@ -123,10 +145,10 @@ NeoBundle 'sjl/gundo.vim'
 " Plugin 'hsitz/VimOrganizer'
 " auto-organizing ascii tables
 NeoBundle 'godlygeek/tabular'
-" clode buffer without closing window
-" NeoBundle 'cespare/vim-sbd'
+" close buffer without closing window
+NeoBundle 'cespare/vim-sbd'
 " awesome fuzzy file and buffer search
-NeoBundle 'kien/ctrlp.vim'
+NeoBundle 'ctrlpvim/ctrlp.vim'
 " don't manage woring dir
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = {
@@ -146,11 +168,17 @@ NeoBundle 'groenewege/vim-less'
 " Plugin 'nanotech/jellybeans.vim'
 NeoBundle 'tudorprodan/html_annoyance.vim'
 NeoBundle 'rust-lang/rust.vim'
+NeoBundle 'cespare/vim-toml'
 
-" color schemes
-NeoBundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
+" PostgreSQL syntax highlighting
+NeoBundle 'exu/pgsql.vim'
+autocmd BufNewFile,Bufread *.sql setf pgsql
+
+" colors {{{
+NeoBundle 'flazz/vim-colorschemes'
 NeoBundle 'chriskempson/base16-vim'
-NeoBundle 'tomasr/molokai'
+NeoBundle 'qualiabyte/vim-colorstepper'
+"}}}
 
 NeoBundle 'kien/rainbow_parentheses.vim'
 
@@ -166,6 +194,7 @@ NeoBundle 'dhruvasagar/vim-markify'
 " Plugin 'jnwhiteh/vim-golang'
 NeoBundle 'fatih/vim-go'
 let $GOPATH=resolve(expand('~/src/gostuff'))
+NeoBundle 'rhysd/vim-go-impl'
 NeoBundle 'Shougo/unite.vim'
 
 " Plugin 'bling/vim-bufferline'
@@ -178,6 +207,7 @@ let g:syntastic_javascript_checkers = ['eslint']
 " default: let g:syntastic_python_checkers = ['python', 'flake8', 'pylint']
 " let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_python_checkers = ['prospector']
+" let g:syntastic_coffee_checkers = ['coffee-jshint']
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_error_symbol = "✗"
 " let g:syntastic_error_symbol = "‼»"
@@ -265,6 +295,7 @@ let g:pymode_folding = 0
 let g:pymode_indent = 0
 let g:pymode_lint = 0
 let g:pymode_lint_write = 0
+let g:pymode_rope = 0
 let g:pymode_rope_complete_on_dot = 0
 let g:pymode_rope_completion = 0
 let g:pymode_syntax = 0
@@ -283,11 +314,11 @@ NeoBundle 'kennethzfeng/vim-raml'
 NeoBundle 'stephpy/vim-yaml'
 
 " writing
+" NeoBundle 'plasticboy/vim-markdown'
 NeoBundle 'tpope/vim-markdown'
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 autocmd BufNewFile,BufReadPost *.mkd set filetype=markdown
 NeoBundle 'mattly/vim-markdown-enhancements'
-" NeoBundle 'plasticboy/vim-markdown'
 " let g:vim_markdown_initial_foldlevel=1
 " I like the default highlighting better
 NeoBundle 'reedes/vim-pencil'
@@ -306,8 +337,8 @@ function! s:goyo_enter()
   set noshowcmd
   set scrolloff=999
   Limelight
-  Pencil
-  TableModeEnable
+  " Pencil
+  " TableModeEnable
 endfunction
 
 function! s:goyo_leave()
@@ -316,8 +347,8 @@ function! s:goyo_leave()
   set showcmd
   set scrolloff=5
   Limelight!
-  PencilOff
-  TableModeDisable
+  " PencilOff
+  " TableModeDisable
 endfunction
 
 autocmd! User GoyoEnter
@@ -335,10 +366,6 @@ NeoBundleCheck
 filetype plugin indent on
 " }}} Bundles =======================
 
-
-" FUZZYFINDER MAPPINGS
-map <leader>zf :FufFile<cr>
-map <leader>zb :FufBuffer<cr>
 
 " Allow backgrounding buffers without writing them, and remember marks/undo
 " for backgrounded buffers
@@ -441,10 +468,6 @@ set textwidth=78
 set hls
 
 " colors {{{
-set t_Co=256 " 256 colors
-set background=dark
-color molokai
-
 if has("gui_running")
     set lines=100
     set columns=173
@@ -479,13 +502,6 @@ endif
 " syn region pythonVars start="(" end=")" contained contains=pythonParameters transparent keepend
 " syn match pythonParameters "[^,]*" contained skipwhite
 " HiLink pythonParameters       Statement
-
-au Colorscheme * hi Comment cterm=italic gui=italic
-au Colorscheme * hi htmlItalic cterm=italic gui=italic
-au Colorscheme * hi htmlBold cterm=bold gui=bold
-au Colorscheme * hi htmlBoldItalic cterm=bold,italic gui=bold,italic
-au Colorscheme * hi htmlH1 cterm=bold gui=bold
-au Colorscheme * hi Comment cterm=italic gui=italic
 " autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#151515 guifg=#202020 ctermbg=3
 " }}}
 
@@ -684,13 +700,11 @@ function! RemoveFancyCharacters()
 endfunction
 command! RemoveFancyCharacters :call RemoveFancyCharacters()
 
-" MAPS AND MAPS AND MAPS AND MAPS ============================================
+" MAPS AND MAPS AND MAPS AND MAPS "{{{
 nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>gu :GundoToggle<CR>
-command Bd bp\|bd \#
-command Bdf bp\|bd\! \#
-nnoremap <silent> <leader>bd :Bd<CR>
-nnoremap <silent> <leader>bD :Bdf<CR>
+nnoremap <silent> <leader>bd :Sbd<CR>
+nnoremap <silent> <leader>bD :Sbdm<CR>
 " map quickfix
 nnoremap <silent> <leader>cc :cc<cr>
 nnoremap <silent> <leader>cn :cn<cr>
@@ -703,12 +717,15 @@ nnoremap <silent> <leader>gh :Gvdiff HEAD<cr>
 nnoremap <silent> <leader>gs :Gstatus<cr>
 nnoremap <silent> <leader>gc :Gcommit<cr>
 nnoremap <silent> <leader>gx :wincmd h<cr>:q<cr>
+" git gutter
+nnoremap <silent> <leader>gg :GitGutter<cr>
 " open file in Marked (mac only)
 nnoremap <leader>md :silent !open -a Marked\ 2.app '%:p'<cr>
 " tagbar
 nnoremap <leader>t :TagbarToggle<cr>
 " save
 nnoremap <leader>w :w<cr>
+nnoremap <c-s> :w<cr>
 " b#
 nnoremap <leader>bb :b#<cr>
 " markdown headlines
@@ -722,6 +739,10 @@ nnoremap <leader>v :vertical bo new<cr>
 " FFFFFFFUUUUUU
 vmap <s-up> k
 vmap <s-down> j
+
+" move
+nnoremap <c-j> 10j
+nnoremap <c-k> 10k
 
 nnoremap * *<c-o>
 nnoremap D d$
@@ -743,14 +764,15 @@ nnoremap vv ^vg_
 
 " calculator
 inoremap <c-b> <c-o>yiW<end>=<c-r>=<c-r>0<cr>
+" previous buffer
+nnoremap <c-s-a> :b#<cr>
+"}}}
 
 " easy filetype switching {{{
 nnoremap _md :set ft=markdown<cr>
 nnoremap _hd :set ft=htmldjango<cr>
 nnoremap _pd :set ft=python.django<cr>
 " }}}
-" {% en
-"  %}
 
 " mamba (python version of rspec)
 " open the spec for the current file
@@ -789,3 +811,5 @@ command! PySuper :call PySuper()
 " Find camel case caps:
 " \v^@!((\U@<=)\u|(\u((\u|$)@!)))
 " }}}
+
+" vim:foldmethod=marker:foldlevel=0
