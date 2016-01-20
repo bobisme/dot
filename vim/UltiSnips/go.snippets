@@ -55,3 +55,25 @@ func ($1 $2) Less(i, j int) bool {
 	return $1[i]${3:.Property} < $1[j]$3
 }
 endsnippet
+
+snippet des "Ginkgo Describe" b
+Describe("${1:Some Thing}", func() {
+	$0
+})
+endsnippet
+
+snippet con "Ginkgo Context" b
+Context("${1:Some Situation}", func() {
+	$0
+})
+endsnippet
+
+snippet it "Ginkgo It" b
+It("${1:should be ok}", func() {
+	$0
+})
+endsnippet
+
+snippet om "Gomega expect Ω" b
+Ω($1).Should(${2:Equal($0)})
+endsnippet
