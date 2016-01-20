@@ -112,10 +112,6 @@ mkpy () { mkdir $1; touch $1/__init__.py }
 zebra () {
 	cat $1 | awk 'NR%2 == 1 {printf("\033[30m\033[47m%s\033[0m\n", $0); next}; 1'
 }
-mkgitignoredir () {
-echo "*
-\!.gitignore" >> .gitignore
-}
 
 # vi mode
 # bindkey -v
@@ -131,3 +127,14 @@ export DOCKER_TLS_VERIFY=1
 # source highlighting in less
 export LESSOPEN="| src-hilite-lesspipe.sh %s"
 export LESS=" -R "
+
+source /Users/bob/.iterm2_shell_integration.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+source ~/.aliases
+
+# node version manager
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh
+eval $(thefuck --alias)
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
