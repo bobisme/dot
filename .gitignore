@@ -3,3 +3,4 @@ nvim/bundle/
 vimold_2/
 config/fish/fundle
 config/nvim/bundle
+config/fish/fish_history
