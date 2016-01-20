@@ -1,3 +1,5 @@
 vim/bundle/
 nvim/bundle/
 vimold_2/
+config/fish/fundle
+config/nvim/bundle
