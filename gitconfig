@@ -13,6 +13,7 @@
 	cb = checkout -b
 	mg = merge
 	ec = config --global -e
+	s = status
 [filter "media"]
 	clean = git-media-clean %f
 	smudge = git-media-smudge %f
@@ -20,3 +21,11 @@
 	default = simple
 [merge]
 	ff = false
+[color]
+	ui = true
+[pull]
+	ff = only
+[filter "lfs"]
+	clean = git lfs clean %f
+	smudge = git lfs smudge %f
+	required = true
