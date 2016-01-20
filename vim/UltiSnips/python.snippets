@@ -226,3 +226,34 @@ class ${1:Wizard}(models.TransientModel):
 		# check the current model or object using the methods above
 		return defaults
 endsnippet
+
+snippet odoocustomreport "Odoo Custom Report" b
+class TaxReport(models.AbstractModel):
+	_name = 'report.${1:<module_code>}.${2:<report_model_code>}'
+
+	@api.multi
+	def render_html(self, data=None):
+		ctx = {
+			'company': self.env.user.company_id,
+			'doc_ids': self._ids,
+			'doc_model': '${3:$1}.${4:report_wizard}',
+			'docs': self.env['$3.$4'].browse(self._ids),
+		}
+		return self.env['report'].render(
+			'$3.${5:report_template}', ctx)
+endsnippet
+
+snippet memoize "Memoize decorator" b
+def memoize(obj, cache=None, attach_cache=False):
+	if cache is None:
+		cache = {}
+	if attach_cache:
+		obj.__cache = cache
+	@functools.wraps(obj)
+	def memoizer(*args, **kwargs):
+		key = tuple(args) + tuple(sorted(kwargs.iteritems()))
+		if key not in cache:
+			cache[key] = obj(*args, **kwargs)
+		return cache[key]
+	return memoizer
+endsnippet
