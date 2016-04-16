@@ -1,0 +1,40 @@
+snippet test "make a simple test function" !b
+void test_${1:test_name}(void) {
+	${2:assert(1 == 0);}
+}
+endsnippet
+
+snippet f "my kind of for" !b
+for (int i = 0; i < ${1:count}; i++) {
+	$2
+}
+endsnippet
+
+snippet ifdb "if debug" !b
+if (DEBUG) $1
+endsnippet
+
+snippet clearprev "ASCII control code to clear previous line"
+\n\033[F\033[J
+endsnippet
+
+snippet fperr "fprintf to stderr" !b
+fprintf(stderr, "$1\n");
+endsnippet
+
+snippet bptest "boilerplate for a test file" !b
+#define TESTING 1
+#include "${1:thefileyouaretesting}.c"
+#include <assert.h>
+
+#define RUN(fn_name) printf("Running test: %s\n", #fn_name); fn_name()
+
+/* void test_functions_defined_here(void) */
+$2
+
+int main() {
+	/* RUN(test_functions_run_here); */
+	$3
+	return 0;
+}
+endsnippet

@@ -21,10 +21,23 @@ set -x VIRTUALFISH_HOME ~/envs
 set -x PROJECT_HOME ~/src
 eval (python -m virtualfish projects)
 
-# base16 shell colors
-eval sh $HOME/.config/base16-shell/base16-monokai.dark.sh
+# gopath
+set -x GOPATH ~/src/gostuff
+set -x PATH $GOPATH/bin $PATH
 
 # nvm on mac from homebrew
 function nvm
     bass source /usr/local/opt/nvm/nvm.sh ';' nvm $argv
 end
+
+# base16 shell colors
+# eval sh $HOME/.config/base16-shell/base16-monokai.dark.sh
+
+# autojump
+[ -f /usr/local/share/autojump/autojump.fish ]; and . /usr/local/share/autojump/autojump.fish
+
+#android
+set -x ANDROID_HOME /Users/bob/Library/Android/sdk
+set -x PATH $PATH $ANDROID_HOME/tools $ANDROID_HOME/platform-tools
+
+test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish

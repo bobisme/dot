@@ -1,0 +1,78 @@
+snippet schema "JSON schema" b
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "${1:Thing}",
+	"description": "${2:$1}",
+	"type": "object",
+	"properties": {
+		$3
+	},
+	"required": [${4:"property"}]
+}
+endsnippet
+
+snippet int "Integer" b
+"${1:id}": {
+	"description": "${2:$1}",
+	"type": "integer"$3
+}$0
+endsnippet
+
+snippet number "Number" b
+"${1:val}": {
+	"description": "${2:$1}",
+	"type": "number"$3
+}$0
+endsnippet
+
+snippet array "Array" b
+"${1:val}": {
+	"description": "${2:$1}",
+	"type": "array",
+	"items": {
+		$3
+	}
+}$0
+endsnippet
+
+snippet str "String" b
+"${1:val}": {
+	"description": "${2:$1}",
+	"type": "string",
+	"maxLength": ${3:255},
+	"pattern": "$4"$5
+}$0
+endsnippet
+
+snippet enum "Enumeration" b
+"${1:val}": {
+	"description": "${2:$1}",
+	"type": "string",
+	"enum": ["${3:opt1}"$4]
+}$0
+endsnippet
+
+snippet object "Object" b
+"${1:val}": {
+	"description": "${2:$1}",
+	"type": "object",
+	"properties": {
+		$3
+	}
+}$0
+endsnippet
+
+snippet bool "Boolean" b
+"${1:val}": {
+	"description": "${2:$1}",
+	"type": "boolean"
+}$0
+endsnippet
+
+snippet datetime "Date-Time" b
+"${1:val}": {
+	"description": "${2:$1}",
+	"type": "string",
+	"format": "date-time"
+}$0
+endsnippet

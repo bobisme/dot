@@ -1,0 +1,124 @@
+snippet ready "DOMContentLoaded listener" b
+document.addEventListener('DOMContentLoaded', function(){
+	$1
+});
+endsnippet
+
+snippet ready-ie8 "IE8 compat. ready function" b
+function ready(fn) {
+	if (document.addEventListener) {
+		document.addEventListener('DOMContentLoaded', fn);
+	} else {
+		document.attachEvent('onreadystatechange', function() {
+			if (document.readyState === 'interactive') fn();
+		});
+	}
+}
+ready(function(){
+	$1
+});
+endsnippet
+
+snippet getJSON "make a GET request and parse JSON IE10+" b
+var request = new XMLHttpRequest();
+request.open('GET', '${1:/my/url}', true);
+
+request.onload = function() {
+	if (this.status >= 200 && this.status < 400) {
+		// Success!
+		var data = JSON.parse(this.response);
+	} else {
+		// We reached our target server, but it returned an error
+	}
+};
+
+request.onerror = function() {
+	// There was a connection error of some sort
+};
+
+request.send();
+endsnippet
+
+snippet post "XMLHttp POST IE8+" b
+var request = new XMLHttpRequest();
+request.open('POST', '/my/url', true);
+request.setRequestHeader(
+	'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+request.send(data);
+endsnippet
+
+snippet eslint "eslint ignore" b
+/* eslint-disable */
+${0:${VISUAL}}
+/* eslint-enable */
+endsnippet
+
+snippet strict "Use Strict" b
+'use strict';
+endsnippet
+
+snippet react "React Component, ES6" b
+import React from 'react';
+
+class ${1:ComponentName} extends React.Component {
+	render() {
+		return (
+			<div className="${2:${1/([a-z0-9])?([A-Z])/\l$1(?1:-)\l$2/g}}">
+				<div className="$2__name">{this.props.name}</div>
+			</div>
+		);
+	}
+}
+
+export default $1;
+endsnippet
+
+snippet pt "PropType" !b
+$1: React.PropTypes.$2,$0
+endsnippet
+
+snippet comp "React Component" b
+import React from 'react';
+
+
+export default class $1 extends React.Component {
+	static propTypes = {}
+
+	render() {
+		return (
+			<div>${0:$1 Instance}</div>
+		);
+	}
+}
+endsnippet
+
+snippet indexexp "index.js export" b
+export $1 from './$1/$1';
+endsnippet
+
+snippet childpt "children PropType" b
+children: React.PropTypes.oneOfType([
+	React.PropTypes.arrayOf(React.PropTypes.node),
+	React.PropTypes.node
+])
+endsnippet
+
+snippet svg "Material UI React SVG Icon component module" b
+import React from 'react';
+import pure from 'recompose/pure';
+import { SvgIcon } from 'material-ui';
+
+let ${1:IconName} = (props) => (
+	<SvgIcon {...props}>
+		<path d="$0"/>
+	</SvgIcon>
+);
+$1 = pure($1);
+$1.displayName = '$1';
+
+export default $1;
+endsnippet
+
+snippet export "index.js export shortcut" b
+export ${1:ExportedName} from './${2:$1/$1}';
+endsnippet

@@ -138,3 +138,5 @@ export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
 eval $(thefuck --alias)
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+PATH=$PATH:node_modules/.bin  

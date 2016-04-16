@@ -1,0 +1,259 @@
+snippet super "super call"
+super(${1:Class}, self).${2:__init__}($3${4:*args, }${5:**kwargs})
+endsnippet
+
+snippet todo "Todo"
+# TODO: ${1:What?} [`!v strftime("%F")`]
+endsnippet
+
+snippet * "*args" 
+*args
+endsnippet
+
+snippet ** "**kwargs" 
+**kwargs
+endsnippet
+
+snippet *ak "*args, **kwargs"
+*args, **kwargs
+endsnippet
+
+snippet utf8 "Insert UTF-8 coding string" !b
+# -*- coding: utf-8 -*-
+endsnippet
+
+snippet test "simple test case" !b
+def test_${1:expected_behaviour_or_condition}():
+	${2:assert False}
+endsnippet
+
+snippet ctest "simple test case in a class" !b
+def test_${1:expected_behaviour_or_condition}(self):
+	${2:assert False}
+endsnippet
+
+snippet dj_ "import django's ugettext" !b
+from django.utils.translation import ugettext${1:_lazy} as _
+endsnippet
+
+snippet charf "Django CharField"
+${1:field_property} = models.CharField($99_('${3:${1/([^_]+)(_*)/\u$1(?2: )/g}}'), max_length=${4:255}${5:, null=True})
+endsnippet
+
+snippet intf "Django Integer Fields"
+${1:field_property} = models.${2:Positive}${3:Small}IntegerField($99_('${4:${1/([^_]+)(_*)/\u$1(?2: )/g}}')${5:, null=True})
+endsnippet
+
+snippet decf "Django Model DecimalField"
+${1:field_property} = models.DecimalField($99_('${3:${1/([^_]+)(_*)/\u$1(?2: )/g}}'), max_digits=${2:12}, decimal_places=${3:4}${4:, null=True})
+endsnippet
+
+snippet djf "DjangoField" !b
+${1:field_property} = models.${2:CharField}($99_('${3:${1/([^_]+)(_*)/\u$1(?2: )/g}}'))
+endsnippet
+
+snippet render "Django render shortcut" !b
+render(request, ${1:template}, ${2:ctx})
+endsnippet
+
+snippet meta "Metaclass" !b
+class ${1:MetaclassName}(${2:type}):
+	def __new__(cls, name, bases, attrs):
+		return super($1, cls).__new__(cls, name, bases, attrs)
+endsnippet
+
+snippet odoocreate "Odoo override create method." !b
+@api.model
+@api.returns('self', lambda obj: obj.id)
+def create(self, vals):
+	obj = super(${1:ClassName}, self).create(vals)
+	$2
+	return obj
+endsnippet
+
+snippet odoowrite "Odoo override write method." !b
+@api.multi
+def write(self, vals):
+	result = super(${1:ClassName}, self).write(vals)
+	$2
+	return result
+endsnippet
+
+snippet odoounlink "Odoo override unlink method." !b
+@api.multi
+def unlink(self):
+	$2
+	return super(${1:ClassName}, self).unlink()
+endsnippet
+
+snippet odooover "Odoo override create and write." !b
+@api.model
+@api.returns('self', lambda obj: obj.id)
+def create(self, values):
+	return super(${1:ClassName}, self).create(values)
+
+@api.multi
+def write(self, values):
+	return super($1, self).write(values)
+endsnippet
+
+snippet des "Mamba spec description" b
+with describe("$1"):
+	${2:pass}
+endsnippet
+
+snippet con "Mamba spec context" b
+with context("$1"):
+	${2:pass}
+endsnippet
+
+snippet it "Mamba spec expectation" b
+with ${2:_}it("$1"):
+	${3:raise NotImplementedError}
+endsnippet
+
+snippet specout "Boilerplate Spec" b
+#pylint: skip-file
+import sure
+from mock import *
+
+with describe("$1"):
+	$2
+endsnippet
+
+snippet exst "Behave ctx.execute_steps(..." b
+ctx.execute_steps(u"""
+	$1
+""")
+endsnippet
+
+snippet given "Behave @given" b
+@given(u"${1:${VISUAL/^([tw]hen|given) //i}}")
+def step_impl(ctx$2):
+	$3
+endsnippet
+
+snippet when "Behave @when" b
+@when(u"${1:${VISUAL/^([tw]hen|given) //i}}")
+def step_impl(ctx$2):
+	$3
+endsnippet
+
+snippet then "Behave @then" b
+@then(u"${1:${VISUAL/^([tw]hen|given) //i}}")
+def step_impl(ctx$2):
+	$3
+endsnippet
+
+snippet step "Behave step" b
+@${1:${VISUAL/^([TtWwGg])(hen|iven).+$/\L$1$2\E/}}(u"${2:${VISUAL/^([tw]hen|given) //i}}")
+def step_impl(ctx$3):
+	$0
+endsnippet
+
+snippet envpop "from os import environ; os.environ.pop" b
+${1:ENV_VAR} = environ.pop('$1'${2:, '${3:default}'})
+endsnippet
+
+snippet odoomanifest "Odoo Manifest" b
+{
+	'name': '${1:Module Name}',
+	'version': '0.1',
+	'category': 'General',
+	'author': 'Bob <bob@steinbauerusa.com>',
+	'description': '${2:$1}',
+	'summary': """
+	${3:- Feature 1
+	- Feature 2}
+	""",
+	'depends': [
+		"base", "web",$4
+	],
+	'installable': True,
+	'data': [
+		# 'views/views.xml',
+		# 'security/security.xml',
+		# 'security/ir.model.access.csv',
+		# 'views/load_assets.xml',
+		# 'views/menus.xml',
+		$5
+	],
+}
+endsnippet
+
+snippet odooreport "Odoo custom report class" b
+class ${1:CustomReport}(models.AbstractModel):
+	_name = 'report.${2:module.report_name}'
+
+	@api.multi
+	def render_html(self, data=None):
+		report_obj = self.env['report']
+		report = report_obj._get_report_from_name('$2')
+		ctx = {
+			'doc_ids': self._ids,
+			'doc_model': report.model,
+			'docs': self,
+		}
+		return report_obj.render('$2', ctx)
+endsnippet
+
+snippet odoowiz "Odoo Wizard Model" b
+class ${1:Wizard}(models.TransientModel):
+	@api.model
+	def _get_active_model(self):
+		resource = self.env.context.get('active_model')
+		if not resource:
+			return None
+		return self.env[resource]
+
+	@api.model
+	def _get_active_object(self):
+		model = self._get_active_model()
+		if model is None:
+			return None
+		id_ = self.env.context.get('active_id')
+		if id_ is None:
+			return None
+		return model.browse(id_)
+
+	@api.model
+	def default_get(self, fields):
+		env = self.env
+		ctx = env.context
+		defaults = super($1, self).default_get(fields)
+		# defaults is a dict. the keys are this wizard's fields
+		# set them like defaults['wiz_field_1'] = 'something'
+		# check the current model or object using the methods above
+		return defaults
+endsnippet
+
+snippet odoocustomreport "Odoo Custom Report" b
+class TaxReport(models.AbstractModel):
+	_name = 'report.${1:<module_code>}.${2:<report_model_code>}'
+
+	@api.multi
+	def render_html(self, data=None):
+		ctx = {
+			'company': self.env.user.company_id,
+			'doc_ids': self._ids,
+			'doc_model': '${3:$1}.${4:report_wizard}',
+			'docs': self.env['$3.$4'].browse(self._ids),
+		}
+		return self.env['report'].render(
+			'$3.${5:report_template}', ctx)
+endsnippet
+
+snippet memoize "Memoize decorator" b
+def memoize(obj, cache=None, attach_cache=False):
+	if cache is None:
+		cache = {}
+	if attach_cache:
+		obj.__cache = cache
+	@functools.wraps(obj)
+	def memoizer(*args, **kwargs):
+		key = tuple(args) + tuple(sorted(kwargs.iteritems()))
+		if key not in cache:
+			cache[key] = obj(*args, **kwargs)
+		return cache[key]
+	return memoizer
+endsnippet

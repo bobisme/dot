@@ -1,0 +1,2 @@
+alias quickvim='vim -X --noplugin'
+alias vimquick=quickvim

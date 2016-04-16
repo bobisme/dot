@@ -14,6 +14,7 @@
 	mg = merge
 	ec = config --global -e
 	s = status
+	backup = push dropbox --all --prune --follow-tags
 [filter "media"]
 	clean = git-media-clean %f
 	smudge = git-media-smudge %f
