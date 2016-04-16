@@ -1,0 +1,28 @@
+snippet feat "Feature" b
+Feature: ${1:feature name}
+	$2
+endsnippet
+
+snippet back "Background" b
+Background: ${1:some requirement of this test}
+  Given ${2:some setup condition}
+    And ${3:some other setup action}
+endsnippet
+
+snippet scen "Scenario" b
+Scenario: ${1:some scenario}
+    Given ${2:some condition}
+     When ${3:some action is taken}
+     Then ${4:some result is expected.}
+endsnippet
+
+snippet out "Scenario Outline" b
+Scenario Outline: ${1:Outline name}
+   Given ${2:I put <thing> in a blender,}
+    When ${3:I switch the blender on}
+    Then ${4:it should transform into <other thing>}
+
+ Examples: ${5:Amphibians}
+   | ${6:thing}         | ${7:other thing} |
+   | ${8:Red Tree Frog} | ${9:mush}        |
+endsnippet

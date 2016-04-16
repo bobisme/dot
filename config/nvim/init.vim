@@ -7,6 +7,8 @@ set visualbell
 set lazyredraw
 set shiftround
 set undofile
+" use system clipboard
+set clipboard=unnamed
 
 set undodir=~/.vim/tmp/undo//
 set backupdir=~/.vim/tmp/backup//
@@ -21,6 +23,9 @@ endif
 if !isdirectory(expand(&directory))
     call mkdir(expand(&directory), "p")
 endif
+
+" mac brew only
+let g:python_host_prog='/usr/local/bin/python'
 
 " Bundles ========================================================== {{{
 " Vundle to be replaced by NeoBundle
@@ -104,16 +109,15 @@ NeoBundle 'tpope/vim-unimpaired'
 NeoBundle 'tomtom/tcomment_vim'
 
 " visual indention guides
-NeoBundle 'nathanaelkane/vim-indent-guides'
-" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#151515 guifg=#202020 ctermbg=3
-" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#000000 guifg=#151515 ctermbg=4
-" let g:indent_guides_auto_colors = 1
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
-let g:indent_guides_enable_on_vim_startup = 1
+" NeoBundle 'nathanaelkane/vim-indent-guides'
+" " autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#151515 guifg=#202020 ctermbg=3
+" " autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#000000 guifg=#151515 ctermbg=4
+" " let g:indent_guides_auto_colors = 1
+" let g:indent_guides_start_level = 2
+" let g:indent_guides_guide_size = 1
+" let g:indent_guides_enable_on_vim_startup = 1
 " to replace indent guides?
-" follow-up: i like it, but too slow
-" NeoBundle 'Yggdroot/indentLine'
+NeoBundle 'Yggdroot/indentLine'
 
 " auto-close tags when you type </
 NeoBundle 'docunext/closetag.vim'
@@ -143,6 +147,7 @@ NeoBundle 'cespare/vim-sbd'
 " let g:ctrlp_reuse_window = '.*'
 
 " fuzzy finder is cool
+let $FZF_DEFAULT_COMMAND='ag -g ""'
 NeoBundle 'junegunn/fzf', { 'dir': '~/.fzf'}
 NeoBundle 'junegunn/fzf.vim'
 let g:fzf_command_prefix = 'Fzf'
@@ -154,6 +159,10 @@ NeoBundle 'groenewege/vim-less'
 NeoBundle 'tudorprodan/html_annoyance.vim'
 NeoBundle 'rust-lang/rust.vim'
 NeoBundle 'cespare/vim-toml'
+" kotlin language
+NeoBundle 'udalov/kotlin-vim'
+" gradle syntax
+NeoBundle 'tfnico/vim-gradle'
 
 " PostgreSQL syntax highlighting
 NeoBundle 'exu/pgsql.vim'
@@ -200,8 +209,22 @@ let g:airline_powerline_fonts=1
 " " let g:syntastic_warning_symbol = "⁉»"
 " nmap <leader>l :Errors<cr>
 
+NeoBundleLazy 'facebook/vim-flow', {
+    \ 'autoload': {
+    \     'filetypes': ['javascript', 'jsx']
+    \ }}
+let g:flow#enable = 0
+
 NeoBundle 'benekastah/neomake'
 autocmd! BufWritePost * Neomake
+let g:neomake_python_pylama_maker = {
+    \ 'args': [
+        \ '--format', 'pep8',
+        \ '-l', 'pep8,mccabe,pyflakes,pep257,pylint'],
+    \ 'errorformat': '%f:%l:%c: %m',
+    \ }
+let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
+let g:neomake_jsx_enabled_makers = ['eslint', 'flow']
 
 " vim-scripts repos
 " Plugin 'L9'
@@ -255,6 +278,7 @@ NeoBundle 'Valloric/YouCompleteMe', {
 " let g:ycm__key_list_previous_completion = ['<Up>']
 " let g:ycm__key_list_select_completion = ['<Enter>', '<Down>']
 " let g:ycm_autoclose_preview_window_after_completion=1
+let g:ycm_python_binary_path='/usr/local/bin/python'
 let g:ycm_complete_in_comments = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tag_files = 1
@@ -266,11 +290,14 @@ NeoBundle 'tikhomirov/vim-glsl'
 NeoBundle 'cstrahan/vim-capnp'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'othree/html5.vim'
+NeoBundle 'digitaltoad/vim-pug'
 
 " Python
 " refactoring using python rope
 " NeoBundle 'pfdevilliers/Pretty-Vim-Python'
-NeoBundle 'klen/rope-vim'
+NeoBundle 'python-rope/ropevim'
+let ropevim_vim_completions=1
+let ropevim_extend_complete=1
 NeoBundle 'klen/python-mode'
 let g:pymode_folding = 0
 let g:pymode_indent = 0
@@ -338,6 +365,11 @@ autocmd  User GoyoEnter nested call <SID>goyo_enter()
 autocmd  User GoyoLeave nested call <SID>goyo_leave()
 
 NeoBundle 'editorconfig/editorconfig-vim'
+" preview colors in css and stuff
+NeoBundle 'gorodinskiy/vim-coloresque'
+
+" android tools
+" NeoBundle 'hsanson/vim-android'
 
 call neobundle#end()
 NeoBundleCheck
@@ -448,17 +480,24 @@ set textwidth=78
 set hls
 
 " colors {{{
-set t_Co=256 " 256 colors
+" set t_Co=256 " 256 colors
 set background=dark
 syntax enable
-let base16colorspace=256
+" let base16colorspace=256
 color base16-monokai
 au Colorscheme * hi Comment cterm=italic gui=italic
-au Colorscheme * hi htmlItalic cterm=italic gui=italic
-au Colorscheme * hi htmlBold cterm=bold gui=bold
-au Colorscheme * hi htmlBoldItalic cterm=bold,italic gui=bold,italic
+au Colorscheme * hi htmlItalic cterm=italic ctermfg=white gui=italic
+au Colorscheme * hi htmlBold cterm=bold ctermfg=white gui=bold
+au Colorscheme * hi htmlBoldItalic cterm=bold,italic ctermfg=white gui=bold,italic
 au Colorscheme * hi htmlH1 cterm=bold gui=bold
 au Colorscheme * hi Comment cterm=italic gui=italic
+" highlight 81st column
+set colorcolumn=80
+" hi ColorColumn ctermbg=magenta
+" call matchadd('ColorColumn', '\%81v', 100)
+
+" highlight current line
+set cursorline
 
 if has("gui_running")
     set lines=100
@@ -510,18 +549,14 @@ endfunction
 " GRB: use emacs-style tab completion when selecting files, etc
 set wildmode=longest,list
 
-" GRB: Put useful info in status line
-:set statusline=%<%f%=\ [%1*%M%*%n%R%H]\ %-19(%3l,%02c%03V%)%O'%02b'
-:hi User1 term=inverse,bold cterm=inverse,bold ctermfg=red
+" " GRB: Put useful info in status line
+" :set statusline=%<%f%=\ [%1*%M%*%n%R%H]\ %-19(%3l,%02c%03V%)%O'%02b'
+" :hi User1 term=inverse,bold cterm=inverse,bold ctermfg=red
 
 " GRB: clear the search buffer when hitting return
 :nnoremap <CR> :nohlsearch<CR>/<BS>
 
 let mapleader=","
-
-" highlight current line
-set cursorline
-hi CursorLine cterm=NONE ctermbg=black
 
 set cmdheight=2
 
@@ -621,6 +656,8 @@ autocmd FileType python setlocal foldmethod=indent foldnestmax=2
 autocmd FileType go setlocal noexpandtab
 autocmd FileType coffee setlocal sw=2 ts=2 sts=2
 autocmd FileType raml setlocal ts=2 sw=2 sts=2 et
+autocmd FileType jade,pug setlocal ts=2 sw=2 sts=2 et
+
 " make commentary use // for go files
 autocmd FileType go set commentstring=//\ %s
 " autocmd FileType c set commentstring=//\ %s
@@ -758,6 +795,11 @@ inoremap <c-b> <c-o>yiW<end>=<c-r>=<c-r>0<cr>
 " previous buffer
 nnoremap <c-s-a> :b#<cr>
 "}}}
+
+" indent newlines in blocks/braces/parens
+inoremap {<cr> {<cr>}<esc>O
+inoremap (<cr> (<cr>)<esc>O
+inoremap [<cr> [<cr>]<esc>O
 
 " easy filetype switching {{{
 nnoremap _md :set ft=markdown<cr>
