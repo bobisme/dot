@@ -9,6 +9,8 @@ set shiftround
 set undofile
 " use system clipboard
 set clipboard=unnamed
+" why would you think . is part of a word?
+set iskeyword-=.
 
 set undodir=~/.vim/tmp/undo//
 set backupdir=~/.vim/tmp/backup//
@@ -130,22 +132,6 @@ NeoBundle 'godlygeek/tabular'
 " close buffer without closing window
 NeoBundle 'cespare/vim-sbd'
 
-" awesome fuzzy file and buffer search
-" disabled Wed Jan 20 05:19:05 2016
-" NeoBundle 'ctrlpvim/ctrlp.vim'
-" " don't manage woring dir
-" let g:ctrlp_working_path_mode = 0
-" let g:ctrlp_custom_ignore = {
-"   \ 'dir':  '\v(\.git|\.hg|\.svn|node_modules|static\/components|bower_components|Godeps)$',
-"   \ 'file': '\.exe$\|\.so$\|\.dll\|\.pyc\|\.jpg\|\.png\|\.gif\|\.pdf$',
-"   \ 'link': 'some_bad_symbolic_links',
-"   \ }
-" let g:ctrlp_max_height = 20
-" let g:ctrlp_map = '<leader>f'
-" " open the buffer again, I don't care
-" let g:ctrlp_switch_buffer = 0
-" let g:ctrlp_reuse_window = '.*'
-
 " fuzzy finder is cool
 let $FZF_DEFAULT_COMMAND='ag -g ""'
 NeoBundle 'junegunn/fzf', { 'dir': '~/.fzf'}
@@ -175,6 +161,10 @@ NeoBundle 'qualiabyte/vim-colorstepper'
 "}}}
 
 NeoBundle 'kien/rainbow_parentheses.vim'
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
 
 NeoBundle 'airblade/vim-gitgutter'
 " make gitgutter not look stupid
@@ -182,12 +172,12 @@ let g:gitgutter_diff_args = '-w'
 " highlight clear signColumn
 " don't run so damn much
 let g:gitgutter_realtime = 0
-let g:gitgutter_eager = 0
 
 NeoBundle 'dhruvasagar/vim-markify'
 " Plugin 'jnwhiteh/vim-golang'
 NeoBundle 'fatih/vim-go'
-let $GOPATH=resolve(expand('~/src/gostuff'))
+let $GOPATH=resolve(expand('~/go'))
+let $GOROOT=resolve(expand('/usr/local/opt/go/libexec'))
 NeoBundle 'rhysd/vim-go-impl'
 NeoBundle 'Shougo/unite.vim'
 
@@ -195,19 +185,6 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'bling/vim-airline'
 set laststatus=2
 let g:airline_powerline_fonts=1
-
-" NeoBundle 'scrooloose/syntastic'
-" let g:syntastic_javascript_checkers = ['eslint']
-" " default: let g:syntastic_python_checkers = ['python', 'flake8', 'pylint']
-" " let g:syntastic_python_checkers = ['flake8']
-" let g:syntastic_python_checkers = ['prospector']
-" " let g:syntastic_coffee_checkers = ['coffee-jshint']
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_error_symbol = "✗"
-" " let g:syntastic_error_symbol = "‼»"
-" let g:syntastic_warning_symbol = "⚠"
-" " let g:syntastic_warning_symbol = "⁉»"
-" nmap <leader>l :Errors<cr>
 
 NeoBundleLazy 'facebook/vim-flow', {
     \ 'autoload': {
@@ -220,11 +197,25 @@ autocmd! BufWritePost * Neomake
 let g:neomake_python_pylama_maker = {
     \ 'args': [
         \ '--format', 'pep8',
+        \ '-i', 'D203',
         \ '-l', 'pep8,mccabe,pyflakes,pep257,pylint'],
     \ 'errorformat': '%f:%l:%c: %m',
     \ }
 let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
 let g:neomake_jsx_enabled_makers = ['eslint', 'flow']
+let g:neomake_rust_rustc_maker = {
+    \ 'args': ['rustc', '-Zno-trans'],
+    \ 'exe': 'cargo',
+    \ 'append_file': 0,
+    \ 'errorformat':
+        \ '%-G%f:%s:,' .
+        \ '%f:%l:%c: %trror: %m,' .
+        \ '%f:%l:%c: %tarning: %m,' .
+        \ '%f:%l:%c: %m,'.
+        \ '%f:%l: %trror: %m,'.
+        \ '%f:%l: %tarning: %m,'.
+        \ '%f:%l: %m',
+    \ }
 
 " vim-scripts repos
 " Plugin 'L9'
@@ -266,14 +257,15 @@ NeoBundle 'rking/ag.vim'
 
 " fantastic autocomplete, c checking
 " increase neobundle timeout so build can complete
-NeoBundle 'Valloric/YouCompleteMe', {
-\'build': {
-  \'mac': './install.py --clang-completer --omnisharp-completer --gocode-completer',
-  \'unix': './install.py --clang-completer --omnisharp-completer --gocode-completer',
-  \'windows': 'install.py --clang-completer --omnisharp-completer --gocode-completer',
-  \'cygwin': './install.py --clang-completer --omnisharp-completer --gocode-completer'
-  \}
-\}
+NeoBundle 'Valloric/YouCompleteMe'
+" NeoBundle 'Valloric/YouCompleteMe', {
+" \'build': {
+"   \'mac': './install.py --all',
+"   \'unix': './install.py --all',
+"   \'windows': 'install.py --all',
+"   \'cygwin': './install.py --all'
+"   \}
+" \}
 " ./install.sh --clang-completer --omnisharp-completer --gocode-completer
 " let g:ycm__key_list_previous_completion = ['<Up>']
 " let g:ycm__key_list_select_completion = ['<Enter>', '<Down>']
@@ -484,16 +476,23 @@ set hls
 set background=dark
 syntax enable
 " let base16colorspace=256
+" color base16-monokai
+" color molokai
 color base16-monokai
+colorscheme grb256
 au Colorscheme * hi Comment cterm=italic gui=italic
 au Colorscheme * hi htmlItalic cterm=italic ctermfg=white gui=italic
 au Colorscheme * hi htmlBold cterm=bold ctermfg=white gui=bold
 au Colorscheme * hi htmlBoldItalic cterm=bold,italic ctermfg=white gui=bold,italic
 au Colorscheme * hi htmlH1 cterm=bold gui=bold
 au Colorscheme * hi Comment cterm=italic gui=italic
+au Colorscheme * hi DiffText ctermfg=none ctermbg=20
+au Colorscheme * hi DiffChange ctermfg=none ctermbg=17
+au Colorscheme * hi DiffAdd ctermfg=none ctermbg=22
+au Colorscheme * hi DiffDelete ctermfg=red ctermbg=none
 " highlight 81st column
-set colorcolumn=80
-" hi ColorColumn ctermbg=magenta
+" set colorcolumn=80
+" hi ColorColumn ctermbg=gray
 " call matchadd('ColorColumn', '\%81v', 100)
 
 " highlight current line

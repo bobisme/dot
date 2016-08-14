@@ -22,8 +22,10 @@ set -x PROJECT_HOME ~/src
 eval (python -m virtualfish projects)
 
 # gopath
-set -x GOPATH ~/src/gostuff
+set -x GOPATH ~/go
 set -x PATH $GOPATH/bin $PATH
+set -x PATH ~/.cargo/bin $PATH
+set -x RUST_SRC_PATH ~/repos/rust/src
 
 # nvm on mac from homebrew
 function nvm

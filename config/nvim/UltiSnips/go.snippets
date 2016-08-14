@@ -89,3 +89,17 @@ endsnippet
 snippet fjre "Struct field with JSON+rethink annotations" !b
 ${1:Name} ${2:string} \`json:"${3:${1/\w/\l$0/}}" gorethink:"${3:${1/\w/\l$0/}}"$4\`
 endsnippet
+
+snippet stringerjson "Stringer interface using JSON" b
+func (${1:self} ${2:Type}) String() string {
+	jsonBytes, err := json.Marshal($1)
+	if err != nil {
+		return `"ERROR MARSHALLING TO JSON"`
+	}
+	return string(jsonBytes)
+}
+endsnippet
+
+snippet logr "import logrus as log" b
+log "github.com/Sirupsen/logrus"
+endsnippet
