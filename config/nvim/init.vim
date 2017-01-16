@@ -39,374 +39,389 @@ let g:python_host_prog='/usr/local/bin/python'
 " Note: Skip initialization for vim-tiny or vim-small.
 if 0 | endif
 
-if has('vim_starting')
-  " Required:
-  set runtimepath+=~/.config/nvim/bundle/neobundle.vim/
+" dein Scripts-----------------------------
+if &compatible
+  set nocompatible               " Be iMproved
 endif
 
 " Required:
-call neobundle#begin(expand('~/.config/nvim/bundle'))
+set runtimepath+=/Users/bob/.nvim//repos/github.com/Shougo/dein.vim
 
-" Let NeoBundle manage NeoBundle
 " Required:
-NeoBundleFetch 'Shougo/neobundle.vim'
+if dein#load_state('~/.nvim/')
+    call dein#begin('~/.nvim/')
 
-" background stuff
-NeoBundle 'Shougo/vimproc.vim', {
-\ 'build' : {
-\     'windows' : 'tools\\update-dll-mingw',
-\     'cygwin' : 'make -f make_cygwin.mak',
-\     'mac' : 'make',
-\     'linux' : 'make',
-\     'unix' : 'gmake',
-\    },
-\ }
+    " Let dein manage dein
+    " Required:
+    call dein#add('~/.nvim/repos/github.com/Shougo/dein.vim')
 
-" original repos on github
-NeoBundle 'tpope/vim-fugitive'
+    " Add or remove your plugins here:
+    call dein#add('Shougo/neosnippet.vim')
+    call dein#add('Shougo/neosnippet-snippets')
 
-NeoBundle 'Lokaltog/vim-easymotion'
-" do 2-char search, like vim-sneak
-" nmap s <Plug>(easymotion-s2)
-nmap s <Plug>(easymotion-sn)
-" enhance search
-map  <leader>/ <Plug>(easymotion-sn)
-omap <leader>/ <Plug>(easymotion-tn)
-" map  n <Plug>(easymotion-next)
-" map  N <Plug>(easymotion-prev)
-let g:EasyMotion_smartcase = 1
-" highlight column
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
-let g:EasyMotion_startofline = 0
+    " background stuff
+    call dein#add('Shougo/vimproc.vim', {
+    \ 'build' : {
+    \     'windows' : 'tools\\update-dll-mingw',
+    \     'cygwin' : 'make -f make_cygwin.mak',
+    \     'mac' : 'make',
+    \     'linux' : 'make',
+    \     'unix' : 'gmake',
+    \    },
+    \ })
 
-" Disabled 2015-03-18 in favor of emmet
-" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-NeoBundle 'scrooloose/nerdtree'
-let NERDTreeIgnore = ['\.pyc$']
-NeoBundle 'majutsushi/tagbar'
-" not updated enough
-NeoBundle 'phreax/vim-coffee-script'
-" close tags and brackets
-NeoBundle 'Raimondi/delimitMate'
-NeoBundle 'SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsEditSplit="horizontal"
-" snippets for ultisnips
-NeoBundle 'honza/vim-snippets'
-" use . repeat for more
-NeoBundle 'tpope/vim-repeat'
-" surround
-NeoBundle 'tpope/vim-surround'
-" easy substitution, cool replace trick, recasing
-NeoBundle 'tpope/vim-abolish'
-" handy keybindings I use a lot
-NeoBundle 'tpope/vim-unimpaired'
-" easy commenting/uncommenting
-" Plugin 'tpope/vim-commentary'
-" disabled for this: 2015-04-05
-NeoBundle 'tomtom/tcomment_vim'
+    " original repos on github
+    call dein#add('tpope/vim-fugitive')
 
-" visual indention guides
-NeoBundle 'nathanaelkane/vim-indent-guides'
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#151515 guifg=#202020 ctermbg=238
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#000000 guifg=#151515 ctermbg=236
-let g:indent_guides_auto_colors = 1
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
-let g:indent_guides_enable_on_vim_startup = 1
-" to replace indent guides?
-" NeoBundle 'Yggdroot/indentLine'
-" let g:indentLine_setColors = 0
-" let g:indentLine_color_term = 239
+    call dein#add('Lokaltog/vim-easymotion')
+    " do 2-char search, like vim-sneak
+    " nmap s <Plug>(easymotion-s2)
+    nmap s <Plug>(easymotion-sn)
+    " enhance search
+    map  <leader>/ <Plug>(easymotion-sn)
+    omap <leader>/ <Plug>(easymotion-tn)
+    " map  n <Plug>(easymotion-next)
+    " map  N <Plug>(easymotion-prev)
+    let g:EasyMotion_smartcase = 1
+    " highlight column
+    map <Leader>j <Plug>(easymotion-j)
+    map <Leader>k <Plug>(easymotion-k)
+    let g:EasyMotion_startofline = 0
 
-" auto-close tags when you type </
-NeoBundle 'docunext/closetag.vim'
-" neat browseable tree-style undo
-NeoBundle 'sjl/gundo.vim'
-" Disabled: Wed Nov  5 09:49:35 2014
-" Plugin 'hsitz/VimOrganizer'
-" auto-organizing ascii tables
-NeoBundle 'godlygeek/tabular'
-" close buffer without closing window
-NeoBundle 'cespare/vim-sbd'
+    " Disabled 2015-03-18 in favor of emmet
+    " Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+    call dein#add('scrooloose/nerdtree')
+    let NERDTreeIgnore = ['\.pyc$']
+    call dein#add('majutsushi/tagbar')
+    " not updated enough
+    call dein#add('phreax/vim-coffee-script')
+    " close tags and brackets
+    call dein#add('Raimondi/delimitMate')
+    call dein#add('SirVer/ultisnips')
+    let g:UltiSnipsExpandTrigger="<c-j>"
+    let g:UltiSnipsEditSplit="horizontal"
+    " snippets for ultisnips
+    call dein#add('honza/vim-snippets')
+    " use . repeat for more
+    call dein#add('tpope/vim-repeat')
+    " surround
+    call dein#add('tpope/vim-surround')
+    " easy substitution, cool replace trick, recasing
+    call dein#add('tpope/vim-abolish')
+    " handy keybindings I use a lot
+    call dein#add('tpope/vim-unimpaired')
+    " easy commenting/uncommenting
+    " Plugin 'tpope/vim-commentary'
+    " disabled for this: 2015-04-05
+    call dein#add('tomtom/tcomment_vim')
 
-" fuzzy finder is cool
-" let $FZF_DEFAULT_COMMAND='ag -g ""'
-let $FZF_DEFAULT_COMMAND='rg --files --follow'
-NeoBundle 'junegunn/fzf', { 'dir': '~/.fzf'}
-NeoBundle 'junegunn/fzf.vim'
-let g:fzf_command_prefix = 'Fzf'
+    " visual indention guides
+    call dein#add('nathanaelkane/vim-indent-guides')
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#151515 guifg=#202020 ctermbg=238
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#000000 guifg=#151515 ctermbg=236
+    let g:indent_guides_auto_colors = 1
+    let g:indent_guides_start_level = 2
+    let g:indent_guides_guide_size = 1
+    let g:indent_guides_enable_on_vim_startup = 1
+    " to replace indent guides?
+    " call dein#add('Yggdroot/indentLine')
+    " let g:indentLine_setColors = 0
+    " let g:indentLine_color_term = 239
 
-NeoBundle 'sheerun/vim-polyglot'
-"" pangloss/vim-javascript
-let g:javascript_plugin_flow = 1
-"" 'mxw/vim-jsx'
-let g:jsx_ext_required = 0
-NeoBundle 'tudorprodan/html_annoyance.vim'
-" polyglotted: NeoBundle 'rust-lang/rust.vim'
-" polyglotted: NeoBundle 'cespare/vim-toml'
-" kotlin language
-" polyglotted: NeoBundle 'udalov/kotlin-vim'
-" gradle syntax
-" polyglotted: NeoBundle 'tfnico/vim-gradle'
-NeoBundle 'haproxy'
+    " auto-close tags when you type </
+    call dein#add('docunext/closetag.vim')
+    " neat browseable tree-style undo
+    call dein#add('sjl/gundo.vim')
+    " Disabled: Wed Nov  5 09:49:35 2014
+    " Plugin 'hsitz/VimOrganizer'
+    " auto-organizing ascii tables
+    call dein#add('godlygeek/tabular')
+    " close buffer without closing window
+    call dein#add('cespare/vim-sbd')
 
-" PostgreSQL syntax highlighting
-" polyglotted: NeoBundle 'exu/pgsql.vim'
-autocmd BufNewFile,Bufread *.sql setf pgsql
+    " fuzzy finder is cool
+    " let $FZF_DEFAULT_COMMAND='ag -g ""'
+    let $FZF_DEFAULT_COMMAND='rg --files --follow'
+    call dein#add('junegunn/fzf', { 'dir': '~/.fzf'})
+    call dein#add('junegunn/fzf.vim')
+    let g:fzf_command_prefix = 'Fzf'
 
-" colors {{{
-NeoBundle 'flazz/vim-colorschemes'
-NeoBundle 'chriskempson/base16-vim'
-NeoBundle 'qualiabyte/vim-colorstepper'
-"}}}
+    call dein#add('sheerun/vim-polyglot')
+    "" pangloss/vim-javascript
+    let g:javascript_plugin_flow = 1
+    "" 'mxw/vim-jsx'
+    let g:jsx_ext_required = 0
+    call dein#add('tudorprodan/html_annoyance.vim')
+    " polyglotted: call dein#add('rust-lang/rust.vim')
+    " polyglotted: call dein#add('cespare/vim-toml')
+    " kotlin language
+    " polyglotted: call dein#add('udalov/kotlin-vim')
+    " gradle syntax
+    " polyglotted: call dein#add('tfnico/vim-gradle')
+    call dein#add('haproxy')
 
-NeoBundle 'kien/rainbow_parentheses.vim'
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
+    " PostgreSQL syntax highlighting
+    " polyglotted: call dein#add('exu/pgsql.vim')
+    autocmd BufNewFile,Bufread *.sql setf pgsql
 
-NeoBundle 'airblade/vim-gitgutter'
-" make gitgutter not look stupid
-let g:gitgutter_diff_args = '-w'
-" highlight clear signColumn
-" don't run so damn much
-let g:gitgutter_realtime = 0
+    " colors {{{
+    call dein#add('flazz/vim-colorschemes')
+    call dein#add('chriskempson/base16-vim')
+    call dein#add('qualiabyte/vim-colorstepper')
+    "}}}
 
-NeoBundle 'dhruvasagar/vim-markify'
-NeoBundle 'fatih/vim-go'
-" turn on syntax highlighting
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_types = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_build_constraints = 1
-" install binaries to ~/bin
-let g:go_bin_path = expand("~/bin")
-" if !isdirectory("workspace")
-"     call mkdir("/my/directory", "p")
-" endif
-" let $GOPATH=resolve(expand('~/go'))
-" let $GOROOT=resolve(expand('/usr/local/opt/go/libexec'))
-let g:go_fmt_command = "goimports"
-NeoBundle 'rhysd/vim-go-impl'
-NeoBundle 'Shougo/unite.vim'
+    call dein#add('kien/rainbow_parentheses.vim')
+    au VimEnter * RainbowParenthesesToggle
+    au Syntax * RainbowParenthesesLoadRound
+    au Syntax * RainbowParenthesesLoadSquare
+    au Syntax * RainbowParenthesesLoadBraces
 
-" Plugin 'bling/vim-bufferline'
-NeoBundle 'bling/vim-airline'
-set laststatus=2
-let g:airline_powerline_fonts=1
+    call dein#add('airblade/vim-gitgutter')
+    " make gitgutter not look stupid
+    let g:gitgutter_diff_args = '-w'
+    " highlight clear signColumn
+    " don't run so damn much
+    let g:gitgutter_realtime = 0
 
-NeoBundleLazy 'facebook/vim-flow', {
-    \ 'autoload': {
-    \     'filetypes': ['javascript', 'jsx']
-    \ }}
-let g:flow#enable = 0
-NeoBundle 'ternjs/tern_for_vim'
-NeoBundle 'mephux/vim-jsfmt'
+    call dein#add('dhruvasagar/vim-markify')
+    call dein#add('fatih/vim-go')
+    " turn on syntax highlighting
+    let g:go_highlight_functions = 1
+    let g:go_highlight_methods = 1
+    let g:go_highlight_fields = 1
+    let g:go_highlight_types = 1
+    let g:go_highlight_operators = 1
+    let g:go_highlight_build_constraints = 1
+    " install binaries to ~/bin
+    let g:go_bin_path = expand("~/bin")
+    " if !isdirectory("workspace")
+    "     call mkdir("/my/directory", "p")
+    " endif
+    " let $GOPATH=resolve(expand('~/go'))
+    " let $GOROOT=resolve(expand('/usr/local/opt/go/libexec'))
+    let g:go_fmt_command = "goimports"
+    call dein#add('rhysd/vim-go-impl')
+    call dein#add('Shougo/unite.vim')
 
-NeoBundle 'benekastah/neomake'
-autocmd! BufWritePost * Neomake
-let g:neomake_python_pylama_maker = {
-    \ 'args': [
-        \ '--format', 'pep8',
-        \ '-i', 'D203,D212',
-        \ '-l', 'pep8,mccabe,pyflakes,pep257,pylint'],
-    \ 'errorformat': '%f:%l:%c: %m',
-    \ }
-let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
-let g:neomake_jsx_enabled_makers = ['eslint', 'flow']
-let g:neomake_rust_rustc_maker = {
-    \ 'args': ['rustc', '-Zno-trans'],
-    \ 'exe': 'cargo',
-    \ 'append_file': 0,
-    \ 'errorformat':
-        \ '%-G%f:%s:,' .
-        \ '%f:%l:%c: %trror: %m,' .
-        \ '%f:%l:%c: %tarning: %m,' .
-        \ '%f:%l:%c: %m,'.
-        \ '%f:%l: %trror: %m,'.
-        \ '%f:%l: %tarning: %m,'.
-        \ '%f:%l: %m',
-    \ }
+    " Plugin 'bling/vim-bufferline'
+    call dein#add('bling/vim-airline')
+    set laststatus=2
+    let g:airline_powerline_fonts=1
 
-" vim-scripts repos
-" Plugin 'L9'
-" Plugin 'FuzzyFinder'
-" Plugin 'Better-CSS-Syntax-for-Vim'
-" Plugin 'css_color.vim'
-" Plugin 'AutoComplPop'
-NeoBundle 'VOoM'
-NeoBundle 'po.vim--gray'
-NeoBundle 'loremipsum'
+    call dein#add('facebook/vim-flow', {'on_ft': ['javascript', 'jsx']})
+    let g:flow#enable = 0
+    call dein#add('ternjs/tern_for_vim')
+    call dein#add('mephux/vim-jsfmt')
 
-NeoBundle 'dhruvasagar/vim-table-mode'
-let g:table_mode_corner = '|'
+    call dein#add('benekastah/neomake')
+    autocmd! BufWritePost * Neomake
+    let g:neomake_python_pylama_maker = {
+        \ 'args': [
+            \ '--format', 'pep8',
+            \ '-i', 'D203,D212',
+            \ '-l', 'pep8,mccabe,pyflakes,pep257,pylint'],
+        \ 'errorformat': '%f:%l:%c: %m',
+        \ }
+    let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
+    let g:neomake_jsx_enabled_makers = ['eslint', 'flow']
+    let g:neomake_rust_rustc_maker = {
+        \ 'args': ['rustc', '-Zno-trans'],
+        \ 'exe': 'cargo',
+        \ 'append_file': 0,
+        \ 'errorformat':
+            \ '%-G%f:%s:,' .
+            \ '%f:%l:%c: %trror: %m,' .
+            \ '%f:%l:%c: %tarning: %m,' .
+            \ '%f:%l:%c: %m,'.
+            \ '%f:%l: %trror: %m,'.
+            \ '%f:%l: %tarning: %m,'.
+            \ '%f:%l: %m',
+        \ }
 
-" Disabled: Wed Nov  5 10:04:15 2014
-" Plugin 'fmoralesc/vim-pad'
-" nnoremap <leader>p :OpenPad<cr>
-" nnoremap <leader>lp :ListPads<cr>
+    " vim-scripts repos
+    " Plugin 'L9'
+    " Plugin 'FuzzyFinder'
+    " Plugin 'Better-CSS-Syntax-for-Vim'
+    " Plugin 'css_color.vim'
+    " Plugin 'AutoComplPop'
+    call dein#add('VOoM')
+    call dein#add('po.vim--gray')
+    call dein#add('loremipsum')
 
-" make * a little better
-NeoBundle 'nelstrom/vim-visual-star-search'
-" put vim in a virtualenv
-NeoBundle 'jmcantrell/vim-virtualenv'
-let g:virtualenv_directory = '~/envs'
+    call dein#add('dhruvasagar/vim-table-mode')
+    let g:table_mode_corner = '|'
 
-" CSV highlighting
-NeoBundle 'chrisbra/csv.vim'
+    " Disabled: Wed Nov  5 10:04:15 2014
+    " Plugin 'fmoralesc/vim-pad'
+    " nnoremap <leader>p :OpenPad<cr>
+    " nnoremap <leader>lp :ListPads<cr>
 
-" Disabled: Wed Nov  5 10:05:18 2014
-" functionality provided my smart motion
-" Plugin 'justinmk/vim-sneak'
+    " make * a little better
+    call dein#add('nelstrom/vim-visual-star-search')
+    " put vim in a virtualenv
+    call dein#add('jmcantrell/vim-virtualenv')
+    let g:virtualenv_directory = '~/envs'
 
-" Disabled: Wed Nov  5 10:05:27 2014
-" Plugin 'maksimr/vim-translator'
-" g:goog_user_conf = {'langpair': 'de|en', 'v_key': 'T'}
+    " CSV highlighting
+    call dein#add('chrisbra/csv.vim')
 
-" awesome, better-than grep search
-NeoBundle 'rking/ag.vim'
-" use ripgrep
-let g:ag_prg="rg --vimgrep --no-heading"
+    " Disabled: Wed Nov  5 10:05:18 2014
+    " functionality provided my smart motion
+    " Plugin 'justinmk/vim-sneak'
 
-" " fantastic autocomplete, c checking
-" " increase neobundle timeout so build can complete
-" NeoBundle 'Valloric/YouCompleteMe'
-" " NeoBundle 'Valloric/YouCompleteMe', {
-" " \'build': {
-" "   \'mac': './install.py --all',
-" "   \'unix': './install.py --all',
-" "   \'windows': 'install.py --all',
-" "   \'cygwin': './install.py --all'
-" "   \}
-" " \}
-" " ./install.sh --clang-completer --omnisharp-completer --gocode-completer
-" " let g:ycm__key_list_previous_completion = ['<Up>']
-" " let g:ycm__key_list_select_completion = ['<Enter>', '<Down>']
-" " let g:ycm_autoclose_preview_window_after_completion=1
-" let g:ycm_python_binary_path='/usr/local/bin/python'
-" let g:ycm_complete_in_comments = 1
-" let g:ycm_collect_identifiers_from_comments_and_strings = 1
-" let g:ycm_collect_identifiers_from_tag_files = 1
-" nnoremap <leader>G :YcmCompleter GoToDefinitionElseDeclaration<cr>
-" let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+    " Disabled: Wed Nov  5 10:05:27 2014
+    " Plugin 'maksimr/vim-translator'
+    " g:goog_user_conf = {'langpair': 'de|en', 'v_key': 'T'}
 
-" replace youcompleteme?
-set completeopt=longest,menuone,preview
-NeoBundle 'ervandew/supertab'
-NeoBundle 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
-" let g:deoplete#auto_complete_delay = 50
-NeoBundle 'zchee/deoplete-jedi'
-NeoBundle 'steelsojka/deoplete-flow', { 'for': ['javascript', 'javascript.jsx'] }
-NeoBundle 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
-NeoBundle 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
-let g:deoplete#sources = {}
-let g:deoplete#sources['javascript.jsx'] = ['buffer', 'file', 'ultisnips', 'flow', 'ternjs']
-let g:tern#command = ['tern']
-" use arrows to go gthrough auto-complete menu and insert the text
-inoremap <expr> <down> ((pumvisible())?("\<C-n>"):("<down>"))
-inoremap <expr> <up> ((pumvisible())?("\<C-p>"):("<up>"))
-let g:tern#arguments = ['--persistent']
-let g:deoplete#omni#functions = {}
-let g:deoplete#omni#functions.javascript = [
-  \ 'flowcomplete#Complete',
-  \ 'tern#Complete',
-  \ 'jspc#omni'
-\]
-NeoBundle 'zchee/deoplete-go', {'build': {'unix': 'make'}}
-NeoBundle 'zchee/deoplete-clang'
+    " awesome, better-than grep search
+    call dein#add('rking/ag.vim')
+    " use ripgrep
+    let g:ag_prg="rg --vimgrep --no-heading"
 
-" syntax highlighting
-NeoBundle 'tikhomirov/vim-glsl'
-NeoBundle 'cstrahan/vim-capnp'
-NeoBundle 'mattn/emmet-vim'
-NeoBundle 'othree/html5.vim'
-NeoBundle 'digitaltoad/vim-pug'
-NeoBundle 'ntpeters/vim-better-whitespace'
+    " " fantastic autocomplete, c checking
+    " " increase neobundle timeout so build can complete
+    " call dein#add('Valloric/YouCompleteMe')
+    " " call dein#add('Valloric/YouCompleteMe', {)
+    " " \'build': {
+    " "   \'mac': './install.py --all',
+    " "   \'unix': './install.py --all',
+    " "   \'windows': 'install.py --all',
+    " "   \'cygwin': './install.py --all'
+    " "   \}
+    " " \}
+    " " ./install.sh --clang-completer --omnisharp-completer --gocode-completer
+    " " let g:ycm__key_list_previous_completion = ['<Up>']
+    " " let g:ycm__key_list_select_completion = ['<Enter>', '<Down>']
+    " " let g:ycm_autoclose_preview_window_after_completion=1
+    " let g:ycm_python_binary_path='/usr/local/bin/python'
+    " let g:ycm_complete_in_comments = 1
+    " let g:ycm_collect_identifiers_from_comments_and_strings = 1
+    " let g:ycm_collect_identifiers_from_tag_files = 1
+    " nnoremap <leader>G :YcmCompleter GoToDefinitionElseDeclaration<cr>
+    " let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 
-" Python
-" refactoring using python rope
-" NeoBundle 'pfdevilliers/Pretty-Vim-Python'
-NeoBundle 'python-rope/ropevim'
-let ropevim_vim_completions=1
-let ropevim_extend_complete=1
-NeoBundle 'klen/python-mode'
-let g:pymode_folding = 0
-let g:pymode_indent = 0
-let g:pymode_lint = 0
-let g:pymode_lint_write = 0
-let g:pymode_rope = 0
-let g:pymode_rope_complete_on_dot = 0
-let g:pymode_rope_completion = 0
-let g:pymode_syntax = 0
-let g:pymode_syntax_slow_sync = 0
-let g:pymode_warnings = 0
-NeoBundle 'hdima/python-syntax'
-let python_highlight_all = 1
+    " replace youcompleteme?
+    set completeopt=longest,menuone,preview
+    call dein#add('ervandew/supertab')
+    call dein#add('Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' })
+    let g:deoplete#enable_at_startup = 1
+    " let g:deoplete#auto_complete_delay = 50
+    call dein#add('zchee/deoplete-jedi')
+    call dein#add('steelsojka/deoplete-flow', { 'for': ['javascript', 'javascript.jsx'] })
+    call dein#add('othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] })
+    call dein#add('carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] })
+    let g:deoplete#sources = {}
+    let g:deoplete#sources['javascript.jsx'] = ['buffer', 'file', 'ultisnips', 'flow', 'ternjs']
+    let g:tern#command = ['tern']
+    " use arrows to go gthrough auto-complete menu and insert the text
+    inoremap <expr> <down> ((pumvisible())?("\<C-n>"):("<down>"))
+    inoremap <expr> <up> ((pumvisible())?("\<C-p>"):("<up>"))
+    let g:tern#arguments = ['--persistent']
+    let g:deoplete#omni#functions = {}
+    let g:deoplete#omni#functions.javascript = [
+    \ 'flowcomplete#Complete',
+    \ 'tern#Complete',
+    \ 'jspc#omni'
+    \]
+    call dein#add('zchee/deoplete-go', {'build': {'unix': 'make'}})
+    call dein#add('zchee/deoplete-clang')
 
-" Javascript
-NeoBundle 'othree/javascript-libraries-syntax.vim'
+    " syntax highlighting
+    call dein#add('tikhomirov/vim-glsl')
+    call dein#add('cstrahan/vim-capnp')
+    call dein#add('mattn/emmet-vim')
+    call dein#add('othree/html5.vim')
+    call dein#add('digitaltoad/vim-pug')
+    call dein#add('ntpeters/vim-better-whitespace')
 
-" writing
-NeoBundle 'tpope/vim-markdown'
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
-autocmd BufNewFile,BufReadPost *.mkd set filetype=markdown
-NeoBundle 'mattly/vim-markdown-enhancements'
-" let g:vim_markdown_initial_foldlevel=1
-" I like the default highlighting better
-NeoBundle 'reedes/vim-pencil'
-augroup pencil
-  autocmd!
-  autocmd FileType markdown,mkd call pencil#init()
-  autocmd FileType markdown,mkd TableModeEnable
-  autocmd FileType text         call pencil#init({'wrap': 'hard'})
-augroup END
-NeoBundle 'junegunn/limelight.vim'
-let g:limelight_conceal_ctermfg = 'gray'
-NeoBundle 'junegunn/goyo.vim'
+    " Python
+    " refactoring using python rope
+    " call dein#add('pfdevilliers/Pretty-Vim-Python')
+    call dein#add('python-rope/ropevim')
+    let ropevim_vim_completions=1
+    let ropevim_extend_complete=1
+    call dein#add('klen/python-mode')
+    let g:pymode_folding = 0
+    let g:pymode_indent = 0
+    let g:pymode_lint = 0
+    let g:pymode_lint_write = 0
+    let g:pymode_rope = 0
+    let g:pymode_rope_complete_on_dot = 0
+    let g:pymode_rope_completion = 0
+    let g:pymode_syntax = 0
+    let g:pymode_syntax_slow_sync = 0
+    let g:pymode_warnings = 0
+    call dein#add('hdima/python-syntax')
+    let python_highlight_all = 1
 
-function! s:goyo_enter()
-  silent !tmux set status off
-  set noshowmode
-  set noshowcmd
-  set scrolloff=999
-  Limelight
-  " Pencil
-  " TableModeEnable
-endfunction
+    " Javascript
+    call dein#add('othree/javascript-libraries-syntax.vim')
 
-function! s:goyo_leave()
-  silent !tmux set status on
-  set showmode
-  set showcmd
-  set scrolloff=5
-  Limelight!
-  " PencilOff
-  " TableModeDisable
-endfunction
+    " writing
+    call dein#add('tpope/vim-markdown')
+    autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+    autocmd BufNewFile,BufReadPost *.mkd set filetype=markdown
+    call dein#add('mattly/vim-markdown-enhancements')
+    " let g:vim_markdown_initial_foldlevel=1
+    " I like the default highlighting better
+    call dein#add('reedes/vim-pencil')
+    augroup pencil
+        autocmd!
+        autocmd FileType markdown,mkd call pencil#init()
+        autocmd FileType markdown,mkd TableModeEnable
+        autocmd FileType text         call pencil#init({'wrap': 'hard'})
+    augroup END
+    call dein#add('junegunn/limelight.vim')
+    let g:limelight_conceal_ctermfg = 'gray'
+    call dein#add('junegunn/goyo.vim')
 
-autocmd! User GoyoEnter
-autocmd! User GoyoLeave
-autocmd  User GoyoEnter nested call <SID>goyo_enter()
-autocmd  User GoyoLeave nested call <SID>goyo_leave()
+    function! s:goyo_enter()
+    silent !tmux set status off
+    set noshowmode
+    set noshowcmd
+    set scrolloff=999
+    Limelight
+    " Pencil
+    " TableModeEnable
+    endfunction
 
-NeoBundle 'editorconfig/editorconfig-vim'
-" preview colors in css and stuff
-NeoBundle 'gorodinskiy/vim-coloresque'
+    function! s:goyo_leave()
+    silent !tmux set status on
+    set showmode
+    set showcmd
+    set scrolloff=5
+    Limelight!
+    " PencilOff
+    " TableModeDisable
+    endfunction
 
-" android tools
-" NeoBundle 'hsanson/vim-android'
+    autocmd! User GoyoEnter
+    autocmd! User GoyoLeave
+    autocmd  User GoyoEnter nested call <SID>goyo_enter()
+    autocmd  User GoyoLeave nested call <SID>goyo_leave()
 
-call neobundle#end()
-NeoBundleCheck
+    call dein#add('editorconfig/editorconfig-vim')
+    " preview colors in css and stuff
+    call dein#add('gorodinskiy/vim-coloresque')
+
+    " android tools
+    " call dein#add('hsanson/vim-android')
+
+
+  " Required:
+  call dein#end()
+  call dein#save_state()
+endif
 
 " Required:
 filetype plugin indent on
+syntax enable
+
+" If you want to install not installed plugins on startup.
+"if dein#check_install()
+"  call dein#install()
+"endif
+
 " }}} Bundles =======================
 
 
