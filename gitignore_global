@@ -1,0 +1,6 @@
+/__crap
+.DS_Store
+src/github.com/pippio/dashboard/devbox.pem
+.tern-port
+.ropeproject
+/amake

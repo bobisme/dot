@@ -122,3 +122,19 @@ endsnippet
 snippet export "index.js export shortcut" b
 export ${1:ExportedName} from './${2:$1/$1}';
 endsnippet
+
+snippet reduxaction "Redux Action Type" b
+export const ${1:ACTION_TYPE} = '${2:appname}/${3:reducer}/$1'
+endsnippet
+
+snippet describe "Mocha describe" b
+describe('${1:some aspect of the program}', function() {
+	$0
+})
+endsnippet
+
+snippet it "Description" b
+it('should ${1:behave a certain way}', function() {
+	$0
+})
+endsnippet

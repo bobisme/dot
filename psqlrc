@@ -1,0 +1,6 @@
+-- start writing lowercase, complete in uppercase
+\set COMP_KEYWORD_CASE upper
+-- automatically expand super-wide rows
+\x auto
+-- make a visually identifiable NULL
+\pset null ¤

@@ -11,10 +11,11 @@ set undofile
 set clipboard=unnamed
 " why would you think . is part of a word?
 set iskeyword-=.
+set conceallevel=1
 
-set undodir=~/.vim/tmp/undo//
-set backupdir=~/.vim/tmp/backup//
-set directory=~/.vim/tmp/swap//
+set undodir=~/.nvim/tmp/undo//
+set backupdir=~/.nvim/tmp/backup//
+set directory=~/.nvim/tmp/swap//
 " Make those folders automatically if they don't already exist.
 if !isdirectory(expand(&undodir))
     call mkdir(expand(&undodir), "p")
@@ -31,7 +32,7 @@ let g:python_host_prog='/usr/local/bin/python'
 
 " Bundles ========================================================== {{{
 " Vundle to be replaced by NeoBundle
-" set rtp+=~/.vim/bundle/vundle/
+" set rtp+=~/.config/nvim/bundle/vundle/
 " call vundle#begin()
 " Plugin 'gmarik/vundle'
 
@@ -39,16 +40,12 @@ let g:python_host_prog='/usr/local/bin/python'
 if 0 | endif
 
 if has('vim_starting')
-    if &compatible
-        set nocompatible               " Be iMproved
-    endif
-
-    " Required:
-    set runtimepath+=~/.nvim/bundle/neobundle.vim/
+  " Required:
+  set runtimepath+=~/.config/nvim/bundle/neobundle.vim/
 endif
 
 " Required:
-call neobundle#begin(expand('~/.nvim/bundle/'))
+call neobundle#begin(expand('~/.config/nvim/bundle'))
 
 " Let NeoBundle manage NeoBundle
 " Required:
@@ -111,15 +108,17 @@ NeoBundle 'tpope/vim-unimpaired'
 NeoBundle 'tomtom/tcomment_vim'
 
 " visual indention guides
-" NeoBundle 'nathanaelkane/vim-indent-guides'
-" " autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#151515 guifg=#202020 ctermbg=3
-" " autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#000000 guifg=#151515 ctermbg=4
-" " let g:indent_guides_auto_colors = 1
-" let g:indent_guides_start_level = 2
-" let g:indent_guides_guide_size = 1
-" let g:indent_guides_enable_on_vim_startup = 1
+NeoBundle 'nathanaelkane/vim-indent-guides'
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#151515 guifg=#202020 ctermbg=238
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#000000 guifg=#151515 ctermbg=236
+let g:indent_guides_auto_colors = 1
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+let g:indent_guides_enable_on_vim_startup = 1
 " to replace indent guides?
-NeoBundle 'Yggdroot/indentLine'
+" NeoBundle 'Yggdroot/indentLine'
+" let g:indentLine_setColors = 0
+" let g:indentLine_color_term = 239
 
 " auto-close tags when you type </
 NeoBundle 'docunext/closetag.vim'
@@ -133,25 +132,28 @@ NeoBundle 'godlygeek/tabular'
 NeoBundle 'cespare/vim-sbd'
 
 " fuzzy finder is cool
-let $FZF_DEFAULT_COMMAND='ag -g ""'
+" let $FZF_DEFAULT_COMMAND='ag -g ""'
+let $FZF_DEFAULT_COMMAND='rg --files --follow'
 NeoBundle 'junegunn/fzf', { 'dir': '~/.fzf'}
 NeoBundle 'junegunn/fzf.vim'
 let g:fzf_command_prefix = 'Fzf'
 
-" Plugin 'skammer/vim-css-color'
-" Plugin 'hail2u/vim-css3-syntax'
-NeoBundle 'groenewege/vim-less'
-" Plugin 'nanotech/jellybeans.vim'
+NeoBundle 'sheerun/vim-polyglot'
+"" pangloss/vim-javascript
+let g:javascript_plugin_flow = 1
+"" 'mxw/vim-jsx'
+let g:jsx_ext_required = 0
 NeoBundle 'tudorprodan/html_annoyance.vim'
-NeoBundle 'rust-lang/rust.vim'
-NeoBundle 'cespare/vim-toml'
+" polyglotted: NeoBundle 'rust-lang/rust.vim'
+" polyglotted: NeoBundle 'cespare/vim-toml'
 " kotlin language
-NeoBundle 'udalov/kotlin-vim'
+" polyglotted: NeoBundle 'udalov/kotlin-vim'
 " gradle syntax
-NeoBundle 'tfnico/vim-gradle'
+" polyglotted: NeoBundle 'tfnico/vim-gradle'
+NeoBundle 'haproxy'
 
 " PostgreSQL syntax highlighting
-NeoBundle 'exu/pgsql.vim'
+" polyglotted: NeoBundle 'exu/pgsql.vim'
 autocmd BufNewFile,Bufread *.sql setf pgsql
 
 " colors {{{
@@ -174,10 +176,22 @@ let g:gitgutter_diff_args = '-w'
 let g:gitgutter_realtime = 0
 
 NeoBundle 'dhruvasagar/vim-markify'
-" Plugin 'jnwhiteh/vim-golang'
 NeoBundle 'fatih/vim-go'
-let $GOPATH=resolve(expand('~/go'))
-let $GOROOT=resolve(expand('/usr/local/opt/go/libexec'))
+" turn on syntax highlighting
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+" install binaries to ~/bin
+let g:go_bin_path = expand("~/bin")
+" if !isdirectory("workspace")
+"     call mkdir("/my/directory", "p")
+" endif
+" let $GOPATH=resolve(expand('~/go'))
+" let $GOROOT=resolve(expand('/usr/local/opt/go/libexec'))
+let g:go_fmt_command = "goimports"
 NeoBundle 'rhysd/vim-go-impl'
 NeoBundle 'Shougo/unite.vim'
 
@@ -191,13 +205,15 @@ NeoBundleLazy 'facebook/vim-flow', {
     \     'filetypes': ['javascript', 'jsx']
     \ }}
 let g:flow#enable = 0
+NeoBundle 'ternjs/tern_for_vim'
+NeoBundle 'mephux/vim-jsfmt'
 
 NeoBundle 'benekastah/neomake'
 autocmd! BufWritePost * Neomake
 let g:neomake_python_pylama_maker = {
     \ 'args': [
         \ '--format', 'pep8',
-        \ '-i', 'D203',
+        \ '-i', 'D203,D212',
         \ '-l', 'pep8,mccabe,pyflakes,pep257,pylint'],
     \ 'errorformat': '%f:%l:%c: %m',
     \ }
@@ -254,28 +270,56 @@ NeoBundle 'chrisbra/csv.vim'
 
 " awesome, better-than grep search
 NeoBundle 'rking/ag.vim'
+" use ripgrep
+let g:ag_prg="rg --vimgrep --no-heading"
 
-" fantastic autocomplete, c checking
-" increase neobundle timeout so build can complete
-NeoBundle 'Valloric/YouCompleteMe'
-" NeoBundle 'Valloric/YouCompleteMe', {
-" \'build': {
-"   \'mac': './install.py --all',
-"   \'unix': './install.py --all',
-"   \'windows': 'install.py --all',
-"   \'cygwin': './install.py --all'
-"   \}
-" \}
-" ./install.sh --clang-completer --omnisharp-completer --gocode-completer
-" let g:ycm__key_list_previous_completion = ['<Up>']
-" let g:ycm__key_list_select_completion = ['<Enter>', '<Down>']
-" let g:ycm_autoclose_preview_window_after_completion=1
-let g:ycm_python_binary_path='/usr/local/bin/python'
-let g:ycm_complete_in_comments = 1
-let g:ycm_collect_identifiers_from_comments_and_strings = 1
-let g:ycm_collect_identifiers_from_tag_files = 1
-nnoremap <leader>G :YcmCompleter GoToDefinitionElseDeclaration<cr>
-let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+" " fantastic autocomplete, c checking
+" " increase neobundle timeout so build can complete
+" NeoBundle 'Valloric/YouCompleteMe'
+" " NeoBundle 'Valloric/YouCompleteMe', {
+" " \'build': {
+" "   \'mac': './install.py --all',
+" "   \'unix': './install.py --all',
+" "   \'windows': 'install.py --all',
+" "   \'cygwin': './install.py --all'
+" "   \}
+" " \}
+" " ./install.sh --clang-completer --omnisharp-completer --gocode-completer
+" " let g:ycm__key_list_previous_completion = ['<Up>']
+" " let g:ycm__key_list_select_completion = ['<Enter>', '<Down>']
+" " let g:ycm_autoclose_preview_window_after_completion=1
+" let g:ycm_python_binary_path='/usr/local/bin/python'
+" let g:ycm_complete_in_comments = 1
+" let g:ycm_collect_identifiers_from_comments_and_strings = 1
+" let g:ycm_collect_identifiers_from_tag_files = 1
+" nnoremap <leader>G :YcmCompleter GoToDefinitionElseDeclaration<cr>
+" let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+
+" replace youcompleteme?
+set completeopt=longest,menuone,preview
+NeoBundle 'ervandew/supertab'
+NeoBundle 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
+" let g:deoplete#auto_complete_delay = 50
+NeoBundle 'zchee/deoplete-jedi'
+NeoBundle 'steelsojka/deoplete-flow', { 'for': ['javascript', 'javascript.jsx'] }
+NeoBundle 'othree/jspc.vim', { 'for': ['javascript', 'javascript.jsx'] }
+NeoBundle 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
+let g:deoplete#sources = {}
+let g:deoplete#sources['javascript.jsx'] = ['buffer', 'file', 'ultisnips', 'flow', 'ternjs']
+let g:tern#command = ['tern']
+" use arrows to go gthrough auto-complete menu and insert the text
+inoremap <expr> <down> ((pumvisible())?("\<C-n>"):("<down>"))
+inoremap <expr> <up> ((pumvisible())?("\<C-p>"):("<up>"))
+let g:tern#arguments = ['--persistent']
+let g:deoplete#omni#functions = {}
+let g:deoplete#omni#functions.javascript = [
+  \ 'flowcomplete#Complete',
+  \ 'tern#Complete',
+  \ 'jspc#omni'
+\]
+NeoBundle 'zchee/deoplete-go', {'build': {'unix': 'make'}}
+NeoBundle 'zchee/deoplete-clang'
 
 " syntax highlighting
 NeoBundle 'tikhomirov/vim-glsl'
@@ -283,6 +327,7 @@ NeoBundle 'cstrahan/vim-capnp'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'othree/html5.vim'
 NeoBundle 'digitaltoad/vim-pug'
+NeoBundle 'ntpeters/vim-better-whitespace'
 
 " Python
 " refactoring using python rope
@@ -306,15 +351,8 @@ let python_highlight_all = 1
 
 " Javascript
 NeoBundle 'othree/javascript-libraries-syntax.vim'
-NeoBundle 'pangloss/vim-javascript'
-NeoBundle 'mxw/vim-jsx'
-let g:jsx_ext_required = 0
-NeoBundle 'elzr/vim-json'
-NeoBundle 'kennethzfeng/vim-raml'
-NeoBundle 'stephpy/vim-yaml'
 
 " writing
-" NeoBundle 'plasticboy/vim-markdown'
 NeoBundle 'tpope/vim-markdown'
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 autocmd BufNewFile,BufReadPost *.mkd set filetype=markdown
@@ -329,6 +367,7 @@ augroup pencil
   autocmd FileType text         call pencil#init({'wrap': 'hard'})
 augroup END
 NeoBundle 'junegunn/limelight.vim'
+let g:limelight_conceal_ctermfg = 'gray'
 NeoBundle 'junegunn/goyo.vim'
 
 function! s:goyo_enter()
@@ -486,14 +525,22 @@ au Colorscheme * hi htmlBold cterm=bold ctermfg=white gui=bold
 au Colorscheme * hi htmlBoldItalic cterm=bold,italic ctermfg=white gui=bold,italic
 au Colorscheme * hi htmlH1 cterm=bold gui=bold
 au Colorscheme * hi Comment cterm=italic gui=italic
+" lighter comments
+au Colorscheme * hi Comment ctermfg=247
 au Colorscheme * hi DiffText ctermfg=none ctermbg=20
 au Colorscheme * hi DiffChange ctermfg=none ctermbg=17
 au Colorscheme * hi DiffAdd ctermfg=none ctermbg=22
 au Colorscheme * hi DiffDelete ctermfg=red ctermbg=none
+au Colorscheme * hi Folded ctermbg=16
 " highlight 81st column
 " set colorcolumn=80
 " hi ColorColumn ctermbg=gray
+au Colorscheme * hi ColorColumn ctermbg=16
 " call matchadd('ColorColumn', '\%81v', 100)
+" au Colorscheme * hi Conceal ctermfg=red ctermbg=None
+" flat divider column
+au Colorscheme * hi VertSplit ctermfg=darkgray ctermbg=darkgray
+au Colorscheme * hi CursorLine ctermbg=None
 
 " highlight current line
 set cursorline
@@ -642,41 +689,44 @@ set background=dark
 set foldmethod=marker
 
 " FILETYPE AUTOCOMMANDS ======================================================
-autocmd BufRead,BufNewFile *.less setfiletype css
-autocmd BufRead,BufNewFile *.md setfiletype markdown
-autocmd BufRead,BufNewFile *.raml setlocal syntax=yaml
+au BufRead,BufNewFile *.less setfiletype css
+au BufRead,BufNewFile *.md setfiletype markdown
+au BufRead,BufNewFile *.raml setlocal syntax=yaml
+au BufEnter *.css,*.sass,*.scss,*.html,*.javascript setlocal iskeyword-=.
 
-autocmd FileType html setlocal sw=2 ts=2 sts=2
-autocmd FileType htmldjango setlocal sw=2 ts=2 sts=2
-autocmd FileType xml setlocal sw=2 ts=2 sts=2
-autocmd FileType javascript,json setlocal sw=2 ts=2 sts=2
-autocmd FileType css,less setlocal sw=2 ts=2 sts=2
-autocmd FileType python setlocal foldmethod=indent foldnestmax=2
-autocmd FileType go setlocal noexpandtab
-autocmd FileType coffee setlocal sw=2 ts=2 sts=2
-autocmd FileType raml setlocal ts=2 sw=2 sts=2 et
-autocmd FileType jade,pug setlocal ts=2 sw=2 sts=2 et
+au FileType coffee setlocal sw=2 ts=2 sts=2
+au FileType css,less setlocal sw=2 ts=2 sts=2
+au FileType go setlocal noexpandtab iskeyword-=.
+au FileType html setlocal sw=2 ts=2 sts=2
+au FileType htmldjango setlocal sw=2 ts=2 sts=2
+au FileType jade,pug setlocal ts=2 sw=2 sts=2 et
+au FileType javascript,json setlocal sw=2 ts=2 sts=2 iskeyword-=.
+au FileType python setlocal foldmethod=indent foldnestmax=2
+au FileType raml setlocal ts=2 sw=2 sts=2 et
+au FileType sass,scss setlocal ts=2 sw=2 sts=2
+au FileType sh setlocal ts=2 sw=2 sts=2
+au FileType xml setlocal sw=2 ts=2 sts=2
 
 " make commentary use // for go files
-autocmd FileType go set commentstring=//\ %s
-" autocmd FileType c set commentstring=//\ %s
-autocmd FileType c set formatprg=astyle\ -A2\ -s4\ -C\ -S\ -w\ -Y\ -p\ -W1\ -k1\ -j\ -c\ -xC79
+au FileType go set commentstring=//\ %s
+" au FileType c set commentstring=//\ %s
+au FileType c set formatprg=astyle\ -A2\ -s4\ -C\ -S\ -w\ -Y\ -p\ -W1\ -k1\ -j\ -c\ -xC79
 " make quick fix span bottom
-autocmd FileType qf wincmd J
+au FileType qf wincmd J
 " make fugitive status/commit span top
-autocmd FileType gitcommit wincmd K
-autocmd FileType htmldjango let b:surround_{char2nr("v")} = "{{\r}}"
-autocmd FileType htmldjango let b:surround_{char2nr("{")} = "{{\r}}"
-autocmd FileType htmldjango let b:surround_{char2nr("%")} = "{% \r %}"
-autocmd FileType htmldjango let b:surround_{char2nr("b")} = "{% block \1block name: \1 %}\r{% endblock \1\1 %}"
-autocmd FileType htmldjango let b:surround_{char2nr("i")} = "{% if \1condition: \1 %}\r{% endif %}"
-autocmd FileType htmldjango let b:surround_{char2nr("w")} = "{% with \1with: \1 %}\r{% endwith %}"
-autocmd FileType htmldjango let b:surround_{char2nr("f")} = "{% for \1for loop: \1 %}\r{% endfor %}"
-autocmd FileType htmldjango let b:surround_{char2nr("c")} = "{% comment %}\r{% endcomment %}"
-" autocmd FileType mkd set commentstring=<!--\ %s\ -->
-autocmd FileType mkd set commentstring=<!--\ %s\ -->
-autocmd FileType less let &efm='%E%t: %m in %f on line %l, column %c:%C%C%C'
-autocmd FileType less set makeprg=lessc\ --no-color\ -l\ %
+au FileType gitcommit wincmd K
+au FileType htmldjango let b:surround_{char2nr("v")} = "{{\r}}"
+au FileType htmldjango let b:surround_{char2nr("{")} = "{{\r}}"
+au FileType htmldjango let b:surround_{char2nr("%")} = "{% \r %}"
+au FileType htmldjango let b:surround_{char2nr("b")} = "{% block \1block name: \1 %}\r{% endblock \1\1 %}"
+au FileType htmldjango let b:surround_{char2nr("i")} = "{% if \1condition: \1 %}\r{% endif %}"
+au FileType htmldjango let b:surround_{char2nr("w")} = "{% with \1with: \1 %}\r{% endwith %}"
+au FileType htmldjango let b:surround_{char2nr("f")} = "{% for \1for loop: \1 %}\r{% endfor %}"
+au FileType htmldjango let b:surround_{char2nr("c")} = "{% comment %}\r{% endcomment %}"
+" au FileType mkd set commentstring=<!--\ %s\ -->
+au FileType mkd set commentstring=<!--\ %s\ -->
+au FileType less let &efm='%E%t: %m in %f on line %l, column %c:%C%C%C'
+au FileType less set makeprg=lessc\ --no-color\ -l\ %
 
 " control+enter to indent new line
 imap <C-Return> <CR><CR><C-o>k<Tab>
@@ -843,6 +893,18 @@ function! PySuper()
 endfunction
 command! PySuper :call PySuper()
 "}}}
+
+" custom grep {{{
+if executable('ag')
+  set grepprg=ag\ --nogroup\ --nocolor\ --vimgrep
+  set grepformat^=%f:%l:%c:%m   " file:line:column:message
+endif
+
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --no-heading
+endif
+" }}}
+
 
 " NOTES ================================================================= {{{
 " Find camel case caps:
