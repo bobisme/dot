@@ -3,7 +3,7 @@ function cut_staging
   set -l branch_name "staging/$week_number"
 
   git checkout master
-    and git pull origin master
+    and git pull origin --ff-only master
     and git checkout -b $branch_name
     or return
 
