@@ -1,0 +1,37 @@
+" This is a minimal vimrc which assumes that nvim will do most of
+" the editing and vim will only be called in read-only mode via `view`.
+
+" be VImproved
+set nocompatible
+" display incomplete commands
+set showcmd
+" Enable highlighting for syntax
+syntax on
+" Enable file type detection.
+" Use the default filetype settings, so that mail gets 'tw' set to 72,
+" 'cindent' is on in C files, etc.
+" Also load indent files, to automatically do language-dependent indenting.
+filetype plugin indent on
+" use emacs-style tab completion when selecting files, etc
+set wildmode=longest,list
+" make tab completion for files/buffers act like bash
+set wildmenu
+" allow buffers in the background
+set hidden
+" Prevent Vim from clobbering the scrollback buffer. See
+" http://www.shallowsky.com/linux/noaltscreen.html
+set t_ti= t_te=
+" Make searches case-sensitive only if they contain upper-case characters
+set ignorecase
+set foldmethod=marker
+" Change to a window, make it at least this wide
+set winwidth=80
+" Collapsed windows must at least be this wide
+set winminwidth=5
+" Don't try to highlight lines longer than 800 characters.
+set synmaxcol=800
+" Make thing simpler
+set shell=bash
+
+colorscheme pablo
+highlight Comment ctermfg=gray
