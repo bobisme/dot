@@ -1,1 +1,0 @@
-/Users/bob/.local/share/omf/themes/shellder/fish_prompt.fish
