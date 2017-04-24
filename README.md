@@ -1,17 +1,14 @@
 BoB's . Files
 =============
 
-Vim
----
+- My main editor is [NeoVim][]: look at config/nvim/init.vim
+- My main shell is [fish][]: look at config/fish/
+- Fish :heart: [fisherman][].
+- Some fish functions and configs depend on [fzf][].
+- [thefuck][] for fun.
 
-1. Install Vundle
-
-    ```
-    $ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-    ```
-
-2. Install Bundles (in vim):
-
-    ```
-    :BundleInstall
-    ```
+[NeoVim]: https://neovim.io/
+[fish]: https://fishshell.com/
+[fisherman]: https://github.com/fisherman/fisherman
+[fzf]: https://github.com/junegunn/fzf
+[thefuck]: https://github.com/nvbn/thefuck
