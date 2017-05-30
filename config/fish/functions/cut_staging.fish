@@ -1,5 +1,5 @@
 function cut_staging
-  set -l week_number (printf "%02d" (math (date "%W") + 1))
+  set -l week_number (date +"%Y-%W")
   set -l branch_name "staging/$week_number"
 
   git checkout master
@@ -7,7 +7,7 @@ function cut_staging
     and git checkout -b $branch_name
     or return
 
-  read -l -p "Push $branch_name? [y/N] " push_branch
+  read -l -p 'echo "Push $branch_name? [y/N] "' push_branch
   switch $push_branch
     case Y y Yes yes YES
       git push origin $branch_name -u
