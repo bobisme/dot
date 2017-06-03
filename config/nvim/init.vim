@@ -313,6 +313,14 @@ if dein#load_state($HOME . '/.nvim')
       autocmd!
       autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
     augroup end
+
+    " Rust completion
+    " NOTES:
+    " - install rust via rustup: https://www.rustup.rs/
+    " - install rust source via `rustup component add rust-src`
+    " - install racer via `cargo install racer`
+    call dein#add('racer-rust/vim-racer')
+    call dein#add('sebastianmarkow/deoplete-rust')
   " }}}
 
   " Awesome git management.
@@ -374,6 +382,16 @@ if dein#load_state($HOME . '/.nvim')
     autocmd! User GoyoLeave
     autocmd  User GoyoEnter nested call <SID>goyo_enter()
     autocmd  User GoyoLeave nested call <SID>goyo_leave()
+  " }}}
+
+  " Autoformat {{{
+    call dein#add('Chiel92/vim-autoformat')
+
+    " Automatically call on these formats
+    augroup autoformatonsave
+      autocmd!
+      au BufWrite *.rs :Autoformat
+    augroup end
   " }}}
 
   " Required:
