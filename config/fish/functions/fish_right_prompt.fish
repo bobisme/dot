@@ -1,1 +1,0 @@
-/Users/jutodd/.config/fisherman/8o8/fish_right_prompt.fish
