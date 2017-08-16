@@ -5,8 +5,8 @@ git-compare-branches ACTION
 
 ACTIONS:
   both            Show branches which exist in origin and local.
-  local           Show which branches which only exist locally (default).
-  remote,origin   Show which branches which only exist in origin.
+  local           Show branches which only exist locally (default).
+  remote,origin   Show branches which only exist in origin.
 "
   end
 
