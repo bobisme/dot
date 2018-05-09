@@ -39,6 +39,8 @@ let &showbreak='⋙ '
 " Don't try to highlight lines longer than 800 characters.
 set synmaxcol=800
 set shell=bash
+" allow ESC in terminal
+tnoremap <Esc> <C-\><C-n>
 
 " fast grepping
 if executable('rg')
@@ -133,66 +135,56 @@ endif
 
 " PLUGINS {{{
 " Required:
-set runtimepath+=$HOME/.nvim/repos/github.com/Shougo/dein.vim
-
-" Required:
-if dein#load_state($HOME . '/.nvim')
-  call dein#begin($HOME . '/.nvim')
-
-  " Let dein manage dein
-  call dein#add('/Users/jutodd/.nvim/repos/github.com/Shougo/dein.vim')
-
-
-  " use . repeat for more
-  call dein#add('tpope/vim-repeat')
-  " surround
-  call dein#add('tpope/vim-surround')
-  " easy substitution, cool replace trick, recasing
-  call dein#add('tpope/vim-abolish')
-  " handy keybindings I use a lot
-  call dein#add('tpope/vim-unimpaired')
-  " easy commenting/uncommenting
-  call dein#add('tomtom/tcomment_vim')
-  " close quotes and parens
-  call dein#add('jiangmiao/auto-pairs')
-  " auto-close tags when you type </
-  call dein#add('docunext/closetag.vim')
-  " close buffer without closing window
-  call dein#add('cespare/vim-sbd')
-
+call plug#begin('~/.local/share/nvim/plugged')
   " all the colors
-  call dein#add('flazz/vim-colorschemes')
-
+  Plug 'flazz/vim-colorschemes'
+  " 16-color ansii scheme
+  Plug 'noahfrederick/vim-noctu'
+  " use . repeat for more
+  Plug 'tpope/vim-repeat'
+  " surround
+  Plug 'tpope/vim-surround'
+  " easy substitution, cool replace trick, recasing
+  Plug 'tpope/vim-abolish'
+  " handy keybindings I use a lot
+  Plug 'tpope/vim-unimpaired'
+  " auto close keyword blocks
+  Plug 'tpope/vim-endwise'
+  " easy commenting/uncommenting
+  Plug 'tomtom/tcomment_vim'
+  " close quotes and parens
+  Plug 'jiangmiao/auto-pairs'
+  " auto-close tags when you type </
+  Plug 'docunext/closetag.vim'
+  " close buffer without closing window
+  Plug 'cespare/vim-sbd'
   " snippets
-  call dein#add('SirVer/ultisnips')
+  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
   let g:UltiSnipsExpandTrigger="<c-j>"
   let g:UltiSnipsEditSplit="horizontal"
-  " snippets for ultisnips
-  call dein#add('honza/vim-snippets')
 
   " file browser
-  call dein#add('scrooloose/nerdtree')
+  Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
   let NERDTreeIgnore = ['\.pyc$']
   nnoremap <leader>n :NERDTreeToggle<cr>
 
-  call dein#add('majutsushi/tagbar')
+  Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
   nnoremap <leader>t :TagbarToggle<cr>
 
   " POLYGLOT {{{
   " A collection of language packs for Vim.
-    call dein#add('sheerun/vim-polyglot')
+    Plug 'sheerun/vim-polyglot'
     let g:jsx_ext_required = 0
     let g:javascript_plugin_flow = 1
   " }}}
-  call dein#add('haproxy')
+  Plug 'vim-scripts/haproxy', { 'for': 'haproxy' }
   " better javascript syntax
-  call dein#add('jelera/vim-javascript-syntax')
-
+  Plug 'jelera/vim-javascript-syntax', { 'for': 'javascript' }
   " quick HTML/XML creation
-  call dein#add('mattn/emmet-vim')
+  Plug 'mattn/emmet-vim'
 
   " GO {{{
-    call dein#add('fatih/vim-go')
+    Plug 'fatih/vim-go', { 'for': 'go' }
     " turn on syntax highlighting
     let g:go_highlight_functions = 1
     let g:go_highlight_methods = 1
@@ -226,10 +218,10 @@ if dein#load_state($HOME . '/.nvim')
   " }}}
 
   " haskell
-  call dein#add('~/src/ghcmod-vim')
+  Plug 'ndmitchell/ghcid', { 'rtp': 'plugins/nvim', 'for': 'haskell' }
 
   " NEOMAKE {{{
-    call dein#add('benekastah/neomake')
+    Plug 'benekastah/neomake'
     " run Neomake on save
     autocmd! BufWritePost * Neomake
 
@@ -299,15 +291,15 @@ if dein#load_state($HOME . '/.nvim')
     inoremap <expr> <down> ((pumvisible())?("\<C-n>"):("<down>"))
     inoremap <expr> <up> ((pumvisible())?("\<C-p>"):("<up>"))
     " plugin
-    call dein#add('Shougo/deoplete.nvim')
+    Plug 'Shougo/deoplete.nvim'
     let g:deoplete#enable_at_startup = 1
-    let g:deoplete#complete_method = "omnifunc"
-    call dein#add('zchee/deoplete-go', {'build': 'make'})
+    let g:deoplete#complete_method = 'omnifunc'
+    Plug 'zchee/deoplete-go', {'do': 'make', 'for': 'go' }
     " python completion
-    call dein#add('zchee/deoplete-jedi')
-    " call dein#add('bling/vim-airline')
+    Plug 'zchee/deoplete-jedi', { 'for': 'python' }
+    " Plug 'bling/vim-airline'
     " haskell
-    call dein#add('eagletmt/neco-ghc')
+    Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 
     augroup omnifuncs
       autocmd!
@@ -319,39 +311,39 @@ if dein#load_state($HOME . '/.nvim')
     " - install rust via rustup: https://www.rustup.rs/
     " - install rust source via `rustup component add rust-src`
     " - install racer via `cargo install racer`
-    call dein#add('racer-rust/vim-racer')
-    call dein#add('sebastianmarkow/deoplete-rust')
+    Plug 'racer-rust/vim-racer', { 'for': 'rust' }
+    Plug 'sebastianmarkow/deoplete-rust', { 'for': 'rust' }
   " }}}
 
   " Awesome git management.
-  call dein#add('tpope/vim-fugitive')
+  Plug 'tpope/vim-fugitive'
   nnoremap <leader>gs :Gstatus<cr><c-w>k
 
   " remove ending whitespace
-  call dein#add('ntpeters/vim-better-whitespace')
+  Plug 'ntpeters/vim-better-whitespace'
   augroup stripwhitespace
     au BufEnter * EnableStripWhitespaceOnSave
   augroup end
 
   " fuzzy file/whatever finder
   let $FZF_DEFAULT_COMMAND='rg --files --follow'
-  call dein#add('junegunn/fzf', { 'build': './install --all', 'dir': '~/.fzf', 'merged': 0 })
-  call dein#add('junegunn/fzf.vim')
+  Plug 'junegunn/fzf', { 'do': './install --all', 'dir': '~/.fzf' }
+  Plug 'junegunn/fzf.vim'
   let g:fzf_command_prefix = 'Fzf'
   nnoremap <leader>ff :FzfFiles<cr>
   nnoremap <leader>fb :FzfBuffers<cr>
 
   " WRITING {{{
-    call dein#add('mattly/vim-markdown-enhancements', {'on_ft': 'markdown'})
-    call dein#add('dhruvasagar/vim-table-mode')
+    Plug 'mattly/vim-markdown-enhancements', {'for': ['markdown', 'asciidoc']}
+    Plug 'dhruvasagar/vim-table-mode'
     let g:table_mode_corner = '|'
     " auto-organizing ascii tables
-    call dein#add('godlygeek/tabular')
-    call dein#add('reedes/vim-pencil')
+    Plug 'godlygeek/tabular'
+    Plug 'reedes/vim-pencil', {'for': ['markdown', 'asciidoc']}
     let g:pencil#map#suspend_af = 'K'
-    call dein#add('junegunn/limelight.vim')
+    Plug 'junegunn/limelight.vim', {'for': ['markdown', 'asciidoc']}
     let g:limelight_conceal_ctermfg = 'gray'
-    call dein#add('junegunn/goyo.vim')
+    Plug 'junegunn/goyo.vim', {'for': ['markdown', 'asciidoc']}
 
     function! s:goyo_enter()
       " turn off mux status line
@@ -385,7 +377,7 @@ if dein#load_state($HOME . '/.nvim')
   " }}}
 
   " Autoformat {{{
-    call dein#add('Chiel92/vim-autoformat')
+    Plug 'Chiel92/vim-autoformat'
 
     " Automatically call on these formats
     augroup autoformatonsave
@@ -393,52 +385,39 @@ if dein#load_state($HOME . '/.nvim')
       au BufWrite *.rs :Autoformat
     augroup end
   " }}}
-
-  " Required:
-  call dein#end()
-  " call dein#save_state()
-endif
-
-filetype plugin indent on
-
-" If you want to install not installed plugins on startup.
-"if dein#check_install()
-"  call dein#install()
-"endif
-
+call plug#end()
 " end plugins }}}
 
 " CUSTOM COLORS {{{
   set background=dark
-  " let base16colorspace=256
-  " color base16-monokai
-  colorscheme grb256
   " highlight current line
   set cursorline
   augroup colors
     au Colorscheme * hi Comment cterm=italic gui=italic ctermfg=gray
-    au Colorscheme * hi htmlBold cterm=bold ctermfg=white gui=bold
-    au Colorscheme * hi htmlBoldItalic cterm=bold,italic ctermfg=white
-    au Colorscheme * hi htmlH1 cterm=bold gui=bold
-    au Colorscheme * hi htmlItalic cterm=italic ctermfg=white gui=italic
-    au Colorscheme * hi DiffText ctermfg=none ctermbg=20
-    au Colorscheme * hi DiffChange ctermfg=none ctermbg=17
-    au Colorscheme * hi DiffAdd ctermfg=none ctermbg=22
-    au Colorscheme * hi DiffDelete ctermfg=red ctermbg=none
-    au Colorscheme * hi Folded ctermbg=234 ctermfg=lightgreen cterm=bold
-    au Colorscheme * hi Special ctermfg=lightgreen
-    " highlight 81st column
+    au Colorscheme * hi PreProc ctermfg=blue
+    " au Colorscheme * hi htmlBold cterm=bold ctermfg=white gui=bold
+    " au Colorscheme * hi htmlBoldItalic cterm=bold,italic ctermfg=white
+    " au Colorscheme * hi htmlH1 cterm=bold gui=bold
+    " au Colorscheme * hi htmlItalic cterm=italic ctermfg=white gui=italic
+    " au Colorscheme * hi DiffText ctermfg=none ctermbg=20
+    " au Colorscheme * hi DiffChange ctermfg=none ctermbg=none cterm=italic
+    au Colorscheme * hi DiffAdd ctermfg=black ctermbg=darkgreen cterm=bold
+    " au Colorscheme * hi DiffDelete ctermfg=red ctermbg=none
+    " au Colorscheme * hi Folded ctermbg=234 ctermfg=lightgreen cterm=bold
+    " au Colorscheme * hi Special ctermfg=lightgreen
+    " highlight 80th column
     set colorcolumn=80
     au Colorscheme * hi ColorColumn ctermbg=234
-    " call matchadd('ColorColumn', '\%81v', 100)
-    " au Colorscheme * hi Conceal ctermfg=red ctermbg=None
-    " flat divider column
-    au Colorscheme * hi VertSplit ctermfg=darkgray ctermbg=darkgray
-    au Colorscheme * hi StatusLineNC ctermbg=237
-    au Colorscheme * hi CursorLine ctermbg=16
-    au Colorscheme * hi NonText ctermfg=darkgray
-    au Colorscheme * hi Visual ctermbg=23
+    " " au Colorscheme * hi Conceal ctermfg=red ctermbg=None
+    " " flat divider column
+    au Colorscheme * hi VertSplit ctermfg=darkgray ctermbg=black
+    au Colorscheme * hi StatusLine ctermbg=gray ctermfg=black
+    au Colorscheme * hi StatusLineNC ctermbg=darkgray ctermfg=black
+    " au Colorscheme * hi CursorLine ctermbg=16
+    " au Colorscheme * hi NonText ctermfg=darkgray
+    " au Colorscheme * hi Visual ctermbg=23
   augroup end
+  colorscheme noctu
 " }}}
 
 " INDENTS {{{
@@ -452,6 +431,7 @@ filetype plugin indent on
     au FileType htmldjango setlocal sw=2 ts=2 sts=2
     au FileType jade,pug setlocal ts=2 sw=2 sts=2 et
     au FileType javascript,json setlocal sw=2 ts=2 sts=2 iskeyword-=.
+    au FileType purescript setlocal sw=2 ts=2 sts=2 et
     au FileType python setlocal foldmethod=indent foldnestmax=2
     au FileType raml setlocal ts=2 sw=2 sts=2 et
     au FileType ruby setlocal ts=2 sw=2 sts=2 et
