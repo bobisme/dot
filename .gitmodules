@@ -1,3 +1,6 @@
 [submodule "config/fish/8o8"]
 	path = config/fish/8o8
 	url = git@github.com:bobisme/fish-theme-8o8.git
+[submodule "config/fish/completions/fish-kubectl-completions"]
+	path = config/fish/completions/fish-kubectl-completions
+	url = https://github.com/evanlucas/fish-kubectl-completions.git
