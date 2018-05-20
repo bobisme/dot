@@ -1,12 +1,19 @@
 function prepend_path
-  set -l path $argv[1]
-  if test -d $path
+  set -l check_path "yes"
+  for arg in $argv
+    if [ $arg = "--check-path=no" ]
+      set -l check_path "no"
+    else
+      set -l path $arg
+    end
+  end
+
+  if begin [ $check_path = "no" ]; or test -d $path; end
     set -x PATH $path $PATH
   end
 end
 
-function append_path
-  set -l path $argv[1]
+function append_path -a path
   if test -d $path
     set -x PATH $PATH $argv[1]
   end
@@ -14,9 +21,6 @@ end
 
 # home bin
 prepend_path ~/bin
-
-# run from node project bin
-prepend_path node_modules/.bin
 
 # pip should only run if there is a virtualenv currently activated
 set -x PIP_REQUIRE_VIRTUALENV true
@@ -26,7 +30,6 @@ set -x PROJECT_HOME ~/src
 eval (python -m virtualfish projects)
 
 # go
-set -x GOPATH ~/go
 set -x PATH $GOPATH/bin $PATH
 # rust
 if test -d $HOME/.cargo/bin
@@ -42,6 +45,9 @@ bass source /usr/local/opt/nvm/nvm.sh
 function nvm
   bass source /usr/local/opt/nvm/nvm.sh ';' nvm $argv
 end
+
+# run node scripts from node project bin
+set -x PATH node_modules/.bin $PATH
 
 # base16 shell colors
 # eval sh $HOME/.config/base16-shell/base16-monokai.dark.sh
@@ -65,14 +71,13 @@ end
 # Google Cloud SDK
 append_path /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin
 
-# bind ctrl-k to search kubectl resources
-bind \ck fzf_kubectl
-if bind -M insert > /dev/null 2>&1
-  bind -M insert \ck fzf_kubectl
-end
-
-# bind ctrl-g to fzf git branches
-fzf_git_branches
-
 # access yarn global binaries
 append_path (yarn global bin)
+
+set -x PATH ~/bin $PATH
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+set -x PATH $PATH $HOME/.rvm/bin
+
+test -s "$HOME/.rvm/scripts/rvm"
+  and bass source "$HOME/.rvm/scripts/rvm"
