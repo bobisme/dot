@@ -19,6 +19,9 @@ function append_path -a path
   end
 end
 
+# neovim is my copilot
+set -x EDITOR nvim
+
 # home bin
 prepend_path ~/bin
 
@@ -77,7 +80,10 @@ append_path (yarn global bin)
 set -x PATH ~/bin $PATH
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-set -x PATH $PATH $HOME/.rvm/bin
+# set -x PATH $PATH $HOME/.rvm/bin
+#
+# test -s "$HOME/.rvm/scripts/rvm"
+#   and bass source "$HOME/.rvm/scripts/rvm"
 
-test -s "$HOME/.rvm/scripts/rvm"
-  and bass source "$HOME/.rvm/scripts/rvm"
+# Set up rbenv
+status --is-interactive; and source (rbenv init -|psub)
