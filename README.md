@@ -7,6 +7,10 @@ BoB's . Files
 - Some fish functions and configs depend on [fzf][].
 - [thefuck][] for fun.
 
+### Tools I Dig
+
+- [fzf][] is a **must install** for ctrl+r alone, but it can do so much more
+
 [NeoVim]: https://neovim.io/
 [fish]: https://fishshell.com/
 [fisherman]: https://github.com/fisherman/fisherman
