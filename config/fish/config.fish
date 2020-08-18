@@ -1,3 +1,7 @@
+# bobthefish theme
+set -g theme_date_format "+%Y-%m-%d %H:%M:%S"
+set -g theme_date_timezone America/New_York
+
 function prepend_path
   set -l check_path "yes"
   for arg in $argv
@@ -27,12 +31,9 @@ prepend_path ~/bin
 
 # pip should only run if there is a virtualenv currently activated
 set -x PIP_REQUIRE_VIRTUALENV true
-# virtualfish
-set -x VIRTUALFISH_HOME ~/envs
-set -x PROJECT_HOME ~/src
-eval (python -m virtualfish projects)
 
 # go
+set -x GOPATH ~/go
 set -x PATH $GOPATH/bin $PATH
 # rust
 if test -d $HOME/.cargo/bin
@@ -42,18 +43,8 @@ if test -d $HOME/repos/rust/src
   set -x RUST_SRC_PATH ~/repos/rust/src
 end
 
-# nvm on mac from homebrew
-set -x NVM_DIR ~/.nvm
-bass source /usr/local/opt/nvm/nvm.sh
-function nvm
-  bass source /usr/local/opt/nvm/nvm.sh ';' nvm $argv
-end
-
 # run node scripts from node project bin
 set -x PATH node_modules/.bin $PATH
-
-# base16 shell colors
-# eval sh $HOME/.config/base16-shell/base16-monokai.dark.sh
 
 # autojump
 if test -e /usr/local/share/autojump/autojump.fish
@@ -73,9 +64,6 @@ end
 
 # Google Cloud SDK
 append_path /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin
-
-# access yarn global binaries
-append_path (yarn global bin)
 
 set -x PATH ~/bin $PATH
 
