@@ -74,9 +74,18 @@ set -x PATH ~/bin $PATH
 #   and bass source "$HOME/.rvm/scripts/rvm"
 
 # Set up rbenv
-if command -s rbenv
+if type -q rbenv
   status --is-interactive; and source (rbenv init -|psub)
+end
+
+# Set up pyenv
+append_path $HOME/.pyenv/bin
+if type -q pyenv
+  status --is-interactive; and pyenv init - | source
+  status --is-interactive; and pyenv virtualenv-init - | source
 end
 
 # https://starship.rs cross-shell prompt
 starship init fish | source
+
+set -x GPG_TTY (tty)
