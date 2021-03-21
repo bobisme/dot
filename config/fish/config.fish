@@ -74,7 +74,9 @@ set -x PATH ~/bin $PATH
 #   and bass source "$HOME/.rvm/scripts/rvm"
 
 # Set up rbenv
-status --is-interactive; and source (rbenv init -|psub)
+if command -s rbenv
+  status --is-interactive; and source (rbenv init -|psub)
+end
 
 # https://starship.rs cross-shell prompt
 starship init fish | source
