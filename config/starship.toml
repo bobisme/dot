@@ -2,5 +2,16 @@
 truncation_length = 6
 truncate_to_repo = false
 
+[git_branch]
+always_show_remote = true
+format = 'on [$symbol$branch(:$remote_name/$remote_branch)]($style) '
+
 [time]
 disabled = false
+
+[custom.git_remote_branch]
+command = 'git branch | grep "* (HEAD detached at" | grep --only-matching "\w\+/[^)]\+"'
+when = true
+detect_files = ['.git']
+style = 'bold green'
+disabled = true
