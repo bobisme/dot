@@ -103,3 +103,20 @@ endsnippet
 snippet logr "import logrus as log" b
 log "github.com/Sirupsen/logrus"
 endsnippet
+
+snippet dmap "data mapper"
+type ${2:${1:Object}Mapper} struct{}
+
+func (m $2) Columns() string {
+	return "${3:id,created_at,modified_at,deleted_at}"
+}
+
+func (m $2) Fields(${4:obj} *${5:model.Object}) []interface{} {
+	return []interface{}{
+		&$4.ID,
+		&$4.CreatedAt,
+		&$4.ModifiedAt,
+		&$4.DeletedAt,$0
+	}
+}
+endsnippet
