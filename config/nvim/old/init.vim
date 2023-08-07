@@ -41,6 +41,13 @@ set synmaxcol=800
 set shell=bash
 " allow ESC in terminal
 tnoremap <Esc> <C-\><C-n>
+" live preview of search and replace
+set inccommand=nosplit
+" Give more space for displaying messages.
+set cmdheight=2
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
 
 " fast grepping
 if executable('rg')
@@ -73,7 +80,7 @@ endif
   " paste from system
   nmap <leader>p "*p
   nmap <leader>P "*P
-  nmap <leader><leader>p o<esc>"*p
+  nmap <leader><leader> <c-^>
 
   map <leader>y "*y
   nmap <leader>yy ^vg_"*y`]
@@ -170,18 +177,29 @@ call plug#begin('~/.local/share/nvim/plugged')
 
   Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
   nnoremap <leader>t :TagbarToggle<cr>
+  " autoformatter for neovim
+  " Plug 'sbdchd/neoformat'
+  " augroup fmt
+  "   autocmd!
+  "   autocmd BufWritePre * undojoin | Neoformat
+  " augroup END
 
-  " POLYGLOT {{{
-  " A collection of language packs for Vim.
-    Plug 'sheerun/vim-polyglot'
-    let g:jsx_ext_required = 0
-    let g:javascript_plugin_flow = 1
-  " }}}
   Plug 'vim-scripts/haproxy', { 'for': 'haproxy' }
   " better javascript syntax
   Plug 'jelera/vim-javascript-syntax', { 'for': 'javascript' }
   " quick HTML/XML creation
   Plug 'mattn/emmet-vim'
+  " PureScript
+  Plug 'FrigoEU/psc-ide-vim', { 'for': 'purescript' }
+  " ReasonML
+  Plug 'reasonml-editor/vim-reason-plus'
+  " Auto-linting via Language Server Protocol
+  Plug 'dense-analysis/ale'
+  " Dart and Flutter
+  Plug 'dart-lang/dart-vim-plugin'
+  Plug 'thosakwe/vim-flutter'
+  " jsonnet
+  Plug 'google/vim-jsonnet'
 
   " GO {{{
     Plug 'fatih/vim-go', { 'for': 'go' }
@@ -193,7 +211,7 @@ call plug#begin('~/.local/share/nvim/plugged')
     let g:go_highlight_operators = 1
     let g:go_highlight_build_constraints = 1
     " install binaries to ~/bin
-    let g:go_bin_path = expand("~/bin")
+    " let g:go_bin_path = expand("~/bin")
     " let $GOPATH=resolve(expand('~/go'))
     " let $GOROOT=resolve(expand('/usr/local/opt/go/libexec'))
     let g:go_fmt_command = "goimports"
@@ -215,6 +233,16 @@ call plug#begin('~/.local/share/nvim/plugged')
       au FileType go nmap <Leader>i <Plug>(go-info)
       au FileType go nmap <Leader>e <Plug>(go-rename)
     augroup end
+  " }}}
+
+  " POLYGLOT {{{
+  " A collection of language packs for Vim.
+    Plug 'sheerun/vim-polyglot'
+    let g:jsx_ext_required = 0
+    let g:javascript_plugin_flow = 1
+    if exists('g:loaded_polyglot')
+      let g:polyglot_disabled = ['go']
+    endif
   " }}}
 
   " haskell
@@ -290,16 +318,21 @@ call plug#begin('~/.local/share/nvim/plugged')
     " use arrows to go gthrough auto-complete menu and insert the text
     inoremap <expr> <down> ((pumvisible())?("\<C-n>"):("<down>"))
     inoremap <expr> <up> ((pumvisible())?("\<C-p>"):("<up>"))
-    " plugin
-    Plug 'Shougo/deoplete.nvim'
-    let g:deoplete#enable_at_startup = 1
-    let g:deoplete#complete_method = 'omnifunc'
-    Plug 'zchee/deoplete-go', {'do': 'make', 'for': 'go' }
-    " python completion
-    Plug 'zchee/deoplete-jedi', { 'for': 'python' }
-    " Plug 'bling/vim-airline'
-    " haskell
-    Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
+
+    " coc {{{
+      Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+      " GoTo code navigation.
+      nmap <silent> gd <Plug>(coc-definition)
+      nmap <silent> gy <Plug>(coc-type-definition)
+      nmap <silent> gi <Plug>(coc-implementation)
+      nmap <silent> gr <Plug>(coc-references)
+      " Use <c-space> to trigger completion.
+      inoremap <silent><expr> <c-space> coc#refresh()
+      " Applying codeAction to the selected region.
+      " Example: `<leader>aap` for current paragraph
+      xmap <leader>a  <Plug>(coc-codeaction-selected)
+      nmap <leader>a  <Plug>(coc-codeaction-selected)
+    " }}}
 
     augroup omnifuncs
       autocmd!
@@ -312,7 +345,6 @@ call plug#begin('~/.local/share/nvim/plugged')
     " - install rust source via `rustup component add rust-src`
     " - install racer via `cargo install racer`
     Plug 'racer-rust/vim-racer', { 'for': 'rust' }
-    Plug 'sebastianmarkow/deoplete-rust', { 'for': 'rust' }
   " }}}
 
   " Awesome git management.
@@ -383,6 +415,7 @@ call plug#begin('~/.local/share/nvim/plugged')
     augroup autoformatonsave
       autocmd!
       au BufWrite *.rs :Autoformat
+      au BufWrite *.dart :Autoformat
     augroup end
   " }}}
 call plug#end()
@@ -424,7 +457,9 @@ call plug#end()
 	set shiftwidth=4 tabstop=4 softtabstop=4
   augroup indents
     au FileType coffee setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+    au FileType crystal setlocal sw=2 ts=2 sts=2 et
     au FileType css,less setlocal sw=2 ts=2 sts=2 et
+    au FileType dart setlocal sw=2 ts=2 sts=2 et
     au FileType fish setlocal sw=2 ts=2 sts=2 et
     au FileType go setlocal sw=4 ts=4 sts=4 noexpandtab iskeyword-=.
     au FileType html setlocal sw=2 ts=2 sts=2
@@ -434,6 +469,7 @@ call plug#end()
     au FileType purescript setlocal sw=2 ts=2 sts=2 et
     au FileType python setlocal foldmethod=indent foldnestmax=2
     au FileType raml setlocal ts=2 sw=2 sts=2 et
+    au FileType reason setlocal ts=2 sw=2 sts=2 et
     au FileType ruby setlocal ts=2 sw=2 sts=2 et
     au FileType sass,scss setlocal ts=2 sw=2 sts=2
     au FileType sh setlocal ts=2 sw=2 sts=2
