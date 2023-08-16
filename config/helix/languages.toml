@@ -1,0 +1,9 @@
+[[language]]
+name = "rust"
+auto-format = true
+
+[language-server.rust-analyzer.config]
+checkOnSave = { command = "clippy" } #, extraArgs = ["--", "-W", "clippy::pedantic"]}
+# cargo = { allFeatures = true }
+procMacro = { enable = true }
+

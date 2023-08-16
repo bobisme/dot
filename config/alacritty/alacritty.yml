@@ -1,0 +1,75 @@
+window:
+  option_as_alt: Both
+
+font:
+  normal:
+    # family: JetBrainsMono Nerd Font Propo
+    # family: FantasqueSansM Nerd Font
+    # family: FantasqueSansM Nerd Font Mono
+    # family: IosevkaTerm Nerd Font Mono
+    family: FantasqueSansM Nerd Font Propo
+    style: Regular
+  size: 18
+
+# Catppuccino theme scheme for Alacritty
+colors:
+  primary:
+    background: '#1E1E2E'
+    foreground: '0xd6d6d6'
+  cursor:
+    text: '#CDD6F4'
+    cursor: '#D9D9D9'
+  normal:
+    black: '#181A1F'
+    red: '#E86671'
+    green: '#98C379'
+    yellow: '#E5C07B'
+    blue: '#61AFEF'
+    magenta: '#C678DD'
+    cyan: '#54AFBC'
+    white: '#ABB2BF'
+  bright:
+    black: '#5C6370'
+    red: '#E86671'
+    green: '#98C379'
+    yellow: '#E5C07B'
+    blue: '#61AFEF'
+    magenta: '#C678DD'
+    cyan: '#54AFBC'
+    white: '0xf7f7f7'
+  dim:
+    black: '#5C6370'
+    red: '0x74423f'
+    green: '#98C379'
+    yellow: '#E5C07B'
+    blue: '#61AFEF'
+    magenta: '0x6e4962'
+    cyan: '0x5c8482'
+    white: '0x828282'
+
+# carbonfox
+# colors:
+#   # Default colors
+#   primary:
+#     background: '0x161616'
+#     foreground: '0xf2f4f8'
+#   # Normal colors
+#   normal:
+#     black:   '0x282828'
+#     red:     '0xee5396'
+#     green:   '0x25be6a'
+#     yellow:  '0x08bdba'
+#     blue:    '0x78a9ff'
+#     magenta: '0xbe95ff'
+#     cyan:    '0x33b1ff'
+#     white:   '0xdfdfe0'
+#   # Bright colors
+#   bright:
+#     black:   '0x484848'
+#     red:     '0xf16da6'
+#     green:   '0x46c880'
+#     yellow:  '0x2dc7c4'
+#     blue:    '0x8cb6ff'
+#     magenta: '0xc8a5ff'
+#     cyan:    '0x52bdff'
+#     white:   '0xe4e4e5'

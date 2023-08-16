@@ -1,0 +1,55 @@
+theme = "catppuccin_mocha"
+
+[editor]
+undercurl = true
+rulers = [80,120]
+
+[keys.normal]
+C-l = "jump_view_right"
+C-h = "jump_view_left"
+C-s = ":w" # c-s to save instead of add to jumplist
+C-j = [
+  "move_visual_line_down",
+  "move_visual_line_down",
+  "move_visual_line_down",
+  "move_visual_line_down",
+  "move_visual_line_down",
+  "move_visual_line_down",
+  "move_visual_line_down",
+  "move_visual_line_down",
+  "move_visual_line_down",
+  "move_visual_line_down"]
+C-k = [
+  "move_visual_line_up",
+  "move_visual_line_up",
+  "move_visual_line_up",
+  "move_visual_line_up",
+  "move_visual_line_up",
+  "move_visual_line_up",
+  "move_visual_line_up",
+  "move_visual_line_up",
+  "move_visual_line_up",
+  "move_visual_line_up"]
+[keys.select]
+C-j = [
+  "extend_visual_line_down",
+  "extend_visual_line_down",
+  "extend_visual_line_down",
+  "extend_visual_line_down",
+  "extend_visual_line_down",
+  "extend_visual_line_down",
+  "extend_visual_line_down",
+  "extend_visual_line_down",
+  "extend_visual_line_down",
+  "extend_visual_line_down"]
+C-k = [
+  "extend_visual_line_up",
+  "extend_visual_line_up",
+  "extend_visual_line_up",
+  "extend_visual_line_up",
+  "extend_visual_line_up",
+  "extend_visual_line_up",
+  "extend_visual_line_up",
+  "extend_visual_line_up",
+  "extend_visual_line_up",
+  "extend_visual_line_up"]

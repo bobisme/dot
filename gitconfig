@@ -24,3 +24,6 @@
 	clean = git lfs clean %f
 	smudge = git lfs smudge %f
 	required = true
+[user]
+	name = Bob
+	email = bob@standardinput.co

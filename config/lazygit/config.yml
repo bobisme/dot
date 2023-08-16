@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://json.schemastore.org/lazygit.json
+gui:
+  theme:
+    activeBorderColor:
+      - green
+      - bold
+    inactiveBorderColor:
+      - white
+    searchingActiveBorderColor:
+      - cyan
+      - bold
+    optionsTextColor:
+      - blue
+    selectedLineBgColor:
+      - black # set to `default` to have no background colour
+    selectedRangeBgColor:
+      - black
+    cherryPickedCommitBgColor:
+      - black
+    cherryPickedCommitFgColor:
+      - blue
+    unstagedChangesColor:
+      - red
+    defaultFgColor:
+      - default
