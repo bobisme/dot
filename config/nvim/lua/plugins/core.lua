@@ -35,12 +35,6 @@ return {
     },
     opts = { use_default_keymaps = false, max_join_length = 1500 },
   },
-    config = function()
-      require("treesj").setup({
-        use_default_keymaps = false,
-      })
-    end,
-  },
   {
     "L3MON4D3/LuaSnip",
     keys = function()
