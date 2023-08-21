@@ -10,6 +10,7 @@ return {
       endwise = { enable = true },
     },
   },
+  { "LhKipp/nvim-nu", type = "nu" },
   {
     "christoomey/vim-tmux-navigator",
     init = function()
