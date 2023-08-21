@@ -846,7 +846,7 @@ $env.config = {
     ]
 }
 
-use ~/.config/nushell/starship.nu
+use ~/.cache/starship/init.nu
 source ~/.config/nushell/zoxide.nu
 alias l = exa
 alias ll = exa -l
