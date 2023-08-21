@@ -1,5 +1,16 @@
 return {
   {
+    "nvim-treesitter/nvim-treesitter",
+    dependencies = {
+      "windwp/nvim-ts-autotag",
+      "RRethy/nvim-treesitter-endwise",
+    },
+    opts = {
+      autotag = { enable = true },
+      endwise = { enable = true },
+    },
+  },
+  {
     "christoomey/vim-tmux-navigator",
     init = function()
       vim.g.tmux_navigator_no_mappings = 1
