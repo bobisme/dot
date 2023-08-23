@@ -10,6 +10,18 @@ return {
       endwise = { enable = true },
     },
   },
+  { "nvim-treesitter/nvim-treesitter-context" },
+  {
+    "Saecki/crates.nvim",
+    event = "BufRead Cargo.toml",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      null_ls = {
+        enabled = true,
+        name = "crates.nvim",
+      },
+    },
+  },
   { "LhKipp/nvim-nu", type = "nu" },
   {
     "christoomey/vim-tmux-navigator",
