@@ -1,0 +1,7 @@
+[user]
+	name = Bob
+	email = bob@standardinput.co
+[alias]
+	s = status --short --branch
+[init]
+	defaultBranch = main
