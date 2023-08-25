@@ -1,5 +1,17 @@
 return {
   {
+    "jackMort/ChatGPT.nvim",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+    },
+    opts = {
+      api_key_cmd = "pass show openapi/nvim",
+    },
+    cmd = { "ChatGPT", "ChatGPTActAs", "ChatGPTRun", "ChatGPTEditWithInstructions", "ChatGPTCompleteCode" },
+  },
+  {
     "nvim-treesitter/nvim-treesitter",
     dependencies = {
       "windwp/nvim-ts-autotag",
@@ -10,7 +22,7 @@ return {
       endwise = { enable = true },
     },
   },
-  { "nvim-treesitter/nvim-treesitter-context" },
+  { "nvim-treesitter/nvim-treesitter-context", event = "BufReadPost" },
   {
     "Saecki/crates.nvim",
     event = "BufRead Cargo.toml",
@@ -22,7 +34,7 @@ return {
       },
     },
   },
-  { "LhKipp/nvim-nu", type = "nu" },
+  { "LhKipp/nvim-nu", ft = "nu" },
   {
     "christoomey/vim-tmux-navigator",
     init = function()
@@ -36,15 +48,12 @@ return {
   {
     "kylechui/nvim-surround",
     version = "*",
-    event = "VeryLazy",
-    config = function()
-      require("nvim-surround").setup()
-    end,
+    event = "BufReadPost",
   },
   {
     "Wansmer/treesj",
     keys = {
-      { "J", vim.cmd.TSJToggle, desc = "Join Toggle" },
+      { "<c-J>", vim.cmd.TSJToggle, desc = "Join Toggle" },
     },
     opts = { use_default_keymaps = false, max_join_length = 1500 },
   },
