@@ -1,0 +1,25 @@
+[global]
+corner_radius = 10
+frame_color = "#89B4FA"
+frame_width = 2
+separator_color= frame
+font = "Cantarell 14"
+offset = 20x20
+padding = 14
+horizontal_padding = 14
+icon_theme = "adwaita-dark"
+width = (300, 500)
+
+[urgency_low]
+background = "#1E1E2E"
+frame_color = "#000000"
+foreground = "#CDD6F4"
+
+[urgency_normal]
+background = "#1E1E2E"
+foreground = "#CDD6F4"
+
+[urgency_critical]
+background = "#1E1E2E"
+foreground = "#CDD6F4"
+frame_color = "#FAB387"
