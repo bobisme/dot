@@ -22,15 +22,17 @@ vim.cmd.colorscheme(colorscheme)
 
 -- Make comments lighter so you can read them.
 local comment_fg = vim.api.nvim_get_hl(0, { name = "Comment" }).fg
+local inlay_fg = vim.api.nvim_get_hl(0, { name = "Comment" }).fg
+
 local fg_rgb = to_rgb(comment_fg)
 if colorscheme == "catppuccin" then
-  fg_rgb.r = fg_rgb.r * 1.4
-  fg_rgb.g = fg_rgb.g * 1.4
-  fg_rgb.b = fg_rgb.b * 1.4
+  fg_rgb = { r = fg_rgb.r * 1.4, g = fg_rgb.g * 1.4, b = fg_rgb.b * 1.4 }
 else
-  fg_rgb.r = fg_rgb.r * 1.75
-  fg_rgb.g = fg_rgb.g * 1.75
-  fg_rgb.b = fg_rgb.b * 1.75
+  fg_rgb = { r = fg_rgb.r * 1.75, g = fg_rgb.g * 1.75, b = fg_rgb.b * 1.75 }
 end
 comment_fg = from_rgb(fg_rgb)
+
 vim.api.nvim_set_hl(0, "Comment", { fg = comment_fg, italic = true })
+vim.api.nvim_set_hl(0, "Inlay", { fg = inlay_fg, italic = true })
+
+require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/snippets" })

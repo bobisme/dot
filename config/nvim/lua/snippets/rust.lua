@@ -20,17 +20,37 @@ local types = require("luasnip.util.types")
 local conds = require("luasnip.extras.conditions")
 local conds_expand = require("luasnip.extras.conditions.expand")
 
-ls.add_snippets("rust", {
-	snippet("cows", {
-		text("Cow<'a, str>"),
+return {
+  snippet("cows", {
+    text("Cow<'a, str>"),
     ins(0),
-	}),
-	snippet("cowb", {
-		text("Cow<'a, [u8]>"),
+  }),
+  snippet("cowb", {
+    text("Cow<'a, [u8]>"),
     ins(0),
-	}),
-	snippet("cow", {
-		text("Cow<'a, "), ins(1), text(">"),
+  }),
+  snippet("cow", {
+    text("Cow<'a, "),
+    ins(1),
+    text(">"),
     ins(0),
-	}),
-})
+  }),
+  snippet("inl", {
+    text("#[inline]"),
+    ins(0),
+  }),
+  snippet("mus", {
+    text("#[must_use]"),
+    ins(0),
+  }),
+  snippet("comptest", {
+    text({
+      "// compile-time tests",
+      "const _: () = {",
+      "\tassert!(",
+    }),
+    ins(1),
+    text({ ")", "};" }),
+    ins(0),
+  }),
+}

@@ -1,4 +1,138 @@
 return {
+  {
+    "ThePrimeagen/harpoon",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    keys = {
+      {
+        "<leader>hm",
+        function()
+          require("harpoon.mark").add_file()
+        end,
+        desc = "add file to harpoon list",
+      },
+      {
+        "<leader>hh",
+        function()
+          require("harpoon.ui").toggle_quick_menu()
+        end,
+        desc = "toggle quick menu",
+      },
+      {
+        "<c-7>",
+        function()
+          require("harpoon.ui").nav_file(1)
+        end,
+        desc = "jump to 1",
+      },
+      {
+        "<c-8>",
+        function()
+          require("harpoon.ui").nav_file(2)
+        end,
+        desc = "jump to 2",
+      },
+      {
+        "<c-9>",
+        function()
+          require("harpoon.ui").nav_file(3)
+        end,
+        desc = "jump to 3",
+      },
+      {
+        "<c-0>",
+        function()
+          require("harpoon.ui").nav_file(4)
+        end,
+        desc = "jump to 4",
+      },
+    },
+  },
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+      "MunifTanjim/nui.nvim",
+    },
+    keys = {
+      { "<leader>ee", ":Neotree filesystem focus<cr>", desc = "focus file tree", silent = true },
+      { "<leader>ec", ":Neotree close<cr>", desc = "close neo tree", silent = true },
+      { "<leader>eb", ":Neotree buffers focus<cr>", desc = "focus buffers tree", silent = true },
+      { "<leader>eg", ":Neotree git_status focus<cr>", desc = "focus git tree", silent = true },
+    },
+    opts = {
+      window = {
+        width = 30,
+      },
+      source_selector = {
+        winbar = true,
+      },
+      -- integrate with harpoon
+      filesystem = {
+        components = {
+          harpoon_index = function(config, node, state)
+            local Marked = require("harpoon.mark")
+            local path = node:get_id()
+            local succuss, index = pcall(Marked.get_index_of, path)
+            if succuss and index and index > 0 then
+              return {
+                text = string.format("─►%d", index),
+                highlight = config.highlight or "NeoTreeDirectoryIcon",
+              }
+            else
+              return {}
+            end
+          end,
+        },
+        renderers = {
+          file = {
+            { "icon" },
+            { "name", use_git_status_colors = true },
+            { "harpoon_index" }, --> This is what actually adds the component in where you want it
+            { "diagnostics" },
+            { "git_status", highlight = "NeoTreeDimText" },
+          },
+        },
+      },
+    },
+  },
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   opts = {
+  --     ---@type lspconfig.options
+  --     servers = {
+  --       rust_analyzer = {
+  --         settings = {
+  --           ["rust-analyzer"] = {
+  --             cargo = {
+  --               allFeatures = false,
+  --             },
+  --             checkOnSave = {
+  --               allFeatures = false,
+  --             },
+  --           },
+  --         },
+  --       },
+  --     },
+  --   },
+  -- },
+  {
+    "simrat39/rust-tools.nvim",
+    ft = "rust",
+    dependencies = { "neovim/nvim-lspconfig" },
+    opts = {
+      tools = {
+        inlay_hints = {
+          parameter_hints_prefix = ": ",
+          other_hints_prefix = "› ",
+          highlight = "Inlay",
+        },
+      },
+    },
+  },
   -- from LazyVim
   { "rcarriga/nvim-notify", opts = {
     render = "compact",
