@@ -7,8 +7,10 @@ font = "Cantarell 14"
 offset = 20x20
 padding = 14
 horizontal_padding = 14
-icon_theme = "adwaita-dark"
-width = (300, 500)
+icon_theme = "Adwaita"
+enable_recursive_icon_lookup = true
+width = (300, 800)
+max_icon_size = 256 # for screenshots
 
 [urgency_low]
 background = "#1E1E2E"
