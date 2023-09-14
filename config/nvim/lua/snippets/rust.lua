@@ -53,4 +53,27 @@ return {
     text({ ")", "};" }),
     ins(0),
   }),
+  snippet("testmod", {
+    text({
+      "#[cfg(test)]",
+      "mod test",
+    }),
+    ins(1),
+    text({
+      "{",
+      "\tuse super::*;",
+      "\tuse assert2::assert;",
+      "\tuse rstest::*;",
+      "",
+      "\t#[rstest]",
+      "\tfn it_works() {",
+      "\t\t",
+    }),
+    ins(0),
+    text({
+      "",
+      "\t}",
+      "}",
+    }),
+  }),
 }
