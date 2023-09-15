@@ -1,0 +1,74 @@
+#!/usr/bin/env lua
+---@alias choice {name: string, url: string}
+
+---@type choice[]
+local CHOICES = {
+	{ name = "YouTube", url = "https://youtube.com" },
+	{ name = "ChatGPT", url = "https://chat.openai.com" },
+}
+
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+
+local mktemp = function()
+	local tmp_cmd = io.popen("mktemp")
+	if tmp_cmd == nil then
+		error("mktemp failed")
+	end
+
+	return tmp_cmd:read("l")
+end
+
+---Get url from table or use what's passed in
+---@param choices choice[]
+---@param selected_key string
+---@return string
+local get_selected_url = function(choices, selected_key)
+	local stripped_key = selected_key:gsub("(^%s+|%s+$)", "")
+	for _, choice in ipairs(choices) do
+		if choice.name == stripped_key then
+			return choice.url
+		end
+	end
+	local start, _ = stripped_key:find("https://")
+	if start ~= 1 then
+		return "https://" .. stripped_key
+	end
+	return stripped_key
+end
+
+---Launch fuzzel
+---@param choices choice[]
+---@return string
+local fuzzel = function(choices)
+	local tmp = mktemp()
+	local cmd = io.popen("fuzzel --dmenu --lines=4 --prompt='Browser App » ' > " .. tmp, "w")
+	if cmd == nil then
+		error("could not run fuzzel")
+	end
+
+	for _, app in ipairs(choices) do
+		cmd:write(app.name .. "\n")
+	end
+	cmd:flush()
+	cmd:close()
+	local tmp_file = io.open(tmp, "r")
+	if tmp_file == nil then
+		error("can't open tmp")
+	end
+	local selected = tmp_file:read("l")
+	return get_selected_url(choices, selected)
+end
+
+---Launch Brave app
+---@param url string
+local brave = function(url)
+	local stripped_url = url:gsub("(^%s+|%s+$)", "")
+	local cmd = "brave --app=" .. stripped_url
+	print(cmd)
+	os.execute(cmd)
+end
+
+local selected = fuzzel(CHOICES)
+brave(selected)
