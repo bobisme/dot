@@ -3,16 +3,17 @@ set -g theme_date_format "+%Y-%m-%d %H:%M:%S"
 set -g theme_date_timezone America/New_York
 
 function prepend_path
-    set -l check_path "yes"
+    set -l check_path yes
     for arg in $argv
         if [ $arg = "--check-path=no" ]
-            set -l check_path "no"
+            set -l check_path no
         else
             set -l path $arg
         end
     end
 
-    if begin [ $check_path = "no" ]; or test -d $path
+    if begin
+            [ $check_path = no ]; or test -d $path
         end
         set -x PATH $path $PATH
     else
@@ -101,6 +102,10 @@ if test (which direnv)
     eval (direnv hook fish)
 end
 
+if type -q zoxide
+    zoxide init fish | source
+end
+
 # fzf
 if type -q fzf
     if type -q pbcopy
@@ -135,3 +140,10 @@ if type -q fzf
         set -x FZF_DEFAULT_COMMAND 'fd --type f'
     end
 end
+
+# pnpm
+set -gx PNPM_HOME "/Users/bob/Library/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end
