@@ -183,6 +183,25 @@ return {
         suffix_next = "n", -- Suffix to search with "next" method
       },
     },
+    "mhartington/formatter.nvim",
+    cmd = { "Format", "FormatLock", "FormatWrite", "FormatWriteLock" },
+    ft = { "asm" },
+    opts = {
+      filetype = {
+        asm = {
+          function()
+            return {
+              exe = "asmfmt",
+              args = {},
+              stdin = true,
+            }
+          end,
+        },
+      },
+    },
+    init = function()
+      vim.cmd([[autocmd BufWritePre *.s Format]])
+    end,
   },
   {
     "jackMort/ChatGPT.nvim",
