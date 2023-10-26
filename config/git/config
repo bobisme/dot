@@ -10,6 +10,7 @@
 	omain = "!f(){ git branch --remotes | grep origin/HEAD | awk '{ print $3 }'; }; f"
 	lz = !lazygit
 	z = !lazygit
+	wat = "!f(){ local=$(git symbolic-ref --short -q HEAD); remote=$(git for-each-ref --format '%(upstream:short)' $(git symbolic-ref -q HEAD) 2>/dev/null); if [ \"$local\" ] && [ \"$remote\" ] && [ $(git rev-parse HEAD) = $(git rev-parse $(git for-each-ref --format '%(upstream:short)' $(git symbolic-ref -q HEAD) 2>/dev/null)) ]; then out=\"$local:$remote\"; elif [ \"$local\" ]; then out=$local; else out=$(git describe --tags --exact-match HEAD 2>/dev/null) || out=$(git for-each-ref --format '%(upstream:short)' $(git symbolic-ref -q HEAD) 2>/dev/null) || out=$(git rev-parse --short HEAD 2>/dev/null); fi; echo \"$out\" | awk '{$1=$1};1' | sed '/^$/d'; }; f"
 [color]
 	ui = true
 [core]
