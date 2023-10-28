@@ -20,6 +20,12 @@ if type -q rtx
     rtx activate fish | source
 end
 
+# bun
+if test -d "$HOME/.bun"
+    set -x BUN_INSTALL "$HOME/.bun"
+    set -x PATH $BUN_INSTALL/bin $PATH
+end
+
 if status is-interactive
     eval (ssh-agent -c) >/dev/null
     # Commands to run in interactive sessions can go here
@@ -47,7 +53,3 @@ if status is-interactive
         fzf_key_bindings
     end
 end
-
-# bun
-set --export BUN_INSTALL "$HOME/.bun"
-set --export PATH $BUN_INSTALL/bin $PATH
