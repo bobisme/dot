@@ -4,7 +4,9 @@
 ---@type choice[]
 local CHOICES = {
 	{ name = "YouTube", url = "https://youtube.com" },
+	{ name = "YouTube-Music", url = "https://music.youtube.com" },
 	{ name = "ChatGPT", url = "https://chat.openai.com" },
+	{ name = "Desmos", url = "https://www.desmos.com/calculator" },
 }
 
 ------------------------------------------------------------
@@ -65,7 +67,7 @@ end
 ---@param url string
 local brave = function(url)
 	local stripped_url = url:gsub("(^%s+|%s+$)", "")
-	local cmd = "brave --app=" .. stripped_url
+	local cmd = "thorium-browser --app=" .. stripped_url
 	print(cmd)
 	os.execute(cmd)
 end
