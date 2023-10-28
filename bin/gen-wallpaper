@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+wallpapergen -o ~/.wallpaper.png \
+	-W 3840 \
+	-H 2160 \
+	--color "#f5e0dc" \
+	--color "#f2cdcd" \
+	--color "#f5c2e7" \
+	--color "#cba6f7" \
+	--color "#f38ba8" \
+	--color "#eba0ac" \
+	--color "#fab387" \
+	--color "#f9e2af" \
+	--color "#a6e3a1" \
+	--color "#94e2d5" \
+	--color "#89dceb" \
+	--color "#74c7ec" \
+	--color "#89b4fa" \
+	--color "#b4befe" \
+	--color "#cdd6f4" \
+	--color "#bac2de" \
+	--color "#a6adc8" \
+	--color "#9399b2" \
+	--color "#7f849c" \
+	--color "#6c7086" \
+	--color "#585b70" \
+	--color "#45475a" \
+	--color "#313244" \
+	--color "#1e1e2e" \
+	--color "#181825" \
+	--color "#11111b" |
+	xargs -I{} swww img {} \
+		--transition-type wipe \
+		--transition-step 1
