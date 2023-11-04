@@ -5,7 +5,9 @@ if type -q cargo
 end
 
 if type -q eza
-    abbr -a l eza
+    set -x EZA_ICON_SPACING 2
+    set -x EZA_ICON_AUTO true
+    abbr -a l eza --icons
 end
 
 if type -q zoxide
