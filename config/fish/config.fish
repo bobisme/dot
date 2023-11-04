@@ -34,7 +34,7 @@ if status is-interactive
     if type -q bat
         set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
         set -x MANROFFOPT -c
-        set -x BAT_THEME base16-256
+        set -x BAT_THEME base16
         abbr -a bhelp "bat --plain --language=help"
     end
 
