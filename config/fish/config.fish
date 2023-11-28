@@ -1,4 +1,11 @@
 set -x PATH $HOME/bin $PATH
+if type -q nvim
+    set -x EDITOR nvim
+else if type -q vim
+    set -x EDITOR vim
+else if type -q vi
+    set -x EDITOR vi
+end
 
 if type -q cargo
     set -x PATH $HOME/.cargo/bin $PATH
@@ -6,8 +13,8 @@ end
 
 if type -q eza
     set -x EZA_ICON_SPACING 2
-    set -x EZA_ICON_AUTO true
-    abbr -a l eza --icons
+    set -x EZA_ICONS_AUTO true
+    abbr -a l eza
 end
 
 if type -q zoxide
