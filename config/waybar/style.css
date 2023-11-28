@@ -1,0 +1,145 @@
+* {
+  border: none;
+  /* font-family: "FantasqueSansM Nerd Font"; */
+  /* font-family: "Inter"; */
+  font-family: "SF Pro";
+  font-weight: 500;
+  font-size: 18px;
+  min-height: 0;
+}
+
+window#waybar {
+  background: rgba(21, 18, 27, 0);
+  color: #cdd6f4;
+}
+
+tooltip {
+  background: #1e1e2e;
+  opacity: 0.8;
+  padding: 0 0.5em 0 1em;
+}
+
+tooltip label {
+  color: #cdd6f4;
+}
+
+#workspaces button {
+  padding: 5px;
+  color: #313244;
+  margin-right: 5px;
+}
+
+#workspaces button.active {
+  color: #a6adc8;
+}
+
+#workspaces button.focused {
+  color: #a6adc8;
+  background: #eba0ac;
+}
+
+#workspaces button.urgent {
+  color: #11111b;
+  background: #a6e3a1;
+}
+
+#workspaces button:hover {
+  background: #11111b;
+  color: #cdd6f4;
+}
+
+#custom-appmenu,
+#custom-gen_wallpaper,
+#custom-lock_screen,
+#custom-light_dark,
+#custom-power_btn,
+#custom-power_profile,
+#custom-weather,
+#window,
+#cpu,
+#disk,
+#custom-updates,
+#memory,
+#clock,
+#battery,
+#pulseaudio,
+#network,
+#tray,
+#temperature,
+#workspaces,
+#backlight {
+  background: #1e1e2e;
+  padding: 0px 0.5em 0px 0.5em;
+  margin: 0;
+  margin-top: 11px;
+}
+#tray {
+  padding-right: 1em;
+}
+#custom-launch_wofi {
+  padding-left: 1em;
+}
+
+/* LEFT END */
+#tray,
+#window,
+#custom-lock_screen,
+#custom-gen_wallpaper,
+#temperature,
+#backlight,
+#custom-launch_wofi,
+#cpu {
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  margin-left: 5px;
+  padding-left: 1em;
+}
+
+/* RIGHT END */
+#window,
+#custom-light_dark,
+#custom-power_btn,
+#custom-launch_wofi,
+#workspaces,
+#battery,
+#pulseaudio.microphone,
+#disk {
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  margin-right: 5px;
+  padding-right: 1em;
+}
+
+#temperature.critical {
+  color: #e92d4d;
+}
+
+#workspaces {
+  padding-right: 0px;
+  padding-left: 5px;
+}
+
+#custom-power_profile {
+  color: #a6e3a1;
+}
+
+#window {
+  margin-right: 20px;
+}
+
+#custom-launch_wofi {
+  color: #89b4fa;
+  margin-left: 10px;
+}
+
+#pulseaudio {
+  color: #89b4fa;
+}
+
+#pulseaudio.microphone {
+  color: #cba6f7;
+}
+
+#battery {
+  color: #a6e3a1;
+}
