@@ -4,9 +4,11 @@
 ---@type choice[]
 local CHOICES = {
 	{ name = "YouTube", url = "https://youtube.com" },
-	{ name = "YouTube-Music", url = "https://music.youtube.com" },
+	{ name = "YouTube Music", url = "https://music.youtube.com" },
 	{ name = "ChatGPT", url = "https://chat.openai.com" },
 	{ name = "Desmos", url = "https://www.desmos.com/calculator" },
+	{ name = "Messages", url = "https://messages.google.com" },
+	{ name = "Discord", url = "https://discord.com" },
 }
 
 ------------------------------------------------------------
@@ -45,7 +47,7 @@ end
 ---@return string
 local fuzzel = function(choices)
 	local tmp = mktemp()
-	local cmd = io.popen("fuzzel --dmenu --lines=4 --prompt='Browser App » ' > " .. tmp, "w")
+	local cmd = io.popen("fuzzel --dmenu --lines=10 --prompt='Browser App » ' > " .. tmp, "w")
 	if cmd == nil then
 		error("could not run fuzzel")
 	end
