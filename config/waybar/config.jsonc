@@ -56,7 +56,7 @@
     "format-icons": {
       "default": ""
     },
-    "on-click": "sh -c '(sleep 0.1s; wleave --protocol layer-shell)' & disown",
+    "on-click": "wleave --buttons-per-row 2 --protocol layer-shell",
     "tooltip": false
   },
   "cpu": {

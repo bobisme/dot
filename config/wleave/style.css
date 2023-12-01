@@ -1,0 +1,158 @@
+* {
+  background-image: none;
+  font-size: 56px;
+}
+
+@define-color bar-bg rgba(0, 0, 0, 0);
+
+@define-color main-bg #11111b;
+@define-color main-fg #cdd6f4;
+
+@define-color wb-act-bg #a6adc8;
+@define-color wb-act-fg #313244;
+
+@define-color wb-hvr-bg #f5c2e7;
+@define-color wb-hvr-fg #313244;
+
+window {
+  background-color: @bar-bg;
+  margin: 0 10rem;
+}
+
+button {
+  color: @main-fg;
+  background-color: @main-bg;
+  outline-style: none;
+  border: none;
+  border-width: 0px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 10%;
+  border-radius: 0px;
+  box-shadow: none;
+  text-shadow: none;
+  animation: gradient_f 20s ease-in infinite;
+  font-weight: 200;
+}
+
+button:focus {
+  background-color: @wb-act-bg;
+  background-size: 20%;
+  color: #000;
+}
+
+button:hover {
+  background-color: @wb-hvr-bg;
+  background-size: 25%;
+  border-radius: 6rem;
+  animation: gradient_f 20s ease-in infinite;
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.28, 1.682);
+  color: #000;
+}
+
+#lock {
+  background-image: image(
+    url("/home/bob/.config/wleave/icons/lock_white.png"),
+    url("/usr/share/wleave/icons/lock.png"),
+    url("/usr/local/share/wleave/icons/lock.png")
+  );
+  border-top-left-radius: 2rem;
+  margin-top: 20rem;
+  margin-left: 60rem;
+}
+
+#shutdown {
+  background-image: image(
+    url("/home/bob/.config/wleave/icons/shutdown_white.png"),
+    url("/usr/share/wleave/icons/shutdown.png"),
+    url("/usr/local/share/wleave/icons/shutdown.png")
+  );
+  border-top-right-radius: 2rem;
+  margin-top: 20rem;
+  margin-right: 60rem;
+}
+
+#logout {
+  background-image: image(
+    url("/home/bob/.config/wleave/icons/logout_white.png"),
+    url("/usr/share/wleave/icons/logout.png"),
+    url("/usr/local/share/wleave/icons/logout.png")
+  );
+  border-bottom-left-radius: 2rem;
+  margin-bottom: 20rem;
+  margin-left: 60rem;
+}
+
+#reboot {
+  background-image: image(
+    url("/home/bob/.config/wleave/icons/reboot_white.png"),
+    url("/usr/share/wleave/icons/reboot.png"),
+    url("/usr/local/share/wleave/icons/reboot.png")
+  );
+  border-bottom-right-radius: 2rem;
+  margin-bottom: 20rem;
+  margin-right: 60rem;
+}
+
+button:hover#lock,
+button:focus#lock {
+  background-image: image(
+    url("/home/bob/.config/wleave/icons/lock_black.png"),
+    url("/usr/share/wleave/icons/lock.png"),
+    url("/usr/local/share/wleave/icons/lock.png")
+  );
+}
+button:hover#lock {
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 12rem;
+  margin: 0;
+  margin-top: 10rem;
+  margin-left: 50rem;
+}
+button:hover#shutdown,
+button:focus#shutdown {
+  background-image: image(
+    url("/home/bob/.config/wleave/icons/shutdown_black.png"),
+    url("/usr/share/wleave/icons/shutdown.png"),
+    url("/usr/local/share/wleave/icons/shutdown.png")
+  );
+}
+button:hover#shutdown {
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 12rem;
+  margin: 0;
+  margin-top: 10rem;
+  margin-right: 50rem;
+}
+
+button:hover#logout,
+button:focus#logout {
+  background-image: image(
+    url("/home/bob/.config/wleave/icons/logout_black.png"),
+    url("/usr/share/wleave/icons/logout.png"),
+    url("/usr/local/share/wleave/icons/logout.png")
+  );
+}
+button:hover#logout {
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 12rem;
+  margin: 0;
+  margin-bottom: 10rem;
+  margin-left: 50rem;
+}
+
+button:hover#reboot,
+button:focus#reboot {
+  background-image: image(
+    url("/home/bob/.config/wleave/icons/reboot_black.png"),
+    url("/usr/share/wleave/icons/reboot.png"),
+    url("/usr/local/share/wleave/icons/reboot.png")
+  );
+}
+button:hover#reboot {
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 12rem;
+  margin: 0;
+  margin-bottom: 10rem;
+  margin-right: 50rem;
+}
