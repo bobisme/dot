@@ -21,6 +21,7 @@
     "custom/power_btn"
   ],
   "modules-right": [
+    "custom/lizzy",
     "custom/gen_wallpaper",
     "temperature",
     "battery",
@@ -139,18 +140,18 @@
     "on-scroll-down": "brightnessctl set 1%-",
     "min-length": 6
   },
-  "battery": {
-    "states": {
-      "good": 95,
-      "warning": 30,
-      "critical": 20
-    },
-    "format": "{icon}  {capacity}%",
-    "format-charging": " {capacity}%",
-    "format-plugged": " {capacity}%",
-    "format-alt": "{time} {icon}",
-    "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
-  },
+  // "battery": {
+  //   "states": {
+  //     "good": 95,
+  //     "warning": 30,
+  //     "critical": 20
+  //   },
+  //   "format": "{icon}  {capacity}%",
+  //   "format-charging": " {capacity}%",
+  //   "format-plugged": " {capacity}%",
+  //   "format-alt": "{time} {icon}",
+  //   "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+  // },
   "pulseaudio": {
     "format": "{icon} {volume}%",
     "format-muted": " ",
@@ -168,6 +169,16 @@
       "car": " ",
       "default": [" ", " ", " "]
     }
+  },
+  "custom/lizzy": {
+    "format": "{icon} {}",
+    "exec": "lizzy",
+    "return-type": "json",
+    "format-icons": {
+      "Playing": "󰐊",
+      "Paused": "󰏤"
+    },
+    "max-length": 45
   },
   "pulseaudio#microphone": {
     "format": "{format_source}",

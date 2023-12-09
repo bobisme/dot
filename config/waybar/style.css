@@ -49,6 +49,7 @@ tooltip label {
 }
 
 #custom-appmenu,
+#custom-lizzy,
 #custom-gen_wallpaper,
 #custom-lock_screen,
 #custom-light_dark,
@@ -84,6 +85,7 @@ tooltip label {
 #tray,
 #window,
 #custom-lock_screen,
+#custom-lizzy,
 #custom-gen_wallpaper,
 #temperature,
 #backlight,
@@ -100,6 +102,7 @@ tooltip label {
 #custom-light_dark,
 #custom-power_btn,
 #custom-launch_wofi,
+#custom-lizzy,
 #workspaces,
 #battery,
 #pulseaudio.microphone,
