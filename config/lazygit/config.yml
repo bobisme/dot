@@ -1,5 +1,7 @@
 # yaml-language-server: $schema=https://json.schemastore.org/lazygit.json
 gui:
+  mainPanelSplitMode: "horizontal"
+  timeFormat: "2006-01-02"
   theme:
     activeBorderColor:
       - green
