@@ -2,7 +2,7 @@ local ls = require("luasnip")
 -- some shorthands...
 local snippet = ls.snippet
 -- local snode = ls.snippet_node
-local text = ls.text_node
+local t = ls.text_node
 local ins = ls.insert_node
 local fn = ls.function_node
 local c = ls.choice_node
@@ -22,44 +22,44 @@ local conds_expand = require("luasnip.extras.conditions.expand")
 
 return {
   snippet("cows", {
-    text("Cow<'a, str>"),
+    t("Cow<'a, str>"),
     ins(0),
   }),
   snippet("cowb", {
-    text("Cow<'a, [u8]>"),
+    t("Cow<'a, [u8]>"),
     ins(0),
   }),
   snippet("cow", {
-    text("Cow<'a, "),
+    t("Cow<'a, "),
     ins(1),
-    text(">"),
+    t(">"),
     ins(0),
   }),
   snippet("inl", {
-    text("#[inline]"),
+    t("#[inline]"),
     ins(0),
   }),
   snippet("mus", {
-    text("#[must_use]"),
+    t("#[must_use]"),
     ins(0),
   }),
   snippet("comptest", {
-    text({
+    t({
       "// compile-time tests",
       "const _: () = {",
       "\tassert!(",
     }),
     ins(1),
-    text({ ")", "};" }),
+    t({ ")", "};" }),
     ins(0),
   }),
   snippet("testmod", {
-    text({
+    t({
       "#[cfg(test)]",
       "mod test",
     }),
     ins(1),
-    text({
+    t({
       "{",
       "\tuse super::*;",
       "\tuse assert2::assert;",
@@ -70,10 +70,28 @@ return {
       "\t\t",
     }),
     ins(0),
-    text({
+    t({
       "",
       "\t}",
       "}",
+    }),
+  }),
+  -- tracing subscriber
+  snippet("tracingsub", {
+    t({
+      "fn subscriber() -> impl tracing::subscriber::Subscriber {",
+      "    use tracing_subscriber::{fmt::format::FmtSpan, prelude::*};",
+      "    tracing_subscriber::registry()",
+      "        .with(tracing_subscriber::EnvFilter::from_default_env())",
+      "        .with(",
+      "            tracing_subscriber::fmt::layer()",
+      "                .compact()",
+      "                .with_target(false)",
+      "                .without_time()",
+      "                .with_span_events(FmtSpan::CLOSE),",
+      "        )",
+      "}",
+      "tracing::subscriber::set_global_default(subscriber()).unwrap();",
     }),
   }),
 }

@@ -1,4 +1,12 @@
+---@type LazySpec[]
 return {
+  {
+    "sourcegraph/sg.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
+  },
+  { "nanotee/zoxide.vim" },
+  { "bfrg/vim-jqplay", cmd = { "Jqplay", "JqplayScratch", "JqplayScratchNoInput" } },
+  ---@type LazySpec
   {
     "ThePrimeagen/harpoon",
     dependencies = {
@@ -10,7 +18,7 @@ return {
         function()
           require("harpoon.mark").add_file()
         end,
-        desc = "add file to harpoon list",
+        descf = "add file to harpoon list",
       },
       {
         "<leader>hh",
@@ -91,7 +99,7 @@ return {
           file = {
             { "icon" },
             { "name", use_git_status_colors = true },
-            { "harpoon_index" }, --> This is what actually adds the component in where you want it
+            -- { "harpoon_index" }, --> This is what actually adds the component in where you want it
             { "diagnostics" },
             { "git_status", highlight = "NeoTreeDimText" },
           },
@@ -99,26 +107,38 @@ return {
       },
     },
   },
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   opts = {
-  --     ---@type lspconfig.options
-  --     servers = {
-  --       rust_analyzer = {
-  --         settings = {
-  --           ["rust-analyzer"] = {
-  --             cargo = {
-  --               allFeatures = false,
-  --             },
-  --             checkOnSave = {
-  --               allFeatures = false,
-  --             },
-  --           },
-  --         },
-  --       },
-  --     },
-  --   },
-  -- },
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      ----@type lspconfig.options
+      servers = {
+        -- rust_analyzer = {
+        --   settings = {
+        --     ["rust-analyzer"] = {
+        --       cargo = {
+        --         allFeatures = false,
+        --       },
+        --       checkOnSave = {
+        --         allFeatures = false,
+        --       },
+        --     },
+        --   },
+        -- },
+        tailwindcss = {
+          filetypes_exclude = { "markdown" },
+        },
+      },
+      setup = {
+        tailwindcss = function(_, opts)
+          local tw = require("lspconfig.server_configurations.tailwindcss")
+          --- @param ft string
+          opts.filetypes = vim.tbl_filter(function(ft)
+            return not vim.tbl_contains(opts.filetypes_exclude or {}, ft)
+          end, tw.default_config.filetypes)
+        end,
+      },
+    },
+  },
   {
     "simrat39/rust-tools.nvim",
     ft = "rust",
@@ -133,16 +153,22 @@ return {
       },
     },
   },
-  -- from LazyVim
-  { "rcarriga/nvim-notify", opts = {
-    render = "compact",
-  } },
-  -- from LazyVim
-  { "folke/flash.nvim", opts = {
-    modes = { search = { enabled = false } },
-  } },
-  -- from LazyVim
   {
+    -- from LazyVim
+    "rcarriga/nvim-notify",
+    opts = {
+      render = "compact",
+    },
+  },
+  {
+    -- from LazyVim
+    "folke/flash.nvim",
+    opts = {
+      modes = { search = { enabled = false } },
+    },
+  },
+  {
+    -- from LazyVim
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
@@ -164,54 +190,59 @@ return {
       },
     },
   },
-  -- from LazyVim
   {
+    -- from LazyVim
     "echasnovski/mini.surround",
     version = "*",
     event = "BufReadPre",
-    opts = {
-      mappings = {
-        add = "ysa", -- Add surrounding in Normal and Visual modes
-        delete = "ysd", -- Delete surrounding
-        find = "ysf", -- Find surrounding (to the right)
-        find_left = "ysF", -- Find surrounding (to the left)
-        highlight = "ysh", -- Highlight surrounding
-        replace = "ysr", -- Replace surrounding
-        update_n_lines = "ysn", -- Update `n_lines`
-
-        suffix_last = "l", -- Suffix to search with "prev" method
-        suffix_next = "n", -- Suffix to search with "next" method
-      },
-    },
-    "mhartington/formatter.nvim",
-    cmd = { "Format", "FormatLock", "FormatWrite", "FormatWriteLock" },
-    ft = { "asm" },
-    opts = {
-      filetype = {
-        asm = {
-          function()
-            return {
-              exe = "asmfmt",
-              args = {},
-              stdin = true,
-            }
-          end,
-        },
-      },
-    },
-    init = function()
-      vim.cmd([[autocmd BufWritePre *.s Format]])
-    end,
   },
+  -- {
+  --   "mhartington/formatter.nvim",
+  --   cmd = { "Format", "FormatLock", "FormatWrite", "FormatWriteLock" },
+  --   ft = { "asm" },
+  --   opts = {
+  --     filetype = {
+  --       asm = {
+  --         function()
+  --           return {
+  --             exe = "asmfmt",
+  --             args = {},
+  --             stdin = true,
+  --           }
+  --         end,
+  --       },
+  --       python = {
+  --         function()
+  --           return {
+  --             exe = "black",
+  --             args = { "-" },
+  --             stdin = true,
+  --           }
+  --         end,
+  --       },
+  --     },
+  --   },
+  --   init = function()
+  --     local group = vim.api.nvim_create_augroup("FormatterOnSave", { clear = true })
+  --     vim.api.nvim_create_autocmd("BufWritePre", {
+  --       pattern = { "*.s", "*.py" },
+  --       command = "silent! Format",
+  --       group = group,
+  --     })
+  --     -- vim.cmd([[autocmd BufWritePre *.s Format]])
+  --   end,
+  -- },
   {
     "jackMort/ChatGPT.nvim",
     dependencies = {
       "MunifTanjim/nui.nvim",
       "nvim-lua/plenary.nvim",
+      "folke/trouble.nvim",
       "nvim-telescope/telescope.nvim",
     },
     opts = {
       api_key_cmd = "pass show openapi/nvim",
+      actions_paths = { "/home/bob/.config/nvim/chatgpt-actions.json" },
     },
     cmd = { "ChatGPT", "ChatGPTActAs", "ChatGPTRun", "ChatGPTEditWithInstructions", "ChatGPTCompleteCode" },
   },
@@ -231,7 +262,7 @@ return {
   {
     "Saecki/crates.nvim",
     event = "BufRead Cargo.toml",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    dependencies = { "nvim-lua/plenary.nvim", "nvimtools/none-ls.nvim" },
     opts = {
       null_ls = {
         enabled = true,
@@ -271,28 +302,33 @@ return {
     dependencies = {
       "hrsh7th/cmp-emoji",
     },
-    opts = {
-      -- ctrl + n to select next item
-      -- ctrl + h to select prev item
-      -- ctrl + l to complete
-      -- ctrl + l to move to next position
-      -- ctrl + h to move to prev position
-      mapping = {
-        ["<c-l>"] = require("cmp").mapping(function(fallback)
-          local cmp = require("cmp")
-          local luasnip = require("luasnip")
+    ---@param opts cmp.ConfigSchema
+    opts = function(_, opts)
+      local has_words_before = function()
+        unpack = unpack or table.unpack
+        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+      end
 
-          if luasnip.expand_or_locally_jumpable() then
+      local luasnip = require("luasnip")
+      local cmp = require("cmp")
+
+      opts.mapping = vim.tbl_extend("force", opts.mapping, {
+        ["<c-l>"] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            -- You could replace select_next_item() with confirm({ select = true }) to get VS Code autocompletion behavior
+            cmp.select_next_item()
+          -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
+          -- this way you will only jump inside the snippet region
+          elseif luasnip.expand_or_jumpable() then
             luasnip.expand_or_jump()
-          elseif cmp.visible() and cmp.get_active_entry() then
-            cmp.confirm()
+          elseif has_words_before() then
+            cmp.complete()
           else
             fallback()
           end
         end, { "i", "s" }),
-        ["<c-h>"] = require("cmp").mapping(function(fallback)
-          local cmp = require("cmp")
-          local luasnip = require("luasnip")
+        ["<c-h>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_prev_item()
           elseif luasnip.jumpable(-1) then
@@ -301,7 +337,25 @@ return {
             fallback()
           end
         end, { "i", "s" }),
-      },
-    },
+      })
+      opts.sources = cmp.config.sources({
+        { name = "cody" },
+        { name = "nvim_lsp" },
+        { name = "luasnip" },
+      }, {
+        { name = "buffer" },
+      })
+    end,
+  },
+  {
+    "hrsh7th/nvim-cmp",
+    opts = function(_, opts)
+      -- original LazyVim kind icon formatter
+      local format_kinds = opts.formatting.format
+      opts.formatting.format = function(entry, item)
+        format_kinds(entry, item) -- add icons
+        return require("tailwindcss-colorizer-cmp").formatter(entry, item)
+      end
+    end,
   },
 }

@@ -36,3 +36,6 @@ vim.api.nvim_set_hl(0, "Comment", { fg = comment_fg, italic = true })
 vim.api.nvim_set_hl(0, "Inlay", { fg = inlay_fg, italic = true })
 
 require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/snippets" })
+
+local Util = require("lazyvim.util")
+Util.toggle.number()
