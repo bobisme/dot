@@ -7,6 +7,12 @@ else if type -q vi
     set -x EDITOR vi
 end
 
+alias e=$EDITOR
+
+if not set --query XDG_CONFIG_HOME
+    set -x XDG_CONFIG_HOME $HOME/.config
+end
+
 if type -q cargo
     set -x PATH $HOME/.cargo/bin $PATH
 end
@@ -19,6 +25,7 @@ end
 
 if type -q zoxide
     zoxide init fish | source
+    abbr -a j z
 end
 
 if type -q direnv
@@ -44,6 +51,7 @@ if status is-interactive
         set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
         set -x MANROFFOPT -c
         set -x BAT_THEME base16
+        set -x BAT_STYLE plain
         abbr -a bhelp "bat --plain --language=help"
     end
 
@@ -61,4 +69,8 @@ if status is-interactive
         set -x FZF_CTRL_T_OPTS $FZF_CTRL_T_OPTS "--preview-window right,60%,border-vertical"
         fzf_key_bindings
     end
+    # set -x GTK_THEME "Mojave-Dark-solid:dark"
+    set -x GTK_THEME "Adwaita:dark"
+    set -x QT_QPA_PLATFORMTHEME qt5ct
+    alias chatgpt 'OPENAI_API_KEY=(pass show openapi/nvim) pipx run --spec git+https://github.com/marcolardera/chatgpt-cli chatgpt-cli --multiline'
 end
