@@ -13,15 +13,23 @@ replace_home() {
 	echo "~${after}"
 }
 
+most_recent_shot() {
+	find "$GRIM_DEFAULT_DIR" -maxdepth 1 -type f -exec stat --format="%Y %n" {} + |
+		sort -n |
+		tail -1 |
+		cut -d' ' -f2-
+}
+
 main() {
 	grim -g "$(slurp)"
-	most_recent=$(find "$GRIM_DEFAULT_DIR" -maxdepth 1 -type f -print0 | xargs -0 ls -t | head -n 1)
+	# most_recent=$(find "$GRIM_DEFAULT_DIR" -maxdepth 1 -type f -print0 | xargs -0 ls -t | head -n 1)
+	most_recent=$(most_recent_shot)
 	wl-copy <"$most_recent"
 	shortpath=$(replace_home "$most_recent")
 	msg="Saved screenshot copied to clipboad and saved to:\n$shortpath"
 	if command -v dunstify >/dev/null 2>&1; then
 		result=$(dunstify --action=open,Open --appname shoot --icon "$most_recent" "Screenshot Taken" "$msg")
-		if [[ "$result" = "open" ]]; then
+		if [[ "$result" = 2 ]]; then
 			thunar "$GRIM_DEFAULT_DIR" &
 		fi
 	elif command -v notify-send >/dev/null 2>&1; then
