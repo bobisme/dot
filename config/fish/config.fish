@@ -1,3 +1,5 @@
+abbr -a o xdg-open
+
 set -x PATH $HOME/bin $PATH
 if type -q nvim
     set -x EDITOR nvim
@@ -23,6 +25,10 @@ if type -q eza
     abbr -a l eza
 end
 
+if type -q timew
+    abbr -a t timew
+end
+
 if type -q zoxide
     zoxide init fish | source
     abbr -a j z
@@ -32,8 +38,16 @@ if type -q direnv
     direnv hook fish | source
 end
 
-if type -q rtx
-    rtx activate fish | source
+if type -q mise
+    mise activate fish | source
+end
+
+if type -q kitten
+    abbr -a icat "kitten icat"
+end
+
+if type -q podman
+    abbr -a pm podman
 end
 
 # bun
@@ -43,6 +57,7 @@ if test -d "$HOME/.bun"
 end
 
 if status is-interactive
+    abbr f fg
     eval (ssh-agent -c) >/dev/null
     # Commands to run in interactive sessions can go here
     source (/usr/bin/starship init fish --print-full-init | psub)
@@ -50,8 +65,8 @@ if status is-interactive
     if type -q bat
         set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
         set -x MANROFFOPT -c
-        set -x BAT_THEME base16
-        set -x BAT_STYLE plain
+        set -x BAT_THEME 'Catppuccin Mocha'
+        # set -x BAT_STYLE plain
         abbr -a bhelp "bat --plain --language=help"
     end
 
@@ -74,3 +89,10 @@ if status is-interactive
     set -x QT_QPA_PLATFORMTHEME qt5ct
     alias chatgpt 'OPENAI_API_KEY=(pass show openapi/nvim) pipx run --spec git+https://github.com/marcolardera/chatgpt-cli chatgpt-cli --multiline'
 end
+
+# pnpm
+set -gx PNPM_HOME "/home/bob/.local/share/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+    set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end
