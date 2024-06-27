@@ -1,20 +1,33 @@
 [user]
 	name = Bob
 	email = bob@standardinput.co
+	signingkey = 75C36CB01EF1B1CF
 [alias]
-	s = status --short --branch
+	backup = push dropbox --all --prune --follow-tags
+  cb = checkout -b
+  cbom = "!f(){ git checkout -b $1 origin/main; }; f"
+  changed = diff --name-only --relative
+  co = checkout
+  com = checkout origin/main
+  focom = "!f(){ git fetch origin; git checkout origin/main; }; f"
+  fo = fetch origin
 	lg0 = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	lg1 = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
 	lg = !git lg0
-	backup = push dropbox --all --prune --follow-tags
-	omain = "!f(){ git branch --remotes | grep origin/HEAD | awk '{ print $3 }'; }; f"
 	lz = !lazygit
-	z = !lazygit
+	omain = "!f(){ git branch --remotes | grep origin/HEAD | awk '{ print $3 }'; }; f"
+	s = status --short --branch
+  staged = diff --name-only --relative --cached
 	wat = "!f(){ local=$(git symbolic-ref --short -q HEAD); remote=$(git for-each-ref --format '%(upstream:short)' $(git symbolic-ref -q HEAD) 2>/dev/null); if [ \"$local\" ] && [ \"$remote\" ] && [ $(git rev-parse HEAD) = $(git rev-parse $(git for-each-ref --format '%(upstream:short)' $(git symbolic-ref -q HEAD) 2>/dev/null)) ]; then out=\"$local:$remote\"; elif [ \"$local\" ]; then out=$local; else out=$(git describe --tags --exact-match HEAD 2>/dev/null) || out=$(git for-each-ref --format '%(upstream:short)' $(git symbolic-ref -q HEAD) 2>/dev/null) || out=$(git rev-parse --short HEAD 2>/dev/null); fi; echo \"$out\" | awk '{$1=$1};1' | sed '/^$/d'; }; f"
+	z = !lazygit
 [color]
 	ui = true
+[commit]
+	gpgsign = true
 [core]
 	pager = delta
+[credential]
+	helper = store
 [delta]
 	navigate = true
 	light = false
@@ -36,5 +49,3 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[credential]
-	helper = store
