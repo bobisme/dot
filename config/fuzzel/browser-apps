@@ -3,12 +3,16 @@
 
 ---@type choice[]
 local CHOICES = {
-	{ name = "YouTube", url = "https://youtube.com" },
-	{ name = "YouTube Music", url = "https://music.youtube.com" },
+	{ name = "Asana", url = "https://app.asana.com" },
 	{ name = "ChatGPT", url = "https://chat.openai.com" },
+	{ name = "Claude", url = "https://claude.ai/chats" },
 	{ name = "Desmos", url = "https://www.desmos.com/calculator" },
-	{ name = "Messages", url = "https://messages.google.com" },
 	{ name = "Discord", url = "https://discord.com" },
+	{ name = "Messages", url = "https://messages.google.com" },
+	{ name = "Notion", url = "https://notion.so" },
+	{ name = "Slack", url = "https://standardinputco.slack.com" },
+	{ name = "YouTube Music", url = "https://music.youtube.com" },
+	{ name = "YouTube", url = "https://youtube.com" },
 }
 
 ------------------------------------------------------------
