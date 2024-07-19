@@ -3,3 +3,4 @@ vim.keymap.set({ "n", "v" }, "<c-j>", "10j", { desc = "Move down 10 lines.", rem
 vim.keymap.set({ "n" }, "<c-;>", "m':norm A;<cr>`'", { desc = "append semicolon;", remap = true, silent = true })
 vim.keymap.set({ "n" }, "<c-,>", "m':norm A,<cr>`'", { desc = "append comma,", remap = true, silent = true })
 vim.keymap.set({ "n" }, "L", vim.diagnostic.open_float, { desc = "append comma,", remap = true, silent = true })
+vim.keymap.set({ "n" }, "-", "<cmd>Oil<cr>", { desc = "Open Oil/parent directory" })

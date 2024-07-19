@@ -34,8 +34,24 @@ comment_fg = from_rgb(fg_rgb)
 
 vim.api.nvim_set_hl(0, "Comment", { fg = comment_fg, italic = true })
 vim.api.nvim_set_hl(0, "Inlay", { fg = inlay_fg, italic = true })
+vim.api.nvim_set_hl(0, "InlayHint", { fg = inlay_fg, italic = true })
+
+vim.api.nvim_set_hl(0, "DiffAdd", { bg = from_rgb({ r = 10.0, g = 50.0, b = 20.0 }) })
+vim.api.nvim_set_hl(0, "DiffChange", { bg = from_rgb({ r = 0.0, g = 0.0, b = 50.0 }) })
+vim.api.nvim_set_hl(0, "DiffText", { bg = from_rgb({ r = 20.0, g = 20.0, b = 200.0 }) })
+vim.api.nvim_set_hl(0, "DiffDelete", {
+  bg = from_rgb({ r = 50.0, g = 0.0, b = 0.0 }),
+  fg = from_rgb({ r = 150.0, g = 50.0, b = 50.0 }),
+})
 
 require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/snippets" })
 
-local Util = require("lazyvim.util")
-Util.toggle.number()
+vim.cmd("set nonumber norelativenumber")
+
+-- require("lspconfig").tsserver.setup({
+--   settings = {
+--     implicitProjectConfiguration = {
+--       checkJs = true,
+--     },
+--   },
+-- })

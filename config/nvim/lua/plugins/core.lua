@@ -1,112 +1,82 @@
 ---@type LazySpec[]
 return {
   {
+    "huynle/ogpt.nvim",
+    event = "VeryLazy",
+    opts = {
+      default_provider = "ollama",
+      providers = {
+        ollama = {
+          model = "llama3",
+          api_host = os.getenv("OLLAMA_API_HOST") or "http://localhost:11434",
+          api_key = os.getenv("OLLAMA_API_KEY") or "",
+          api_params = {
+            model = "llama3",
+            temperature = 0.8,
+            top_p = 0.9,
+          },
+          api_chat_params = {
+            model = "llama3",
+            frequency_penalty = 0,
+            presence_penalty = 0,
+            temperature = 0.5,
+            top_p = 0.9,
+          },
+        },
+      },
+    },
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+    },
+  },
+  {
+    "huggingface/llm.nvim",
+    event = "VeryLazy",
+    opts = {
+      backend = "ollama",
+      model = "llama3",
+      url = "http://localhost:11434/api/generate",
+      -- cf https://github.com/ollama/ollama/blob/main/docs/api.md#parameters
+      request_body = {
+        -- Modelfile options for the model you use
+        options = {
+          num_predict = 512,
+          temperature = 1.1,
+          top_p = 0.95,
+        },
+        system = "You are an AI coder. Your job is to complete incomplete code. You must only provide the code requested, no explanations. You must not format the code.",
+      },
+      lsp = {
+        bin_path = vim.api.nvim_call_function("stdpath", { "data" }) .. "/mason/bin/llm-ls",
+      },
+      fim = {
+        enabled = false,
+      },
+      accept_keymap = "<S-Tab>",
+      dismiss_keymap = "<C-Tab>",
+    },
+  },
+  {
+    "stevearc/oil.nvim",
+    opts = {
+      default_file_explorer = true,
+    },
+  },
+  -- {
+  --   "David-Kunz/gen.nvim",
+  --   opts = {
+  --     model = "phind-codellama",
+  --   },
+  -- },
+  "tpope/vim-fugitive",
+  {
     "sourcegraph/sg.nvim",
     dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
   },
   { "nanotee/zoxide.vim" },
   { "bfrg/vim-jqplay", cmd = { "Jqplay", "JqplayScratch", "JqplayScratchNoInput" } },
-  ---@type LazySpec
-  {
-    "ThePrimeagen/harpoon",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    keys = {
-      {
-        "<leader>hm",
-        function()
-          require("harpoon.mark").add_file()
-        end,
-        descf = "add file to harpoon list",
-      },
-      {
-        "<leader>hh",
-        function()
-          require("harpoon.ui").toggle_quick_menu()
-        end,
-        desc = "toggle quick menu",
-      },
-      {
-        "<c-7>",
-        function()
-          require("harpoon.ui").nav_file(1)
-        end,
-        desc = "jump to 1",
-      },
-      {
-        "<c-8>",
-        function()
-          require("harpoon.ui").nav_file(2)
-        end,
-        desc = "jump to 2",
-      },
-      {
-        "<c-9>",
-        function()
-          require("harpoon.ui").nav_file(3)
-        end,
-        desc = "jump to 3",
-      },
-      {
-        "<c-0>",
-        function()
-          require("harpoon.ui").nav_file(4)
-        end,
-        desc = "jump to 4",
-      },
-    },
-  },
-  {
-    "nvim-neo-tree/neo-tree.nvim",
-    branch = "v3.x",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-      "MunifTanjim/nui.nvim",
-    },
-    keys = {
-      { "<leader>ee", ":Neotree filesystem focus<cr>", desc = "focus file tree", silent = true },
-      { "<leader>ec", ":Neotree close<cr>", desc = "close neo tree", silent = true },
-      { "<leader>eb", ":Neotree buffers focus<cr>", desc = "focus buffers tree", silent = true },
-      { "<leader>eg", ":Neotree git_status focus<cr>", desc = "focus git tree", silent = true },
-    },
-    opts = {
-      window = {
-        width = 30,
-      },
-      source_selector = {
-        winbar = true,
-      },
-      -- integrate with harpoon
-      filesystem = {
-        components = {
-          harpoon_index = function(config, node, state)
-            local Marked = require("harpoon.mark")
-            local path = node:get_id()
-            local succuss, index = pcall(Marked.get_index_of, path)
-            if succuss and index and index > 0 then
-              return {
-                text = string.format("─►%d", index),
-                highlight = config.highlight or "NeoTreeDirectoryIcon",
-              }
-            else
-              return {}
-            end
-          end,
-        },
-        renderers = {
-          file = {
-            { "icon" },
-            { "name", use_git_status_colors = true },
-            -- { "harpoon_index" }, --> This is what actually adds the component in where you want it
-            { "diagnostics" },
-            { "git_status", highlight = "NeoTreeDimText" },
-          },
-        },
-      },
-    },
-  },
   {
     "neovim/nvim-lspconfig",
     opts = {
@@ -124,32 +94,21 @@ return {
         --     },
         --   },
         -- },
-        tailwindcss = {
-          filetypes_exclude = { "markdown" },
-        },
+        -- tailwindcss = {
+        --   filetypes_exclude = { "markdown" },
+        -- },
       },
       setup = {
-        tailwindcss = function(_, opts)
-          local tw = require("lspconfig.server_configurations.tailwindcss")
-          --- @param ft string
-          opts.filetypes = vim.tbl_filter(function(ft)
-            return not vim.tbl_contains(opts.filetypes_exclude or {}, ft)
-          end, tw.default_config.filetypes)
+        rust_analyzer = function()
+          return true
         end,
-      },
-    },
-  },
-  {
-    "simrat39/rust-tools.nvim",
-    ft = "rust",
-    dependencies = { "neovim/nvim-lspconfig" },
-    opts = {
-      tools = {
-        inlay_hints = {
-          parameter_hints_prefix = ": ",
-          other_hints_prefix = "› ",
-          highlight = "Inlay",
-        },
+        -- tailwindcss = function(_, opts)
+        --   local tw = require("lspconfig.server_configurations.tailwindcss")
+        --   --- @param ft string
+        --   opts.filetypes = vim.tbl_filter(function(ft)
+        --     return not vim.tbl_contains(opts.filetypes_exclude or {}, ft)
+        --   end, tw.default_config.filetypes)
+        -- end,
       },
     },
   },
@@ -191,58 +150,18 @@ return {
     },
   },
   {
-    -- from LazyVim
-    "echasnovski/mini.surround",
-    version = "*",
-    event = "BufReadPre",
-  },
-  -- {
-  --   "mhartington/formatter.nvim",
-  --   cmd = { "Format", "FormatLock", "FormatWrite", "FormatWriteLock" },
-  --   ft = { "asm" },
-  --   opts = {
-  --     filetype = {
-  --       asm = {
-  --         function()
-  --           return {
-  --             exe = "asmfmt",
-  --             args = {},
-  --             stdin = true,
-  --           }
-  --         end,
-  --       },
-  --       python = {
-  --         function()
-  --           return {
-  --             exe = "black",
-  --             args = { "-" },
-  --             stdin = true,
-  --           }
-  --         end,
-  --       },
-  --     },
-  --   },
-  --   init = function()
-  --     local group = vim.api.nvim_create_augroup("FormatterOnSave", { clear = true })
-  --     vim.api.nvim_create_autocmd("BufWritePre", {
-  --       pattern = { "*.s", "*.py" },
-  --       command = "silent! Format",
-  --       group = group,
-  --     })
-  --     -- vim.cmd([[autocmd BufWritePre *.s Format]])
-  --   end,
-  -- },
-  {
     "jackMort/ChatGPT.nvim",
+    config = function()
+      require("chatgpt").setup({
+        api_key_cmd = "pass show openapi/nvim",
+        actions_paths = { "/home/bob/.config/nvim/chatgpt-actions.json" },
+      })
+    end,
     dependencies = {
       "MunifTanjim/nui.nvim",
       "nvim-lua/plenary.nvim",
       "folke/trouble.nvim",
       "nvim-telescope/telescope.nvim",
-    },
-    opts = {
-      api_key_cmd = "pass show openapi/nvim",
-      actions_paths = { "/home/bob/.config/nvim/chatgpt-actions.json" },
     },
     cmd = { "ChatGPT", "ChatGPTActAs", "ChatGPTRun", "ChatGPTEditWithInstructions", "ChatGPTCompleteCode" },
   },
@@ -262,15 +181,9 @@ return {
   {
     "Saecki/crates.nvim",
     event = "BufRead Cargo.toml",
-    dependencies = { "nvim-lua/plenary.nvim", "nvimtools/none-ls.nvim" },
-    opts = {
-      null_ls = {
-        enabled = true,
-        name = "crates.nvim",
-      },
-    },
+    -- dependencies = { "nvim-lua/plenary.nvim", "nvimtools/none-ls.nvim" },
+    dependencies = { "nvim-lua/plenary.nvim" },
   },
-  { "LhKipp/nvim-nu", ft = "nu" },
   {
     "christoomey/vim-tmux-navigator",
     init = function()
