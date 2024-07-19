@@ -25,3 +25,8 @@ gui:
       - red
     defaultFgColor:
       - default
+
+git:
+  paging:
+    colorArg: never
+    pager: delta --dark --paging=never
