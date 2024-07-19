@@ -12,13 +12,13 @@
     "cpu",
     "memory",
     "disk",
-    "hyprland/window"
+    "hyprland/window",
   ],
   "modules-center": [
     "custom/lock_screen",
     // "custom/updates",
     "clock",
-    "custom/power_btn"
+    "custom/power_btn",
   ],
   "modules-right": [
     "custom/lizzy",
@@ -26,45 +26,64 @@
     "temperature",
     "battery",
     "backlight",
+    // "cava",
     "pulseaudio",
     "pulseaudio#microphone",
-    "tray"
+    "tray",
   ],
   "hyprland/window": {
-    "format": "{}"
+    "format": "{}",
   },
+  // "cava": {
+  //   "framerate": 30,
+  //   // "autosens": 1,
+  //   // "sensitivity": 100,
+  //   "bars": 7,
+  //   "lower_cutoff_freq": 50,
+  //   "higher_cutoff_freq": 10000,
+  //   "method": "pulse",
+  //   "source": "auto",
+  //   "stereo": false,
+  //   // "reverse": false,
+  //   "bar_delimiter": 0,
+  //   "monstercat": false,
+  //   "waves": false,
+  //   // "noise_reduction": 0.77,
+  //   "input_delay": 2,
+  //   "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+  // },
   "custom/appmenu": {
     "format": "  ",
     "on-click": "pkill fuzzel; fuzzel",
-    "tooltip": false
+    "tooltip": false,
   },
   "custom/lock_screen": {
     "format": "",
     "on-click": "sh -c '(sleep 0.1s; swaylock)' & disown",
-    "tooltip": false
+    "tooltip": false,
   },
   "custom/gen_wallpaper": {
     "escape": true,
     "format": "{icon}",
     "format-icons": {
-      "default": "󰐾"
+      "default": "󰐾",
     },
     "on-click": "gen-wallpaper",
-    "tooltip": false
+    "tooltip": false,
   },
   "custom/power_btn": {
     "format": "{icon}",
     "format-icons": {
-      "default": ""
+      "default": "",
     },
     "on-click": "wleave --buttons-per-row 2 --protocol layer-shell",
-    "tooltip": false
+    "tooltip": false,
   },
   "cpu": {
     "interval": 10,
     "format": "  {usage}%",
     "max-length": 10,
-    "on-click": "kitty --title btop sh -c 'btop'"
+    "on-click": "kitty --title btop sh -c 'btop'",
   },
   "disk": {
     "interval": 30,
@@ -72,7 +91,7 @@
     "path": "/",
     "tooltip": true,
     "tooltip-format": "HDD - {used} used out of {total} on {path} ({percentage_used}%)",
-    "on-click": "kitty --title btop sh -c 'btop'"
+    "on-click": "kitty --title btop sh -c 'btop'",
   },
   "memory": {
     "interval": 30,
@@ -80,7 +99,7 @@
     "max-length": 10,
     "tooltip": true,
     "tooltip-format": "Memory - {used:0.1f}GB used",
-    "on-click": "kitty --title btop sh -c 'btop'"
+    "on-click": "kitty --title btop sh -c 'btop'",
   },
   // "custom/updates": {
   //   "format": "{}",
@@ -90,10 +109,13 @@
   //   "tooltip": true
   // },
   "hyprland/workspaces": {
-    "sort-by-number": true,
-    "disable-scroll": true,
+    "format": "{id}",
+    // "on-scroll-up": "hyprctl dispatch workspace e+1",
+    // "on-scroll-down": "hyprctl dispatch workspace e-1",
+    // "sort-by-number": true,
+    // "disable-scroll": true,
     "all-outputs": true,
-    "on-click": "activate",
+    // "on-click": "activate",
     "persistent-workspaces": {
       "1": [],
       "2": [],
@@ -104,8 +126,8 @@
       "7": [],
       "8": [],
       "9": [],
-      "10": []
-    }
+      "10": [],
+    },
   },
   "custom/power_profile": {
     //shows the current power profile and switches to next on click
@@ -113,7 +135,7 @@
     "interval": 30,
     "format": "󰈐{}",
     "on-click": "asusctl profile -n; pkill -SIGRTMIN+8 waybar",
-    "signal": 8
+    "signal": 8,
   },
   // "custom/weather": {
   //   //shows the current weather and forecast
@@ -125,12 +147,12 @@
   // },
   "tray": {
     "icon-size": 18,
-    "spacing": 10
+    "spacing": 10,
   },
   "clock": {
     "format": "{:%I:%M %p}",
     "tooltip": true,
-    "tooltip-format": "{:  %A, %B %e %Y}"
+    "tooltip-format": "{:  %A, %B %e %Y}",
   },
   "backlight": {
     "device": "intel_backlight",
@@ -138,7 +160,7 @@
     "format-icons": ["󰃞", "󰃟", "󰃠"],
     "on-scroll-up": "brightnessctl set 1%+",
     "on-scroll-down": "brightnessctl set 1%-",
-    "min-length": 6
+    "min-length": 6,
   },
   // "battery": {
   //   "states": {
@@ -153,7 +175,7 @@
   //   "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
   // },
   "pulseaudio": {
-    "format": "{icon} {volume}%",
+    "format": "{icon}  {volume}%",
     "format-muted": " ",
     "on-click": "pamixer -t",
     "on-click-right": "pavucontrol",
@@ -167,8 +189,8 @@
       "phone": " ",
       "portable": " ",
       "car": " ",
-      "default": [" ", " ", " "]
-    }
+      "default": [" ", " ", " "],
+    },
   },
   "custom/lizzy": {
     "format": "{icon} {}",
@@ -176,9 +198,9 @@
     "return-type": "json",
     "format-icons": {
       "Playing": "󰐊",
-      "Paused": "󰏤"
+      "Paused": "󰏤",
     },
-    "max-length": 45
+    "max-length": 45,
   },
   "pulseaudio#microphone": {
     "format": "{format_source}",
@@ -188,13 +210,13 @@
     "on-click-right": "pavucontrol",
     "on-scroll-up": "pamixer --default-source -i 5",
     "on-scroll-down": "pamixer --default-source -d 5",
-    "scroll-step": 5
+    "scroll-step": 5,
   },
   "temperature": {
     "thermal-zone": 1,
     "format": " {temperatureF}°F",
     "critical-threshold": 70,
     "format-critical": " {temperatureC}°C",
-    "on-click": "kitty --title btop sh -c 'btop'"
-  }
+    "on-click": "kitty --title btop sh -c 'btop'",
+  },
 }
