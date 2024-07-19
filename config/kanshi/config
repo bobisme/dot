@@ -1,0 +1,8 @@
+profile main {
+  output "LG Electronics LG Ultra HD 0x00065DFF" mode 3840x2160@60 position 0,0
+  output "Dell Inc. Dell S2716DG #ASOJm2szthLd" mode 2560x1440@60 position 3840,300
+}
+
+profile justdell {
+  output "Dell Inc. Dell S2716DG #ASOJm2szthLd" mode 2560x1440@60 position 0,0
+}
