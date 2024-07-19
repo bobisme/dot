@@ -98,7 +98,7 @@ disabled = true
 disabled = false
 
 [custom.git_remote_branch]
-command = 'git wat'
+command = 'git wat | tail -n1'
 symbol = ''
 format = "on [$symbol ($output )]($style)"
 when = true
