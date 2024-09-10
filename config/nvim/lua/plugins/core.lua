@@ -7,7 +7,7 @@ return {
       default_provider = "ollama",
       providers = {
         ollama = {
-          model = "llama3",
+          model = "llama3.1",
           api_host = os.getenv("OLLAMA_API_HOST") or "http://localhost:11434",
           api_key = os.getenv("OLLAMA_API_KEY") or "",
           api_params = {
@@ -31,33 +31,33 @@ return {
       "nvim-telescope/telescope.nvim",
     },
   },
-  {
-    "huggingface/llm.nvim",
-    event = "VeryLazy",
-    opts = {
-      backend = "ollama",
-      model = "llama3",
-      url = "http://localhost:11434/api/generate",
-      -- cf https://github.com/ollama/ollama/blob/main/docs/api.md#parameters
-      request_body = {
-        -- Modelfile options for the model you use
-        options = {
-          num_predict = 512,
-          temperature = 1.1,
-          top_p = 0.95,
-        },
-        system = "You are an AI coder. Your job is to complete incomplete code. You must only provide the code requested, no explanations. You must not format the code.",
-      },
-      lsp = {
-        bin_path = vim.api.nvim_call_function("stdpath", { "data" }) .. "/mason/bin/llm-ls",
-      },
-      fim = {
-        enabled = false,
-      },
-      accept_keymap = "<S-Tab>",
-      dismiss_keymap = "<C-Tab>",
-    },
-  },
+  -- {
+  --   "huggingface/llm.nvim",
+  --   event = "VeryLazy",
+  --   opts = {
+  --     backend = "ollama",
+  --     model = "llama3.1",
+  --     url = "http://localhost:11434/api/generate",
+  --     -- cf https://github.com/ollama/ollama/blob/main/docs/api.md#parameters
+  --     request_body = {
+  --       -- Modelfile options for the model you use
+  --       options = {
+  --         num_predict = 512,
+  --         temperature = 1.1,
+  --         top_p = 0.95,
+  --       },
+  --       system = "You are an AI coder. Your job is to complete incomplete code. You must only provide the code requested, no explanations. You must not format the code.",
+  --     },
+  --     lsp = {
+  --       bin_path = vim.api.nvim_call_function("stdpath", { "data" }) .. "/mason/bin/llm-ls",
+  --     },
+  --     fim = {
+  --       enabled = false,
+  --     },
+  --     accept_keymap = "<S-Tab>",
+  --     dismiss_keymap = "<C-Tab>",
+  --   },
+  -- },
   {
     "stevearc/oil.nvim",
     opts = {
@@ -138,14 +138,17 @@ return {
           ["vim.lsp.util.stylize_markdown"] = true,
           ["cmp.entry.get_documentation"] = true,
         },
+        hover = {
+          enabled = false,
+        },
       },
       -- you can enable a preset for easier configuration
       presets = {
         bottom_search = true, -- use a classic bottom cmdline for search
         command_palette = true, -- position the cmdline and popupmenu together
         long_message_to_split = true, -- long messages will be sent to a split
-        inc_rename = false, -- enables an input dialog for inc-rename.nvim
-        lsp_doc_border = false, -- add a border to hover docs and signature help
+        -- inc_rename = false, -- enables an input dialog for inc-rename.nvim
+        -- lsp_doc_border = false, -- add a border to hover docs and signature help
       },
     },
   },

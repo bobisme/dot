@@ -21,3 +21,11 @@ if vim.g.neovide then
   vim.g.neovide_scale_factor = 1.00
   vim.g.neovide_scroll_animation_length = 0.3
 end
+
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+  border = "rounded",
+})
+
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.hover, {
+  border = "rounded",
+})
