@@ -1,6 +1,6 @@
 abbr -a o xdg-open
 
-set -x PATH $HOME/bin $PATH
+set -x PATH $HOME/bin $HOME/.local/bin $PATH
 if type -q nvim
     set -x EDITOR nvim
 else if type -q vim
