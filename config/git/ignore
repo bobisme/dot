@@ -1,3 +1,6 @@
+# Ignore anything inside an 8o8-local/ directory.
+8o8-local
+
 # Automatically created by GitHub for Mac
 # To make edits, delete these initial comments, or else your changes may be lost!
 
