@@ -60,7 +60,9 @@ if status is-interactive
     abbr f fg
     eval (ssh-agent -c) >/dev/null
     # Commands to run in interactive sessions can go here
-    source (/usr/bin/starship init fish --print-full-init | psub)
+    if type -q starship
+        source (starship init fish --print-full-init | psub)
+    end
     # bat settings
     if type -q bat
         set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
