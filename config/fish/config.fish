@@ -1,6 +1,13 @@
-abbr -a o xdg-open
+if type -q xdg-open
+    abbr -a o xdg-open
+else if type -q open
+    abbr -a o open
+end
 
-set -x PATH $HOME/bin $HOME/.local/bin $PATH
+if test -e /opt/homebrew/bin
+    set -x PATH /opt/homebrew/bin $PATH
+end
+
 if type -q nvim
     set -x EDITOR nvim
 else if type -q vim
@@ -23,6 +30,10 @@ if type -q eza
     set -x EZA_ICON_SPACING 2
     set -x EZA_ICONS_AUTO true
     abbr -a l eza
+end
+
+if type -q rg
+    set -x RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/ripgreprc
 end
 
 if type -q timew
@@ -93,8 +104,12 @@ if status is-interactive
 end
 
 # pnpm
-set -gx PNPM_HOME "/home/bob/.local/share/pnpm"
-if not string match -q -- $PNPM_HOME $PATH
-    set -gx PATH "$PNPM_HOME" $PATH
+if type -q "$HOME/.local/share/pnpm/pnpm"
+    set -gx PNPM_HOME "$HOME/.local/share/pnpm"
+    if not string match -q -- $PNPM_HOME $PATH
+        set -gx PATH "$PNPM_HOME" $PATH
+    end
 end
-# pnpm end
+
+# HOME bin, keep last
+set -x PATH $HOME/bin $HOME/.local/bin $PATH
