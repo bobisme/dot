@@ -1,0 +1,30 @@
+background-blur-radius = 20
+background-opacity = 0.9
+
+clipboard-trim-trailing-spaces = true
+clipboard-paste-protection = false
+copy-on-select = false
+
+cursor-style = block
+
+# custom-shader = "./ghostty-shaders/bettercrt.glsl"
+
+font-family = "FantasqueSansM Nerd Font Mono"
+font-size = 15
+font-thicken = true
+
+keybind = ctrl+shift+l=goto_split:right
+keybind = ctrl+shift+h=goto_split:left
+keybind = ctrl+shift+k=goto_split:top
+keybind = ctrl+shift+j=goto_split:bottom
+keybind = ctrl+shift+z=toggle_split_zoom
+keybind = ctrl+shift+\=new_split:right
+keybind = ctrl+shift+-=new_split:down
+keybind = super+f=write_screen_file:open
+
+scrollback-limit = 100000000
+
+shell-integration = fish
+
+theme = catppuccin-mocha
+
