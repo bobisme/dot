@@ -33,10 +33,13 @@
 	light = false
 	side-by-side = true
 	diff-so-fancy = false
+	features = catppuccin-mocha
 [diff]
 	colorMoved = default
 [init]
 	defaultBranch = main
+[include]
+	path = ~/.config/delta/catppuccin.gitconfig
 [interactive]
 	diffFilter = delta --color-only
 [merge]
