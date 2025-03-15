@@ -67,19 +67,37 @@ if test -d "$HOME/.bun"
     set -x PATH $BUN_INSTALL/bin $PATH
 end
 
+# cuda
+# Check for CUDA installation in common locations
+if test -d /opt/cuda
+    set -x CUDA_HOME /opt/cuda
+else if test -d /usr/local/cuda
+    set -x CUDA_HOME /usr/local/cuda
+end
+
+# Only set PATH and LD_LIBRARY_PATH if CUDA_HOME is set
+if set -q CUDA_HOME
+    set -x PATH $PATH $CUDA_HOME/bin
+    set -x LD_LIBRARY_PATH $LD_LIBRARY_PATH $CUDA_HOME/lib64
+end
+
 if status is-interactive
     abbr f fg
-    eval (ssh-agent -c) >/dev/null
+
+    if type -q keychain
+        eval (keychain --eval --agents ssh ~/.ssh/id_ed25519)
+    else
+        eval (ssh-agent -c) >/dev/null
+    end
+
     # Commands to run in interactive sessions can go here
     if type -q starship
         source (starship init fish --print-full-init | psub)
     end
     # bat settings
     if type -q bat
-        set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+        set -x MANPAGER "sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
         set -x MANROFFOPT -c
-        set -x BAT_THEME 'Catppuccin Mocha'
-        # set -x BAT_STYLE plain
         abbr -a bhelp "bat --plain --language=help"
     end
 
