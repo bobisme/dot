@@ -1,41 +1,41 @@
 #!/bin/sh
 set -euo pipefail
-export GRIM_DEFAULT_DIR="$HOME/shots"
+export SCREENSHOT_DIR="$HOME/shots"
 
 # replaces /home/whatever with ~ if it's there
 replace_home() {
-	dir=$1
-	if [[ $(expr substr "$dir" 1 ${#HOME}) != $HOME ]]; then
-		echo $dir
-		return 0
-	fi
-	after=$(expr substr "$dir" $((${#HOME} + 1)) 1000)
-	echo "~${after}"
+  dir=$1
+  if [[ $(expr substr "$dir" 1 ${#HOME}) != $HOME ]]; then
+    echo $dir
+    return 0
+  fi
+  after=$(expr substr "$dir" $((${#HOME} + 1)) 1000)
+  echo "~${after}"
 }
 
 most_recent_shot() {
-	find "$GRIM_DEFAULT_DIR" -maxdepth 1 -type f -exec stat --format="%Y %n" {} + |
-		sort -n |
-		tail -1 |
-		cut -d' ' -f2-
+  find "$SCREENSHOT_DIR" -maxdepth 1 -type f -exec stat --format="%Y %n" {} + |
+    sort -n |
+    tail -1 |
+    cut -d' ' -f2-
 }
 
 main() {
-	grim -g "$(slurp)"
-	# most_recent=$(find "$GRIM_DEFAULT_DIR" -maxdepth 1 -type f -print0 | xargs -0 ls -t | head -n 1)
-	most_recent=$(most_recent_shot)
-	wl-copy <"$most_recent"
-	shortpath=$(replace_home "$most_recent")
-	msg="Saved screenshot copied to clipboad and saved to:\n$shortpath"
-	if command -v dunstify >/dev/null 2>&1; then
-		result=$(dunstify --action=open,Open --appname shoot --icon "$most_recent" "Screenshot Taken" "$msg")
-		if [[ "$result" = 2 ]]; then
-			thunar "$GRIM_DEFAULT_DIR" &
-		fi
-	elif command -v notify-send >/dev/null 2>&1; then
-		notify-send --app-name shoot --icon "$most_recent" "Screenshot Taken" "$msg"
-	fi
-	printf $msg
+  mkdir -p "$SCREENSHOT_DIR"
+  scrot -s "$SCREENSHOT_DIR/%Y-%m-%d_%H-%M-%S.png"
+  most_recent=$(most_recent_shot)
+  xclip-copyfile "$most_recent"
+  shortpath=$(replace_home "$most_recent")
+  msg="Saved screenshot copied to clipboad and saved to:\n$shortpath"
+  if command -v dunstify >/dev/null 2>&1; then
+    result=$(dunstify --action=open,Open --appname shoot --icon "$most_recent" "Screenshot Taken" "$msg")
+    if [[ "$result" = 2 ]]; then
+      thunar "$SCREENSHOT_DIR" &
+    fi
+  elif command -v notify-send >/dev/null 2>&1; then
+    notify-send --app-name shoot --icon "$most_recent" "Screenshot Taken" "$msg"
+  fi
+  printf $msg
 }
 
 main "$@"
