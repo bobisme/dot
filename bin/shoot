@@ -24,9 +24,9 @@ main() {
   mkdir -p "$SCREENSHOT_DIR"
   scrot -s "$SCREENSHOT_DIR/%Y-%m-%d_%H-%M-%S.png"
   most_recent=$(most_recent_shot)
-  xclip-copyfile "$most_recent"
+  xclip -selection clipboard -t image/png -i "$most_recent"
   shortpath=$(replace_home "$most_recent")
-  msg="Saved screenshot copied to clipboad and saved to:\n$shortpath"
+  msg="Saved screenshot copied to clipboard and saved to:\n$shortpath"
   if command -v dunstify >/dev/null 2>&1; then
     result=$(dunstify --action=open,Open --appname shoot --icon "$most_recent" "Screenshot Taken" "$msg")
     if [[ "$result" = 2 ]]; then
