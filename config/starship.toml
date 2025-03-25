@@ -1,3 +1,5 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
 format = """
 $username\
 $hostname\
@@ -8,6 +10,7 @@ $kubernetes\
 $directory\
 $vcsh\
 $fossil_branch\
+$fossil_metrics\
 ${custom.git_remote_branch}\
 $git_branch\
 $git_commit\
@@ -29,6 +32,7 @@ $elixir\
 $elm\
 $erlang\
 $fennel\
+$gleam\
 $golang\
 $guix_shell\
 $haskell\
@@ -48,6 +52,7 @@ $php\
 $pulumi\
 $purescript\
 $python\
+$quarto\
 $raku\
 $rlang\
 $red\
@@ -57,6 +62,7 @@ $scala\
 $solidity\
 $swift\
 $terraform\
+$typst\
 $vlang\
 $vagrant\
 $zig\
@@ -70,6 +76,8 @@ $aws\
 $gcloud\
 $openstack\
 $azure\
+$nats\
+$direnv\
 $env_var\
 $crystal\
 $custom\
@@ -85,6 +93,10 @@ $container\
 $shell\
 $character"""
 
+[aws]
+format = 'on [$symbol($profile )($region )]($style)'
+symbol = '🅰  '
+
 [directory]
 truncation_length = 6
 truncate_to_repo = false
@@ -93,6 +105,11 @@ truncate_to_repo = false
 always_show_remote = true
 format = 'on [$symbol$branch(:$remote_name/$remote_branch)]($style) '
 disabled = true
+
+[jobs]
+symbol = "✦jobs:"
+number_threshold = 1
+symbol_threshold = 1
 
 [time]
 disabled = false
