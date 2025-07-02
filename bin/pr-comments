@@ -1,143 +1,117 @@
-#!/usr/bin/env fish
+#!/usr/bin/env nu
 
-function show_condensed_diff
-    set diff_hunk $argv[1]
-    set original_line $argv[2]
-    
-    # Split diff into lines
-    set lines (string split \n -- "$diff_hunk")
+# Show condensed diff with context around the specified line
+def show-condensed-diff [diff_hunk: string, original_line: int] {
+    let lines = $diff_hunk | lines
     
     # Parse the @@ header to get line numbers
-    set header_match (echo "$lines[1]" | string match -r '@@ -(\d+),?(\d*) \+(\d+),?(\d*) @@')
-    if test (count $header_match) -ge 4
-        set old_start $header_match[2]
-        set new_start $header_match[4]
-        # For new files, old_start might be 0
-        if test -z "$new_start"
-            set new_start 1
-        end
-    else
-        # Fallback if we can't parse the header
-        set new_start 1
-    end
+    let header = $lines | first
+    let header_match = $header | parse '@@ -{old_start},{old_count} +{new_start},{new_count} @@' | first
+    
+    let new_start = if ($header_match | is-empty) { 1 } else { $header_match.new_start | into int }
     
     # Find the line index in the diff that corresponds to original_line
-    set comment_line_idx 0
-    set current_new_line (math $new_start - 1)
-    set line_idx 1
+    mut current_new_line = $new_start - 1
+    mut comment_line_idx = 0
     
-    for line in $lines[2..-1]  # Skip the @@ header
-        set line_idx (math $line_idx + 1)
+    for idx in 1..<($lines | length) {
+        let line = $lines | get $idx
         
-        # Track line numbers in the new file
-        if not string match -qr "^-" "$line"
-            set current_new_line (math $current_new_line + 1)
-        end
+        # Track line numbers in the new file (skip lines that start with -)
+        if not ($line | str starts-with '-') {
+            $current_new_line = $current_new_line + 1
+        }
         
         # Check if we've reached the comment line
-        if test $current_new_line -eq $original_line
-            set comment_line_idx $line_idx
+        if $current_new_line == $original_line {
+            $comment_line_idx = $idx
             break
-        end
-    end
+        }
+    }
     
     # Show the @@ header
-    echo "$lines[1]"
+    print $header
     
     # Show context around the comment line
-    if test $comment_line_idx -gt 0
-        set context_size 3  # Show 3 lines before and after
-        set start_idx (math $comment_line_idx - $context_size)
-        set end_idx (math $comment_line_idx + $context_size)
+    if $comment_line_idx > 0 {
+        let context_size = 3
+        let start_idx = if ($comment_line_idx - $context_size) < 1 { 1 } else { $comment_line_idx - $context_size }
+        let end_idx = if ($comment_line_idx + $context_size) > (($lines | length) - 1) { ($lines | length) - 1 } else { $comment_line_idx + $context_size }
         
-        # Ensure we don't go out of bounds
-        if test $start_idx -lt 2
-            set start_idx 2
-        end
-        if test $end_idx -gt (count $lines)
-            set end_idx (count $lines)
-        end
+        if $start_idx > 1 {
+            print "..."
+        }
         
-        # Show ellipsis if we're not starting from the beginning
-        if test $start_idx -gt 2
-            echo "..."
-        end
+        for idx in $start_idx..$end_idx {
+            print ($lines | get $idx)
+        }
         
-        # Show the context lines
-        for i in (seq $start_idx $end_idx)
-            echo "$lines[$i]"
-        end
-        
-        # Show ellipsis if we're not ending at the end
-        if test $end_idx -lt (count $lines)
-            echo "..."
-        end
-    else
+        if $end_idx < (($lines | length) - 1) {
+            print "..."
+        }
+    } else {
         # Fallback: show first few and last few lines
-        set line_count (count $lines)
-        if test $line_count -le 10
-            # Show all if 10 lines or fewer
-            for line in $lines
-                echo "$line"
-            end
-        else
-            # Show first 4 and last 4 lines
-            for i in (seq 1 4)
-                echo "$lines[$i]"
-            end
-            echo "..."
-            for i in (seq (math $line_count - 3) $line_count)
-                echo "$lines[$i]"
-            end
-        end
-    end
-end
+        let line_count = $lines | length
+        if $line_count <= 10 {
+            $lines | each { |line| print $line }
+        } else {
+            # Show first 4 lines
+            for idx in 0..3 {
+                print ($lines | get $idx)
+            }
+            print "..."
+            # Show last 4 lines
+            for idx in ($line_count - 4)..($line_count - 1) {
+                print ($lines | get $idx)
+            }
+        }
+    }
+}
 
-function main
-    # Parse arguments
-    set full_diff false
-    set pr_number ""
+# Main function to display PR comments
+def main [
+    pr_number: int   # PR number to fetch comments for
+    --full-diff      # Show full diff instead of condensed
+] {
+    let term_width = (term size).columns
+    let separator = $"(ansi grey)(1..$term_width | each { '─' } | str join)(ansi reset)"
     
-    for arg in $argv
-        if test "$arg" = "--full-diff"
-            set full_diff true
-        else
-            set pr_number "$arg"
-        end
-    end
+    # Fetch PR comments from GitHub API
+    let comments = (gh api $"repos/:owner/:repo/pulls/($pr_number)/comments" | from json)
     
-    if test -z "$pr_number"
-        echo "Usage: pr-comments <pr-number> [--full-diff]"
-        return 1
-    end
-    
-    set term_width (tput cols 2>/dev/null; or echo 80)
-
-    gh api repos/:owner/:repo/pulls/$pr_number/comments | jq -r '.[] | @base64' | while read encoded
-        set decoded (printf "%s" "$encoded" | base64 -d)
-        # Extract diff_hunk preserving newlines
-        # Use jq -j to avoid adding extra newline at end
-        set diff_hunk (printf "%s" "$decoded" | jq -j '.diff_hunk // ""' | string collect)
-        set original_line (printf "%s" "$decoded" | jq -r '.original_line // 0')
-
-        printf "%s%s%s\n" (tput setaf 8) (string repeat -n "$term_width" '─') (tput sgr0)
-        echo "$decoded" | jq -r .path
-        echo
-        if test -n "$diff_hunk"
-            if test "$full_diff" = "true"
-                echo "$decoded" | jq -r .diff_hunk | bat --language diff --style=plain
-            else
-                show_condensed_diff "$diff_hunk" "$original_line" | bat --language diff --style=plain
-            end
-        else
-            echo "No diff hunk"
-        end
-        echo
-        echo "┏ "(set_color blue)"@"(echo "$decoded" | jq -r .user.login)" ━ "(echo "$decoded" | jq -r .updated_at)(set_color normal)
-        echo "$decoded" | jq -r .body | fmt -w 80 | bat --language md --style=plain | sed 's/^/┃ /'
-        echo "┗ "
-        echo
-    end
-end
-
-main "$argv"
+    # Process each comment
+    for comment in $comments {
+        # Print separator
+        print $separator
+        
+        # Print file path
+        print $comment.path
+        print ""
+        
+        # Handle diff hunk
+        if ($comment.diff_hunk? | is-empty) or ($comment.diff_hunk? == null) {
+            print "No diff hunk"
+        } else {
+            if $full_diff {
+                # Show full diff
+                print $comment.diff_hunk
+            } else {
+                # Show condensed diff
+                let original_line = if ($comment.original_line? | is-empty) { 0 } else { $comment.original_line }
+                show-condensed-diff $comment.diff_hunk $original_line
+            }
+        }
+        
+        print ""
+        
+        # Print comment header with author and timestamp
+        print $"┏ (ansi blue)@($comment.user.login) ━ ($comment.updated_at)(ansi reset)"
+        
+        # Print comment body
+        let formatted_body = ($comment.body | fmt -w 80 | lines | each { |line| $"┃ ($line)" } | str join "\n")
+        print $formatted_body
+        
+        print "┗ "
+        print ""
+    }
+}
