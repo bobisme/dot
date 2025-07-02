@@ -2,6 +2,10 @@
 
 # Show condensed diff with context around the specified line
 def show-condensed-diff [diff_hunk: string, original_line: int] {
+    if ($diff_hunk | is-empty) or ($diff_hunk == null) {
+        return
+    }
+    
     let lines = $diff_hunk | lines
     
     # Parse the @@ header to get line numbers
@@ -29,8 +33,9 @@ def show-condensed-diff [diff_hunk: string, original_line: int] {
         }
     }
     
-    # Show the @@ header
-    print $header
+    # Build the output
+    mut output = []
+    $output = ($output | append $header)
     
     # Show context around the comment line
     if $comment_line_idx > 0 {
@@ -39,33 +44,35 @@ def show-condensed-diff [diff_hunk: string, original_line: int] {
         let end_idx = if ($comment_line_idx + $context_size) > (($lines | length) - 1) { ($lines | length) - 1 } else { $comment_line_idx + $context_size }
         
         if $start_idx > 1 {
-            print "..."
+            $output = ($output | append "...")
         }
         
         for idx in $start_idx..$end_idx {
-            print ($lines | get $idx)
+            $output = ($output | append ($lines | get $idx))
         }
         
         if $end_idx < (($lines | length) - 1) {
-            print "..."
+            $output = ($output | append "...")
         }
     } else {
         # Fallback: show first few and last few lines
         let line_count = $lines | length
         if $line_count <= 10 {
-            $lines | each { |line| print $line }
+            $output = ($output | append $lines)
         } else {
             # Show first 4 lines
             for idx in 0..3 {
-                print ($lines | get $idx)
+                $output = ($output | append ($lines | get $idx))
             }
-            print "..."
+            $output = ($output | append "...")
             # Show last 4 lines
             for idx in ($line_count - 4)..($line_count - 1) {
-                print ($lines | get $idx)
+                $output = ($output | append ($lines | get $idx))
             }
         }
     }
+    
+    $output | str join "\n"
 }
 
 # Main function to display PR comments
@@ -93,12 +100,13 @@ def main [
             print "No diff hunk"
         } else {
             if $full_diff {
-                # Show full diff
-                print $comment.diff_hunk
+                # Show full diff with syntax highlighting
+                $comment.diff_hunk | bat --language=diff --style=plain --color=always --paging=never
             } else {
-                # Show condensed diff
+                # Show condensed diff with syntax highlighting
                 let original_line = if ($comment.original_line? | is-empty) { 0 } else { $comment.original_line }
-                show-condensed-diff $comment.diff_hunk $original_line
+                let condensed = show-condensed-diff $comment.diff_hunk $original_line
+                $condensed | bat --language=diff --style=plain --color=always --paging=never
             }
         }
         
