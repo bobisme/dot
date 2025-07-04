@@ -11,6 +11,6 @@ podman run --rm -it -v ./install.sh:/install.sh:ro archlinux:latest bash -c "
   useradd -m testuser
   echo 'testuser ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
   echo '=== Running install script as testuser ==='
-  su - testuser -c 'sh /install.sh'
+  su - testuser -c 'script -q -c \"sh /install.sh\" /dev/null'
 "
 

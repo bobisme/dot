@@ -88,14 +88,22 @@ install_nix() {
 # Enter the development shell
 enter_devshell() {
   info "Entering development shell from github:bobisme/dot..."
+  
+  # Check for minimal flag
+  if [ "$1" = "--minimal" ] || [ "$1" = "-m" ]; then
+    SHELL_TARGET="#minimal"
+    info "Using minimal environment..."
+  else
+    SHELL_TARGET=""
+  fi
 
   # Check if experimental features are enabled
   if ! nix --version 2>&1 | grep -q "flakes"; then
     warn "Flakes experimental feature might not be enabled"
     info "Attempting to run with experimental features..."
-    exec nix --experimental-features 'nix-command flakes' develop github:bobisme/dot
+    exec nix --experimental-features 'nix-command flakes' develop "github:bobisme/dot/nix${SHELL_TARGET}"
   else
-    exec nix develop github:bobisme/dot
+    exec nix develop "github:bobisme/dot/nix${SHELL_TARGET}"
   fi
 }
 
@@ -121,7 +129,7 @@ main() {
     . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
   fi
 
-  enter_devshell
+  enter_devshell "$@"
 }
 
 # Run main function
