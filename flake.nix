@@ -56,10 +56,10 @@
               ln -sf "${./config/tmux/tmux.conf}" "$HOME/.tmux.conf"
             fi
 
-            # Install tmux plugins
-            if [ -d "${./config/tmux/plugins}" ]; then
-              mkdir -p "$HOME/.tmux"
-              cp -r "${./config/tmux/plugins}" "$HOME/.tmux/"
+            # Install tmux plugin manager (TPM)
+            mkdir -p "$HOME/.tmux/plugins"
+            if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+              ${pkgs.git}/bin/git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm" 2>/dev/null || true
             fi
 
             # Set up nvim directories
@@ -157,10 +157,10 @@
             alias cat='bat'
             alias e='nvim'
 
-            # Install tmux plugins automatically
-            if [ -d "${./config/tmux/plugins/tpm}" ]; then
-              mkdir -p "$HOME/.tmux/plugins"
-              cp -r "${./config/tmux/plugins}" "$HOME/.tmux/"
+            # Install tmux plugin manager (TPM)
+            mkdir -p "$HOME/.tmux/plugins"
+            if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+              ${pkgs.git}/bin/git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm" 2>/dev/null || true
             fi
 
             # Set up LazyVim to auto-install on first launch
