@@ -75,6 +75,8 @@
             mkdir -p "$HOME/.config/fish"
             cp -r ${./config/fish}/* "$HOME/.config/fish/" 2>/dev/null || true
             cp -r ${./config/fish}/.* "$HOME/.config/fish/" 2>/dev/null || true
+            # Ensure fish config is writable
+            chmod -R 755 "$HOME/.config/fish" 2>/dev/null || true
           fi
 
           # Nvim config (copy so LazyVim can install plugins)
@@ -111,8 +113,9 @@
           
           # Set up terminal capabilities for tmux (for proper font support)
           export TERM=xterm-256color
-          export LC_ALL=en_US.UTF-8
-          export LANG=en_US.UTF-8
+          # Use C.UTF-8 which is more universally available
+          export LC_ALL=C.UTF-8
+          export LANG=C.UTF-8
 
           # Set up nvim directories
           mkdir -p "$HOME/.local/share/nvim"
@@ -120,9 +123,13 @@
           mkdir -p "$HOME/.cache/nvim"
 
           # Set up fzf for fish
-          mkdir -p "$HOME/.config/fish/functions"
           if command -v fzf >/dev/null; then
+            # Ensure the functions directory exists and is writable
+            mkdir -p "$HOME/.config/fish/functions"
+            chmod 755 "$HOME/.config/fish/functions"
+            # Generate fzf keybindings
             fzf --fish > "$HOME/.config/fish/functions/fzf_key_bindings.fish" 2>/dev/null || true
+            chmod 644 "$HOME/.config/fish/functions/fzf_key_bindings.fish" 2>/dev/null || true
           fi
 
           # Aliases
