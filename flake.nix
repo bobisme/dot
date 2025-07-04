@@ -82,6 +82,10 @@
             mkdir -p "$HOME/.config/nvim"
             cp -r ${./config/nvim}/* "$HOME/.config/nvim/" 2>/dev/null || true
             cp -r ${./config/nvim}/.* "$HOME/.config/nvim/" 2>/dev/null || true
+            # Ensure lazy-lock.json is writable if it exists
+            if [ -f "$HOME/.config/nvim/lazy-lock.json" ]; then
+              chmod 644 "$HOME/.config/nvim/lazy-lock.json"
+            fi
           fi
 
           # Starship
@@ -94,12 +98,21 @@
             ln -sf "${./config/tmux/tmux.conf}" "$HOME/.tmux.conf"
           fi
 
-          # Install tmux plugin manager (TPM)
+          # Install tmux plugin manager (TPM) and plugins
           mkdir -p "$HOME/.tmux/plugins"
           mkdir -p "$HOME/.config/tmux/plugins"  # TPM might look here too
           if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
             ${pkgs.git}/bin/git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm" 2>/dev/null || true
+            # Auto-install tmux plugins
+            if [ -f "$HOME/.tmux/plugins/tpm/bin/install_plugins" ]; then
+              "$HOME/.tmux/plugins/tpm/bin/install_plugins" >/dev/null 2>&1 || true
+            fi
           fi
+          
+          # Set up terminal capabilities for tmux (for proper font support)
+          export TERM=xterm-256color
+          export LC_ALL=en_US.UTF-8
+          export LANG=en_US.UTF-8
 
           # Set up nvim directories
           mkdir -p "$HOME/.local/share/nvim"
@@ -108,8 +121,8 @@
 
           # Set up fzf for fish
           mkdir -p "$HOME/.config/fish/functions"
-          if command -v fzf-share >/dev/null; then
-            cp -f "$(fzf-share)/key-bindings.fish" "$HOME/.config/fish/functions/fzf_key_bindings.fish" 2>/dev/null || true
+          if command -v fzf >/dev/null; then
+            fzf --fish > "$HOME/.config/fish/functions/fzf_key_bindings.fish" 2>/dev/null || true
           fi
 
           # Aliases
