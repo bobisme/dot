@@ -98,7 +98,8 @@ if status is-interactive
     if type -q bat
         set -x MANPAGER "sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
         set -x MANROFFOPT -c
-        abbr -a bhelp "bat --plain --language=help"
+        abbr -a --position anywhere -- --help '--help | bat -plhelp'
+        abbr -a --position anywhere -- -h '-h | bat -plhelp'
     end
 
     if type -q fzf
