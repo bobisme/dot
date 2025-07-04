@@ -10,7 +10,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let pkgs = nixpkgs.legacyPackages.${system};
       in {
-        devShells.minimal = pkgs.mkShell {
+        devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             # Core tools only
             git
@@ -42,14 +42,26 @@
             # Set up dotfiles from the flake
             mkdir -p "$HOME/.config"
 
-            # Symlink configs
-            for config in git fish nvim tmux starship.toml; do
-              if [ -d "${./config}/$config" ]; then
-                ln -sf "${./config}/$config" "$HOME/.config/$config"
-              elif [ -f "${./config}/$config" ]; then
-                ln -sf "${./config}/$config" "$HOME/.config/$config"
-              fi
-            done
+            # Set up configs (copy instead of symlink for writable directories)
+            # Git config
+            if [ -d "${./config/git}" ]; then
+              cp -r "${./config/git}" "$HOME/.config/"
+            fi
+
+            # Fish config
+            if [ -d "${./config/fish}" ]; then
+              cp -r "${./config/fish}" "$HOME/.config/"
+            fi
+
+            # Nvim config (keep as symlink, nvim handles plugins separately)
+            if [ -d "${./config/nvim}" ]; then
+              ln -sf "${./config/nvim}" "$HOME/.config/nvim"
+            fi
+
+            # Starship
+            if [ -f "${./config/starship.toml}" ]; then
+              ln -sf "${./config/starship.toml}" "$HOME/.config/starship.toml"
+            fi
 
             # Symlink tmux config file
             if [ -f "${./config/tmux/tmux.conf}" ]; then
@@ -87,7 +99,7 @@
           '';
         };
 
-        devShells.default = pkgs.mkShell {
+        devShells.full = pkgs.mkShell {
           buildInputs = with pkgs; [
             # Core tools
             git
@@ -146,10 +158,10 @@
               ln -sf "${./config/tmux/tmux.conf}" "$HOME/.tmux.conf"
             fi
 
-            # Symlink other configs
-            for config in git fish nvim tmux; do
+            # Copy other configs (so they're writable)
+            for config in git fish; do
               if [ -d "${./config}/$config" ]; then
-                ln -sf "${./config}/$config" "$HOME/.config/$config"
+                cp -r "${./config}/$config" "$HOME/.config/"
               fi
             done
 

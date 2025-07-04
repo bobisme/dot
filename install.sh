@@ -89,12 +89,13 @@ install_nix() {
 enter_devshell() {
   info "Entering development shell from github:bobisme/dot..."
   
-  # Check for minimal flag
-  if [ "$1" = "--minimal" ] || [ "$1" = "-m" ]; then
-    SHELL_TARGET="#minimal"
-    info "Using minimal environment..."
+  # Check for full flag
+  if [ "$1" = "--full" ] || [ "$1" = "-f" ]; then
+    SHELL_TARGET="#full"
+    info "Using full environment..."
   else
     SHELL_TARGET=""
+    info "Using minimal environment (use --full for all tools)..."
   fi
 
   # Check if experimental features are enabled
