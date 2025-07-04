@@ -45,17 +45,23 @@
             # Set up configs (copy instead of symlink for writable directories)
             # Git config
             if [ -d "${./config/git}" ]; then
-              cp -r "${./config/git}" "$HOME/.config/"
+              mkdir -p "$HOME/.config/git"
+              cp -r ${./config/git}/* "$HOME/.config/git/" 2>/dev/null || true
+              cp -r ${./config/git}/.* "$HOME/.config/git/" 2>/dev/null || true
             fi
 
             # Fish config
             if [ -d "${./config/fish}" ]; then
-              cp -r "${./config/fish}" "$HOME/.config/"
+              mkdir -p "$HOME/.config/fish"
+              cp -r ${./config/fish}/* "$HOME/.config/fish/" 2>/dev/null || true
+              cp -r ${./config/fish}/.* "$HOME/.config/fish/" 2>/dev/null || true
             fi
 
-            # Nvim config (keep as symlink, nvim handles plugins separately)
+            # Nvim config (copy so LazyVim can install plugins)
             if [ -d "${./config/nvim}" ]; then
-              ln -sf "${./config/nvim}" "$HOME/.config/nvim"
+              mkdir -p "$HOME/.config/nvim"
+              cp -r ${./config/nvim}/* "$HOME/.config/nvim/" 2>/dev/null || true
+              cp -r ${./config/nvim}/.* "$HOME/.config/nvim/" 2>/dev/null || true
             fi
 
             # Starship
@@ -161,7 +167,9 @@
             # Copy other configs (so they're writable)
             for config in git fish; do
               if [ -d "${./config}/$config" ]; then
-                cp -r "${./config}/$config" "$HOME/.config/"
+                mkdir -p "$HOME/.config/$config"
+                cp -r ${./config}/$config/* "$HOME/.config/$config/" 2>/dev/null || true
+                cp -r ${./config}/$config/.* "$HOME/.config/$config/" 2>/dev/null || true
               fi
             done
 
