@@ -1,16 +1,17 @@
 [global]
+scale = 1
 corner_radius = 10
 frame_color = "#89B4FA"
-frame_width = 2
+frame_width = 1
 separator_color= frame
-font = "SF Pro 14"
-offset = 20x20
-padding = 14
-horizontal_padding = 14
+font = "Inter Nerd Font Propo 12"
+offset = (20, 60)
+padding = 12
+horizontal_padding = 12
 icon_theme = "Adwaita"
 enable_recursive_icon_lookup = true
 width = (300, 800)
-max_icon_size = 256 # for screenshots
+max_icon_size = 128 # for screenshots
 
 [urgency_low]
 background = "#1E1E2E"
