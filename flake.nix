@@ -58,6 +58,7 @@
 
             # Install tmux plugin manager (TPM)
             mkdir -p "$HOME/.tmux/plugins"
+            mkdir -p "$HOME/.config/tmux/plugins"  # TPM might look here too
             if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
               ${pkgs.git}/bin/git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm" 2>/dev/null || true
             fi
@@ -159,6 +160,7 @@
 
             # Install tmux plugin manager (TPM)
             mkdir -p "$HOME/.tmux/plugins"
+            mkdir -p "$HOME/.config/tmux/plugins"  # TPM might look here too
             if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
               ${pkgs.git}/bin/git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm" 2>/dev/null || true
             fi
