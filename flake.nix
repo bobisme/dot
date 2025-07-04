@@ -53,6 +53,33 @@
 
         # Common shell hook
         commonShellHook = ''
+          # Helper function to copy config directory with proper permissions
+          copy_config() {
+            local config_name="$1"
+            local extra_perms="$2"
+            local source="${./config}/$config_name"
+            local dest="$HOME/.config/$config_name"
+
+            if [ -d "$source" ]; then
+              mkdir -p "$dest"
+              cp -r $source/* "$dest/" 2>/dev/null || true
+              cp -r $source/.* "$dest/" 2>/dev/null || true
+              # Apply extra permissions if specified
+              if [ -n "$extra_perms" ]; then
+                chmod -R "$extra_perms" "$dest" 2>/dev/null || true
+              fi
+            fi
+          }
+
+          # Helper function to symlink a file
+          link_file() {
+            local source="$1"
+            local dest="$2"
+            if [ -f "$source" ]; then
+              ln -sf "$source" "$dest"
+            fi
+          }
+
           # Create ephemeral home directory
           export REAL_HOME="$HOME"
           export HOME="$(mktemp -d /tmp/ephemeral-home.XXXXXX)"
@@ -62,75 +89,55 @@
           # Set up dotfiles from the flake
           mkdir -p "$HOME/.config"
 
-          # Set up configs (copy instead of symlink for writable directories)
-          # Git config
-          if [ -d "${./config/git}" ]; then
-            mkdir -p "$HOME/.config/git"
-            cp -r ${./config/git}/* "$HOME/.config/git/" 2>/dev/null || true
-            cp -r ${./config/git}/.* "$HOME/.config/git/" 2>/dev/null || true
-          fi
+          # Copy configs with proper permissions
+          copy_config "git"
+          copy_config "fish" "755"
+          copy_config "nvim"
 
-          # Fish config
-          if [ -d "${./config/fish}" ]; then
-            mkdir -p "$HOME/.config/fish"
-            cp -r ${./config/fish}/* "$HOME/.config/fish/" 2>/dev/null || true
-            cp -r ${./config/fish}/.* "$HOME/.config/fish/" 2>/dev/null || true
-            # Ensure fish config is writable
-            chmod -R 755 "$HOME/.config/fish" 2>/dev/null || true
-          fi
+          # Fix LazyVim permissions
+          [ -f "$HOME/.config/nvim/lazy-lock.json" ] && chmod 644 "$HOME/.config/nvim/lazy-lock.json"
 
-          # Nvim config (copy so LazyVim can install plugins)
-          if [ -d "${./config/nvim}" ]; then
-            mkdir -p "$HOME/.config/nvim"
-            cp -r ${./config/nvim}/* "$HOME/.config/nvim/" 2>/dev/null || true
-            cp -r ${./config/nvim}/.* "$HOME/.config/nvim/" 2>/dev/null || true
-            # Ensure lazy-lock.json is writable if it exists
-            if [ -f "$HOME/.config/nvim/lazy-lock.json" ]; then
-              chmod 644 "$HOME/.config/nvim/lazy-lock.json"
+          # Symlink individual files
+          link_file "${./config/starship.toml}" "$HOME/.config/starship.toml"
+          link_file "${./config/tmux/tmux.conf}" "$HOME/.tmux.conf"
+
+          # Helper function to set up tmux
+          setup_tmux() {
+            mkdir -p "$HOME/.tmux/plugins" "$HOME/.config/tmux/plugins"
+            if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+              ${pkgs.git}/bin/git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm" 2>/dev/null || true
+              # Auto-install tmux plugins
+              [ -x "$HOME/.tmux/plugins/tpm/bin/install_plugins" ] && \
+                "$HOME/.tmux/plugins/tpm/bin/install_plugins" >/dev/null 2>&1 || true
             fi
-          fi
+          }
 
-          # Starship
-          if [ -f "${./config/starship.toml}" ]; then
-            ln -sf "${./config/starship.toml}" "$HOME/.config/starship.toml"
-          fi
+          # Helper function to set up editor directories
+          setup_editor_dirs() {
+            mkdir -p "$HOME/.local/share/nvim" \
+                     "$HOME/.local/state/nvim" \
+                     "$HOME/.cache/nvim"
+          }
 
-          # Symlink tmux config file
-          if [ -f "${./config/tmux/tmux.conf}" ]; then
-            ln -sf "${./config/tmux/tmux.conf}" "$HOME/.tmux.conf"
-          fi
-
-          # Install tmux plugin manager (TPM) and plugins
-          mkdir -p "$HOME/.tmux/plugins"
-          mkdir -p "$HOME/.config/tmux/plugins"  # TPM might look here too
-          if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
-            ${pkgs.git}/bin/git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm" 2>/dev/null || true
-            # Auto-install tmux plugins
-            if [ -f "$HOME/.tmux/plugins/tpm/bin/install_plugins" ]; then
-              "$HOME/.tmux/plugins/tpm/bin/install_plugins" >/dev/null 2>&1 || true
+          # Helper function to set up fish
+          setup_fish() {
+            if command -v fzf >/dev/null; then
+              mkdir -p "$HOME/.config/fish/functions"
+              chmod 755 "$HOME/.config/fish/functions"
+              fzf --fish > "$HOME/.config/fish/functions/fzf_key_bindings.fish" 2>/dev/null || true
+              chmod 644 "$HOME/.config/fish/functions/fzf_key_bindings.fish" 2>/dev/null || true
             fi
-          fi
-          
-          # Set up terminal capabilities for tmux (for proper font support)
+          }
+
+          # Set up terminal environment
           export TERM=xterm-256color
-          # Use C.UTF-8 which is more universally available
           export LC_ALL=C.UTF-8
           export LANG=C.UTF-8
 
-          # Set up nvim directories
-          mkdir -p "$HOME/.local/share/nvim"
-          mkdir -p "$HOME/.local/state/nvim"
-          mkdir -p "$HOME/.cache/nvim"
-
-          # Set up fzf for fish
-          if command -v fzf >/dev/null; then
-            # Ensure the functions directory exists and is writable
-            mkdir -p "$HOME/.config/fish/functions"
-            chmod 755 "$HOME/.config/fish/functions"
-            # Generate fzf keybindings
-            fzf --fish > "$HOME/.config/fish/functions/fzf_key_bindings.fish" 2>/dev/null || true
-            chmod 644 "$HOME/.config/fish/functions/fzf_key_bindings.fish" 2>/dev/null || true
-          fi
+          # Set up all components
+          setup_tmux
+          setup_editor_dirs
+          setup_fish
 
           # Aliases
           alias l='eza'
