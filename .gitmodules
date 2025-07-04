@@ -4,3 +4,6 @@
 [submodule "config/fish/completions/fish-kubectl-completions"]
 	path = config/fish/completions/fish-kubectl-completions
 	url = https://github.com/evanlucas/fish-kubectl-completions.git
+[submodule "config/bat/themes/bat"]
+	path = config/bat/themes/bat
+	url = https://github.com/catppuccin/bat.git
