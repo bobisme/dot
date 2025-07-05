@@ -39,7 +39,7 @@
           neovim # the best editor
           nushell # data-driven shell
           pass # cli password manager
-          # openssh
+          openssh
           progress # can see progress on various commands happening in the background
           ripgrep # replace grep
           rsync
