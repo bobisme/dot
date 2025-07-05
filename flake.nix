@@ -150,9 +150,7 @@
             
             # Set up command not found handler
             if [ -f "${./nix/fish_command_not_found.fish}" ]; then
-              cp "${
-                ./nix/fish_command_not_found.fish
-              }" "$HOME/.config/fish/functions/"
+              cp "${./nix/fish_command_not_found.fish}" "$HOME/.config/fish/functions/fish_command_not_found.fish"
               chmod 644 "$HOME/.config/fish/functions/fish_command_not_found.fish"
             fi
           }
