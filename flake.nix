@@ -104,6 +104,9 @@
 
           echo "Setting up ephemeral environment in $HOME..."
 
+          # Change to ephemeral home directory
+          cd "$HOME"
+
           # Set up dotfiles from the flake
           mkdir -p "$HOME/.config"
 
@@ -120,6 +123,7 @@
           # Symlink individual files
           link_file "${./config/starship.toml}" "$HOME/.config/starship.toml"
           link_file "${./config/tmux/tmux.conf}" "$HOME/.tmux.conf"
+          link_file "${./gdu.yaml}" "$HOME/.gdu.yaml"
 
           # Copy nix helper scripts
           mkdir -p "$HOME/.local/bin"
