@@ -25,20 +25,17 @@
           fd # replace find
           fish
           fzf
-          git
-          gnupg # gpg
+          gdu # replace du
+          gitMinimal
+          # gnupg # gpg
           gum # make scripts more interactive
-          ipcalc # overwrite the one in busybox
           jq # json parser and filter. may replace with nushell
           lazygit
           lshw # hardware info
-          magic-wormhole # secure file transfer
           moreutils # chronic combine errno ifdata ifne isutf8 lckdo mispipe parallel pee sponge ts vidir vipe zrun
           mtr # replace ping, tracert
-          ncdu # better than du
           neovim # the best editor
           nushell # data-driven shell
-          pass # cli password manager
           openssh
           progress # can see progress on various commands happening in the background
           ripgrep # replace grep
@@ -46,7 +43,7 @@
           starship # cross-shell prompt
           tealdeer # tldr command
           tmux
-          unp # unpack stuff
+          wush # secure remote cp, ssh, rsync, port-forwarding
           zoxide # replace cd
         ];
 
@@ -169,9 +166,8 @@
             
             # Set up command not found handler
             if [ -f "${./nix/fish_command_not_found.fish}" ]; then
-              cp "${
-                ./nix/fish_command_not_found.fish
-              }" "$HOME/.config/fish/functions/fish_command_not_found.fish"
+              cp "${./nix/fish_command_not_found.fish}" \
+                "$HOME/.config/fish/functions/fish_command_not_found.fish"
               chmod 644 "$HOME/.config/fish/functions/fish_command_not_found.fish"
             fi
           }
@@ -194,8 +190,7 @@
 
           # Initialize tealdeer database
           if command -v tldr >/dev/null; then
-            echo "Updating tldr database..."
-            tldr --update >/dev/null 2>&1 || true
+            tldr --update >/dev/null 2>&1 & disown
           fi
 
           # Aliases
