@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -eu
+
+cmd="$1"
+shift
+
+# Setup missing packages file
+NIX_MISSING_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/nix-missing-packages"
+mkdir -p "$(dirname "$NIX_MISSING_FILE")"
+touch "$NIX_MISSING_FILE"
+
+# Run the command immediately
+if nix shell "nixpkgs#$cmd" --command "$cmd" "$@"; then
+  # Only add to missing list if it succeeded
+  if ! grep -Fxq "$cmd" "$NIX_MISSING_FILE"; then
+    echo "$cmd" >>"$NIX_MISSING_FILE"
+  fi
+
+  # Show helpful hint
+  missing_count=$(wc -l <"$NIX_MISSING_FILE")
+  echo "$missing_count tools available. Run 'nix-refresh' to add them permanently to your shell"
+else
+  echo "Package '$cmd' not found in nixpkgs or failed to run"
+  exit 127
+fi

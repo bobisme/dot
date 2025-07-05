@@ -23,6 +23,7 @@
           git
           jq
           lazygit
+          ncdu
           neovim
           openssh
           ripgrep
@@ -82,7 +83,8 @@
 
           # Create ephemeral home directory
           export REAL_HOME="$HOME"
-          export HOME="$(mktemp -d /tmp/ephemeral-home.XXXXXX)"
+          EPHEMERAL_HOME="$(mktemp -d /tmp/ephemeral-home.XXXXXX)"
+          export HOME="$EPHEMERAL_HOME"
 
           echo "Setting up ephemeral environment in $HOME..."
 
@@ -93,6 +95,7 @@
           copy_config "git"
           copy_config "fish" "755"
           copy_config "nvim"
+          copy_config "ncdu"
 
           # Fix LazyVim permissions
           [ -f "$HOME/.config/nvim/lazy-lock.json" ] && chmod 644 "$HOME/.config/nvim/lazy-lock.json"
@@ -100,6 +103,21 @@
           # Symlink individual files
           link_file "${./config/starship.toml}" "$HOME/.config/starship.toml"
           link_file "${./config/tmux/tmux.conf}" "$HOME/.tmux.conf"
+
+          # Copy nix helper scripts
+          mkdir -p "$HOME/.local/bin"
+          if [ -d "${./nix}" ]; then
+            # Copy executable scripts to bin
+            for script in ${./nix}/*; do
+              if [ -f "$script" ] && [ "$(basename "$script")" != "fish_command_not_found.fish" ]; then
+                cp "$script" "$HOME/.local/bin/" 2>/dev/null || true
+                chmod +x "$HOME/.local/bin/$(basename "$script")" 2>/dev/null || true
+              fi
+            done
+          fi
+
+          # Add local bin to PATH
+          export PATH="$HOME/.local/bin:$PATH"
 
           # Helper function to set up tmux
           setup_tmux() {
@@ -121,11 +139,21 @@
 
           # Helper function to set up fish
           setup_fish() {
+            mkdir -p "$HOME/.config/fish/functions"
+            chmod 755 "$HOME/.config/fish/functions"
+            
+            # Set up fzf keybindings
             if command -v fzf >/dev/null; then
-              mkdir -p "$HOME/.config/fish/functions"
-              chmod 755 "$HOME/.config/fish/functions"
               fzf --fish > "$HOME/.config/fish/functions/fzf_key_bindings.fish" 2>/dev/null || true
               chmod 644 "$HOME/.config/fish/functions/fzf_key_bindings.fish" 2>/dev/null || true
+            fi
+            
+            # Set up command not found handler
+            if [ -f "${./nix/fish_command_not_found.fish}" ]; then
+              cp "${
+                ./nix/fish_command_not_found.fish
+              }" "$HOME/.config/fish/functions/"
+              chmod 644 "$HOME/.config/fish/functions/fish_command_not_found.fish"
             fi
           }
 
@@ -133,6 +161,12 @@
           export TERM=xterm-256color
           export LC_ALL=C.UTF-8
           export LANG=C.UTF-8
+
+          # Enable Nix experimental features
+          export NIX_CONFIG="experimental-features = nix-command flakes"
+
+          # Set shell to fish so nix commands use it
+          export SHELL=${pkgs.fish}/bin/fish
 
           # Set up all components
           setup_tmux
@@ -144,8 +178,23 @@
           alias cat='bat'
           alias e='nvim'
 
-          # Clean up on exit
-          trap "rm -rf $HOME" EXIT
+          # Clean up on exit with safety checks
+          cleanup_ephemeral() {
+            # Only clean up if it's actually our ephemeral directory
+            if [ -n "$EPHEMERAL_HOME" ] && [ -d "$EPHEMERAL_HOME" ]; then
+              # Extra safety: ensure it's in /tmp and contains "ephemeral-home"
+              case "$EPHEMERAL_HOME" in
+                /tmp/ephemeral-home.*)
+                  echo "Cleaning up ephemeral environment: $EPHEMERAL_HOME"
+                  rm -rf "$EPHEMERAL_HOME"
+                  ;;
+                *)
+                  echo "WARNING: Refusing to clean up unexpected directory: $EPHEMERAL_HOME"
+                  ;;
+              esac
+            fi
+          }
+          trap cleanup_ephemeral EXIT
         '';
       in {
         devShells.default = pkgs.mkShell {
