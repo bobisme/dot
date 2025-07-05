@@ -88,7 +88,7 @@ install_nix() {
 # Enter the development shell
 enter_devshell() {
   info "Entering development shell from github:bobisme/dot..."
-  
+
   # Check for full flag
   if [ "$1" = "--full" ] || [ "$1" = "-f" ]; then
     SHELL_TARGET="#full"
@@ -102,9 +102,9 @@ enter_devshell() {
   if ! nix --version 2>&1 | grep -q "flakes"; then
     warn "Flakes experimental feature might not be enabled"
     info "Attempting to run with experimental features..."
-    exec nix --experimental-features 'nix-command flakes' develop "github:bobisme/dot/nix${SHELL_TARGET}"
+    exec nix --experimental-features 'nix-command flakes' develop "github:bobisme/dot${SHELL_TARGET}"
   else
-    exec nix develop "github:bobisme/dot/nix${SHELL_TARGET}"
+    exec nix develop "github:bobisme/dot${SHELL_TARGET}"
   fi
 }
 

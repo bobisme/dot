@@ -110,6 +110,7 @@
           # Copy configs with proper permissions
           copy_config "git"
           copy_config "fish" "755"
+          copy_config "joshuto"
           copy_config "nvim"
           copy_config "ncdu"
 
