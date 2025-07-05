@@ -5,6 +5,13 @@ set -eu
 cmd="$1"
 shift
 
+# Prevent infinite recursion by checking if we're already in a nix-run-missing call
+if [ "${NIX_RUN_MISSING_ACTIVE:-}" = "1" ]; then
+  echo "Command '$cmd' not found (recursive call prevented)"
+  exit 127
+fi
+export NIX_RUN_MISSING_ACTIVE=1
+
 # Setup missing packages file
 NIX_MISSING_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/nix-missing-packages"
 mkdir -p "$(dirname "$NIX_MISSING_FILE")"
