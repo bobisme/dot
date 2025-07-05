@@ -9,7 +9,7 @@ cursor-style = block
 
 # custom-shader = "./ghostty-shaders/bettercrt.glsl"
 
-font-family = "FantasqueSansM Nerd Font"
+font-family = "FantasqueSansM Nerd Font Mono"
 font-size = 15
 font-thicken = true
 
