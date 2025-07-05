@@ -43,7 +43,6 @@
           progress # can see progress on various commands happening in the background
           ripgrep # replace grep
           rsync
-          shred # completely erase a file
           starship # cross-shell prompt
           tealdeer # tldr command
           tmux
