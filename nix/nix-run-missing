@@ -52,7 +52,6 @@ run_with_package() {
 
     # Show helpful hint
     missing_count=$(wc -l <"$NIX_MISSING_FILE")
-    echo "$missing_count tools available. Run 'nix-refresh' to add them permanently to your shell"
     return 0
   fi
   return 1

@@ -13,23 +13,42 @@
 
         # Minimal tools for both environments
         minimalTools = with pkgs; [
-          bat
+          busybox # too many commands to list, keep at the top
+
+          bat # replace cat
+          btop # replace top, htop
           curl
-          delta
-          eza
-          fd
+          delta # replace diff
+          dogdns # replace dig
+          duf # replace df
+          eza # replace ls
+          fd # replace find
           fish
           fzf
           git
-          jq
+          gnupg # gpg
+          gum # make scripts more interactive
+          ipcalc # overwrite the one in busybox
+          jq # json parser and filter. may replace with nushell
           lazygit
-          ncdu
-          neovim
-          openssh
-          ripgrep
-          starship
+          lshw # hardware info
+          magic-wormhole # secure file transfer
+          moreutils # chronic combine errno ifdata ifne isutf8 lckdo mispipe parallel pee sponge ts vidir vipe zrun
+          mtr # replace ping, tracert
+          ncdu # better than du
+          neovim # the best editor
+          nushell # data-driven shell
+          pass # cli password manager
+          # openssh
+          progress # can see progress on various commands happening in the background
+          ripgrep # replace grep
+          rsync
+          shred # completely erase a file
+          starship # cross-shell prompt
+          tealdeer # tldr command
           tmux
-          which
+          unp # unpack stuff
+          zoxide # replace cd
         ];
 
         # Additional tools for full environment
@@ -174,10 +193,17 @@
           setup_editor_dirs
           setup_fish
 
+          # Initialize tealdeer database
+          if command -v tldr >/dev/null; then
+            echo "Updating tldr database..."
+            tldr --update >/dev/null 2>&1 || true
+          fi
+
           # Aliases
           alias l='eza'
           alias cat='bat'
           alias e='nvim'
+          alias cd='z'
 
           # Clean up on exit with safety checks
           cleanup_ephemeral() {
