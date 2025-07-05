@@ -85,7 +85,7 @@ if status is-interactive
     abbr f fg
 
     if type -q keychain
-        eval (keychain --eval --agents ssh ~/.ssh/id_ed25519)
+        eval (keychain --eval ~/.ssh/id_ed25519 2>/dev/null)
     else
         eval (ssh-agent -c) >/dev/null
     end
