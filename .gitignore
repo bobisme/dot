@@ -5,3 +5,4 @@ config/fish/fundle
 config/nvim/bundle
 config/fish/fish_history
 config/fish/functions/fzf_key_bindings.fish
+config/direnv/lib/hm-nix-direnv.sh
