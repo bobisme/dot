@@ -42,7 +42,10 @@ end
 
 if type -q zoxide
     zoxide init fish | source
-    abbr -a j z
+end
+
+if type -q joshuto
+    abbr -a j joshuto
 end
 
 if type -q direnv
