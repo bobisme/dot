@@ -29,7 +29,7 @@
           gitMinimal
           # gnupg # gpg
           gum # make scripts more interactive
-          jq # json parser and filter. may replace with nushell
+          joshuto # tui file explorer
           lazygit
           lshw # hardware info
           moreutils # chronic combine errno ifdata ifne isutf8 lckdo mispipe parallel pee sponge ts vidir vipe zrun
