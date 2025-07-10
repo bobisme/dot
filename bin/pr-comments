@@ -10,9 +10,10 @@ def show-condensed-diff [diff_hunk: string, original_line: int] {
     
     # Parse the @@ header to get line numbers
     let header = $lines | first
-    let header_match = $header | parse '@@ -{old_start},{old_count} +{new_start},{new_count} @@' | first
+    let header_matches = $header | parse '@@ -{old_start},{old_count} +{new_start},{new_count} @@'
+    let header_match = if ($header_matches | is-empty) { null } else { $header_matches | first }
     
-    let new_start = if ($header_match | is-empty) { 1 } else { $header_match.new_start | into int }
+    let new_start = if ($header_match == null) { 1 } else { $header_match.new_start | into int }
     
     # Find the line index in the diff that corresponds to original_line
     mut current_new_line = $new_start - 1
@@ -75,13 +76,13 @@ def show-condensed-diff [diff_hunk: string, original_line: int] {
     $output | str join "\n"
 }
 
-# Main function to display PR comments
+# Tool to show GitHub PR comments in the terminal attached to their respective diffs.
 def main [
     pr_number: int   # PR number to fetch comments for
     --full-diff      # Show full diff instead of condensed
 ] {
     let term_width = (term size).columns
-    let separator = $"(ansi grey)(1..$term_width | each { '─' } | str join)(ansi reset)"
+    let separator = $"(ansi dark_gray)(1..$term_width | each { '━' } | str join)(ansi reset)"
     
     # Fetch PR comments from GitHub API
     let comments = (gh api $"repos/:owner/:repo/pulls/($pr_number)/comments" | from json)
@@ -91,8 +92,8 @@ def main [
         # Print separator
         print $separator
         
-        # Print file path
-        print $comment.path
+        # Print file path with styling
+        print $"(ansi cyan_bold)($comment.path)(ansi reset)"
         print ""
         
         # Handle diff hunk
@@ -112,14 +113,95 @@ def main [
         
         print ""
         
+        # Calculate the maximum width needed for the comment
+        let default_width = 79
+        let inner_width = $default_width - 4  # Account for borders "│ " and " │"
+        
+        # Pre-process comment to find max line width
+        let lines = $comment.body | lines
+        mut max_width = $default_width
+        mut in_code_block = false
+        
+        for line in $lines {
+            if ($line | str starts-with '```') {
+                $in_code_block = not $in_code_block
+            } else if $in_code_block {
+                # For code lines, we need to account for their actual width
+                let line_length = ($line | str length) + 4  # +4 for borders
+                if $line_length > $max_width {
+                    $max_width = $line_length
+                }
+            }
+        }
+        
+        # Use the larger of default or calculated width
+        let box_width = if $max_width > $default_width { $max_width } else { $default_width }
+        let content_width = $box_width - 4
+        
+        # Create the box borders
+        let top_border = $"(ansi dark_gray)┌(1..($box_width - 2) | each { '─' } | str join)┐(ansi reset)"
+        let mid_border = $"(ansi dark_gray)├(1..($box_width - 2) | each { '─' } | str join)┤(ansi reset)"
+        let bot_border = $"(ansi dark_gray)└(1..($box_width - 2) | each { '─' } | str join)┘(ansi reset)"
+        
+        # Print comment box
+        print $top_border
+        
         # Print comment header with author and timestamp
-        print $"┏ (ansi blue)@($comment.user.login) ━ ($comment.updated_at)(ansi reset)"
+        let timestamp = $comment.updated_at | into datetime | date humanize
+        let header_text = $"(ansi yellow_bold)@($comment.user.login)(ansi reset) (ansi dark_gray)• ($timestamp)(ansi reset)"
+        let header_line = $"(ansi dark_gray)│(ansi reset) ($header_text)"
+        # Calculate visible length without ANSI codes for proper padding
+        let visible_length = ($"@($comment.user.login) • ($timestamp)" | str length)
+        let padding_needed = $content_width - $visible_length
+        let padding = (1..$padding_needed | each { ' ' } | str join)
+        print $"($header_line)($padding)   (ansi dark_gray)│(ansi reset)"
+        print $mid_border
         
-        # Print comment body
-        let formatted_body = ($comment.body | fmt -w 80 | lines | each { |line| $"┃ ($line)" } | str join "\n")
-        print $formatted_body
+        # Process comment body - handle code blocks specially
+        let lines = $comment.body | lines
+        mut in_code_block = false
+        mut code_lines = []
+        mut output_lines = []
         
-        print "┗ "
+        for line in $lines {
+            if ($line | str starts-with '```') {
+                if $in_code_block {
+                    # End of code block - highlight and add to output
+                    let code_content = $code_lines | str join "\n"
+                    let highlighted = ($code_content | bat --language=typescript --style=plain --color=always --paging=never | lines)
+                    for code_line in $highlighted {
+                        let stripped_line = ($code_line | ansi strip)
+                        let padding_needed = $content_width - ($stripped_line | str length)
+                        let padding = if $padding_needed > 0 { (1..$padding_needed | each { ' ' } | str join) } else { '' }
+                        $output_lines = ($output_lines | append $"(ansi dark_gray)│(ansi reset) ($code_line)($padding) (ansi dark_gray)│(ansi reset)")
+                    }
+                    $code_lines = []
+                    $in_code_block = false
+                    # Add the closing ``` line
+                    let padded_fence = $line | fill -a l -w $content_width -c ' '
+                    $output_lines = ($output_lines | append $"(ansi dark_gray)│(ansi reset) ($padded_fence) (ansi dark_gray)│(ansi reset)")
+                } else {
+                    # Start of code block
+                    $in_code_block = true
+                    let padded_fence = $line | fill -a l -w $content_width -c ' '
+                    $output_lines = ($output_lines | append $"(ansi dark_gray)│(ansi reset) ($padded_fence) (ansi dark_gray)│(ansi reset)")
+                }
+            } else if $in_code_block {
+                # Collect code lines
+                $code_lines = ($code_lines | append $line)
+            } else {
+                # Regular text - wrap and format
+                let wrapped_lines = ($line | fmt -w $content_width | lines)
+                for wrapped_line in $wrapped_lines {
+                    let padded_line = $wrapped_line | fill -a l -w $content_width -c ' '
+                    $output_lines = ($output_lines | append $"(ansi dark_gray)│(ansi reset) ($padded_line) (ansi dark_gray)│(ansi reset)")
+                }
+            }
+        }
+        
+        print ($output_lines | str join "\n")
+        
+        print $bot_border
         print ""
     }
 }
