@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -eu
+
+NIX_MISSING_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/nix-missing-packages"
+
+if [ ! -f "$NIX_MISSING_FILE" ] || [ ! -s "$NIX_MISSING_FILE" ]; then
+  echo "No missing packages to add to shell"
+  exit 0
+fi
+
+# Get unique packages
+packages=$(sort "$NIX_MISSING_FILE" | uniq | tr '\n' ' ')
+echo "→ Restarting shell with: $packages"
+
+# Build nix shell command
+nix_args=""
+for pkg in $packages; do
+  nix_args="$nix_args nixpkgs#$pkg"
+done
+
+# Clear the file since we're adding them
+>"$NIX_MISSING_FILE"
+
+# Restart shell
+exec nix shell $nix_args

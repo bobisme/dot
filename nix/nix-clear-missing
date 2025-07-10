@@ -1,0 +1,6 @@
+#!/bin/sh
+# Clear the missing packages list
+
+NIX_MISSING_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/nix-missing-packages"
+>"$NIX_MISSING_FILE"
+echo "Cleared missing packages list"

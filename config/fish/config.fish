@@ -42,7 +42,10 @@ end
 
 if type -q zoxide
     zoxide init fish | source
-    abbr -a j z
+end
+
+if type -q joshuto
+    abbr -a j joshuto
 end
 
 if type -q direnv
@@ -85,7 +88,7 @@ if status is-interactive
     abbr f fg
 
     if type -q keychain
-        eval (keychain --eval --agents ssh ~/.ssh/id_ed25519)
+        eval (keychain --eval ~/.ssh/id_ed25519 2>/dev/null)
     else
         eval (ssh-agent -c) >/dev/null
     end
@@ -98,7 +101,8 @@ if status is-interactive
     if type -q bat
         set -x MANPAGER "sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
         set -x MANROFFOPT -c
-        abbr -a bhelp "bat --plain --language=help"
+        abbr -a --position anywhere -- --help '--help | bat -plhelp'
+        abbr -a --position anywhere -- -h '-h | bat -plhelp'
     end
 
     if type -q fzf

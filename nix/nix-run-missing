@@ -1,0 +1,69 @@
+#!/bin/sh
+
+set -eu
+
+cmd="$1"
+shift
+
+# Prevent infinite recursion by checking if we're already in a nix-run-missing call
+if [ "${NIX_RUN_MISSING_ACTIVE:-}" = "1" ]; then
+  echo "Command '$cmd' not found (recursive call prevented)"
+  exit 127
+fi
+export NIX_RUN_MISSING_ACTIVE=1
+
+# Setup missing packages file
+NIX_MISSING_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/nix-missing-packages"
+mkdir -p "$(dirname "$NIX_MISSING_FILE")"
+touch "$NIX_MISSING_FILE"
+
+# Command to package mapping for common cases
+get_package_candidates() {
+  case "$1" in
+  awk) echo "gawk mawk" ;;
+  dig) echo "dnsutils bind" ;;
+  ifconfig) echo "net-tools" ;;
+  make) echo "gnumake" ;;
+  netstat) echo "net-tools" ;;
+  nslookup) echo "dnsutils bind" ;;
+  ping) echo "iputils" ;;
+  ps) echo "procps" ;;
+  telnet) echo "inetutils busybox" ;;
+  xxd) echo "vim" ;;
+  *) echo "$1" ;;
+  esac
+}
+
+# Try running with different package candidates
+run_with_package() {
+  local package="$1"
+  local cmd="$2"
+  shift 2
+
+  # Test if the command exists in the package by checking if we can find it
+  if nix shell "nixpkgs#$package" --command which "$cmd" >/dev/null 2>&1; then
+    # Command exists, now run it for real
+    nix shell "nixpkgs#$package" --command "$cmd" "$@"
+
+    # Add the successful package to missing list
+    if ! grep -Fxq "$package" "$NIX_MISSING_FILE"; then
+      echo "$package" >>"$NIX_MISSING_FILE"
+    fi
+
+    # Show helpful hint
+    missing_count=$(wc -l <"$NIX_MISSING_FILE")
+    return 0
+  fi
+  return 1
+}
+
+# Try each package candidate
+candidates=$(get_package_candidates "$cmd")
+for package in $candidates; do
+  if run_with_package "$package" "$cmd" "$@"; then
+    exit 0
+  fi
+done
+
+echo "Command '$cmd' not found in any known nixpkgs packages"
+exit 127
