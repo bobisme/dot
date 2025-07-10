@@ -82,16 +82,12 @@ def main [
     --full-diff      # Show full diff instead of condensed
 ] {
     let term_width = (term size).columns
-    let separator = $"(ansi dark_gray)(1..$term_width | each { '━' } | str join)(ansi reset)"
     
     # Fetch PR comments from GitHub API
     let comments = (gh api $"repos/:owner/:repo/pulls/($pr_number)/comments" | from json)
     
     # Process each comment
     for comment in $comments {
-        # Print separator
-        print $separator
-        
         # Print file path with styling
         print $"(ansi cyan_bold)($comment.path)(ansi reset)"
         print ""
