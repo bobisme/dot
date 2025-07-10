@@ -80,29 +80,85 @@ def show-condensed-diff [diff_hunk: string, original_line: int] {
 def main [
     pr_number: int   # PR number to fetch comments for
     --full-diff      # Show full diff instead of condensed
+    --show-resolved  # Show resolved comments (hidden by default)
 ] {
     let term_width = (term size).columns
     
-    # Fetch PR comments from GitHub API
-    let comments = (gh api $"repos/:owner/:repo/pulls/($pr_number)/comments" | from json)
+    # Get repository info for GraphQL
+    let repo_info = (gh repo view --json owner,name | from json)
+    
+    # Create the GraphQL query payload
+    let query_payload = {
+        query: 'query($owner: String!, $repo: String!, $number: Int!) {
+            repository(owner: $owner, name: $repo) {
+                pullRequest(number: $number) {
+                    reviewThreads(first: 100) {
+                        nodes {
+                            id
+                            isResolved
+                            comments(first: 50) {
+                                nodes {
+                                    id
+                                    databaseId
+                                    body
+                                    path
+                                    diffHunk
+                                    originalLine
+                                    author {
+                                        login
+                                    }
+                                    updatedAt
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }',
+        variables: {
+            owner: $repo_info.owner.login,
+            repo: $repo_info.name,
+            number: $pr_number
+        }
+    }
+    
+    # Execute GraphQL query by piping JSON payload
+    let pr_data = ($query_payload | to json | gh api graphql --input - | from json)
+    
+    # Extract review threads
+    let review_threads = $pr_data.data.repository.pullRequest.reviewThreads.nodes
+    
+    # Flatten comments with their resolved status
+    let all_comments = $review_threads | each { |thread|
+        $thread.comments.nodes | each { |comment|
+            $comment | insert is_resolved $thread.isResolved
+        }
+    } | flatten
+    
+    # Filter based on resolved status
+    let filtered_comments = if $show_resolved {
+        $all_comments
+    } else {
+        $all_comments | where { |c| not $c.is_resolved }
+    }
     
     # Process each comment
-    for comment in $comments {
+    for comment in $filtered_comments {
         # Print file path with styling
         print $"(ansi cyan_bold)($comment.path)(ansi reset)"
         print ""
         
         # Handle diff hunk
-        if ($comment.diff_hunk? | is-empty) or ($comment.diff_hunk? == null) {
+        if ($comment.diffHunk? | is-empty) or ($comment.diffHunk? == null) {
             print "No diff hunk"
         } else {
             if $full_diff {
                 # Show full diff with syntax highlighting
-                $comment.diff_hunk | bat --language=diff --style=plain --color=always --paging=never
+                $comment.diffHunk | bat --language=diff --style=plain --color=always --paging=never
             } else {
                 # Show condensed diff with syntax highlighting
-                let original_line = if ($comment.original_line? | is-empty) { 0 } else { $comment.original_line }
-                let condensed = show-condensed-diff $comment.diff_hunk $original_line
+                let original_line = if ($comment.originalLine? | is-empty) { 0 } else { $comment.originalLine }
+                let condensed = show-condensed-diff $comment.diffHunk $original_line
                 $condensed | bat --language=diff --style=plain --color=always --paging=never
             }
         }
@@ -143,11 +199,15 @@ def main [
         print $top_border
         
         # Print comment header with author and timestamp
-        let timestamp = $comment.updated_at | into datetime | date humanize
-        let header_text = $"(ansi yellow_bold)@($comment.user.login)(ansi reset) (ansi dark_gray)• ($timestamp)(ansi reset)"
+        let timestamp = $comment.updatedAt | into datetime | date humanize
+        let author = if ($comment.author? | is-empty) { "unknown" } else { $comment.author.login }
+        # Show resolved indicator if comment is resolved
+        let resolved_indicator = if ($comment.is_resolved and $show_resolved) { $" (ansi green)✓ resolved(ansi reset)" } else { "" }
+        let header_text = $"(ansi yellow_bold)@($author)(ansi reset) (ansi dark_gray)• ($timestamp)(ansi reset)($resolved_indicator)"
         let header_line = $"(ansi dark_gray)│(ansi reset) ($header_text)"
         # Calculate visible length without ANSI codes for proper padding
-        let visible_length = ($"@($comment.user.login) • ($timestamp)" | str length)
+        let resolved_text = if ($comment.is_resolved and $show_resolved) { " ✓ resolved" } else { "" }
+        let visible_length = ($"@($author) • ($timestamp)($resolved_text)" | str length)
         let padding_needed = $content_width - $visible_length
         let padding = (1..$padding_needed | each { ' ' } | str join)
         print $"($header_line)($padding)   (ansi dark_gray)│(ansi reset)"
