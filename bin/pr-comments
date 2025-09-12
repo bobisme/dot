@@ -146,8 +146,6 @@ def main [
     for comment in $filtered_comments {
         # Print file path with styling
         print $"(ansi cyan_bold)($comment.path)(ansi reset)"
-        print ""
-        
         # Handle diff hunk
         if ($comment.diffHunk? | is-empty) or ($comment.diffHunk? == null) {
             print "No diff hunk"
