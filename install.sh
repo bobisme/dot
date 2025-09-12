@@ -44,6 +44,38 @@ check_nix() {
   fi
 }
 
+# Setup Nix build users for root/container environments
+setup_nix_build_users() {
+  # Create nixbld group if it doesn't exist
+  if ! getent group nixbld >/dev/null 2>&1; then
+    info "Creating nixbld group..."
+    groupadd -r nixbld || true
+  fi
+
+  # Create nixbld users if they don't exist
+  for n in $(seq 1 10); do
+    if ! id "nixbld$n" >/dev/null 2>&1; then
+      info "Creating nixbld$n user..."
+      useradd -c "Nix build user $n" \
+        -d /var/empty \
+        -g nixbld \
+        -G nixbld \
+        -M \
+        -N \
+        -r \
+        -s "$(command -v nologin || echo /usr/sbin/nologin || echo /bin/false)" \
+        "nixbld$n" || true
+    fi
+  done
+
+  # Create /nix directory with proper permissions if it doesn't exist
+  if [ ! -d /nix ]; then
+    info "Creating /nix directory..."
+    mkdir -m 0755 /nix
+    chown root:root /nix
+  fi
+}
+
 # Install Nix
 install_nix() {
   info "Installing Nix..."
@@ -61,6 +93,27 @@ install_nix() {
     error "Unsupported operating system: $OS"
     ;;
   esac
+
+  # Check if running as root (common in containers)
+  if [ "$(id -u)" = "0" ]; then
+    warn "Running as root. Creating a non-root user for Nix installation..."
+
+    # Create a non-root user for Nix
+    if ! id nix-user >/dev/null 2>&1; then
+      info "Creating nix-user..."
+      useradd -m -s /bin/bash nix-user || error "Failed to create nix-user"
+    fi
+
+    # Setup build users
+    setup_nix_build_users
+
+    # Copy this script to the user's home and run as non-root
+    info "Switching to non-root user for Nix installation..."
+    cp "$1" /tmp/install-as-user.sh
+    chmod +x /tmp/install-as-user.sh
+    su - nix-user -c "INSTALL_AS_USER=1 /tmp/install-as-user.sh $*"
+    exit $?
+  fi
 
   # Download and run the official Nix installer (single-user mode)
   info "Downloading Nix installer..."
@@ -110,24 +163,27 @@ enter_devshell() {
 
 # Main execution
 main() {
-  info "Starting development environment setup..."
+  # Skip the initial message if we're re-running as non-root user
+  if [ "$INSTALL_AS_USER" != "1" ]; then
+    info "Starting development environment setup..."
+  fi
 
   check_shell
 
   if ! check_nix; then
     install_nix
 
-    # Re-check after installation
+    # Ensure Nix is in PATH for current session after installation
+    if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+      . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+    elif [ -f "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
+      . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+    fi
+
+    # Re-check after installation and sourcing
     if ! check_nix; then
       error "Nix installation failed. Please check the output above."
     fi
-  fi
-
-  # Ensure Nix is in PATH for current session
-  if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
-    . "$HOME/.nix-profile/etc/profile.d/nix.sh"
-  elif [ -f "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
-    . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
   fi
 
   enter_devshell "$@"

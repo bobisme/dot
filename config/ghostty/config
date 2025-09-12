@@ -1,15 +1,18 @@
-background-blur-radius = 20
-background-opacity = 0.9
+# background = #000000
+# background-blur-radius = 20
+# background-opacity = 0.9
 
 clipboard-trim-trailing-spaces = true
 clipboard-paste-protection = false
 copy-on-select = false
 
 cursor-style = block
+cursor-invert-fg-bg = true
 
 # custom-shader = "./ghostty-shaders/bettercrt.glsl"
 
 font-family = "FantasqueSansM Nerd Font Mono"
+# font-family-italic = "VictorMono Nerd Font Mono"
 font-size = 15
 font-thicken = true
 
@@ -24,6 +27,7 @@ keybind = super+f=write_screen_file:open
 keybind = super+shift+f=write_screen_file:open
 keybind = super+shift+-=increase_font_size:1
 keybind = super+-=decrease_font_size:1
+keybind = shift+enter=text:\n
 
 scrollback-limit = 100000000
 
@@ -31,5 +35,4 @@ shell-integration = fish
 
 theme = catppuccin-mocha
 
-window-decoration = false
-keybind = shift+enter=text:\n
+window-decoration = true

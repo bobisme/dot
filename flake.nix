@@ -15,11 +15,11 @@
         minimalTools = with pkgs; [
           busybox # too many commands to list, keep at the top
 
+          # gnupg # gpg
           bat # replace cat
           btop # replace top, htop
           curl
           delta # replace diff
-          dogdns # replace dig
           duf # replace df
           eza # replace ls
           fd # replace find
@@ -27,9 +27,7 @@
           fzf
           gdu # replace du
           gitMinimal
-          # gnupg # gpg
           gum # make scripts more interactive
-          joshuto # tui file explorer
           lazygit
           lshw # hardware info
           moreutils # chronic combine errno ifdata ifne isutf8 lckdo mispipe parallel pee sponge ts vidir vipe zrun
@@ -44,6 +42,7 @@
           tealdeer # tldr command
           tmux
           wush # secure remote cp, ssh, rsync, port-forwarding
+          yazi # tui file explorer
           zoxide # replace cd
         ];
 
