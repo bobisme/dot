@@ -1,80 +1,49 @@
 ---@type LazySpec[]
 return {
   {
-    "huynle/ogpt.nvim",
-    event = "VeryLazy",
+    "milanglacier/minuet-ai.nvim",
     opts = {
-      default_provider = "ollama",
-      providers = {
-        ollama = {
-          model = "llama3.1",
-          api_host = os.getenv("OLLAMA_API_HOST") or "http://localhost:11434",
-          api_key = os.getenv("OLLAMA_API_KEY") or "",
-          api_params = {
-            model = "llama3",
-            temperature = 0.8,
-            top_p = 0.9,
-          },
-          api_chat_params = {
-            model = "llama3",
-            frequency_penalty = 0,
-            presence_penalty = 0,
-            temperature = 0.5,
+      virtualtext = {
+        auto_trigger_ft = { "*" },
+        keymap = {
+          -- accept whole completion
+          accept = "<A-y>",
+          -- -- accept one line
+          -- accept_line = '<A-a>',
+          -- -- accept n lines (prompts for number)
+          -- -- e.g. "A-z 2 CR" will accept 2 lines
+          -- accept_n_lines = '<A-z>',
+          -- -- Cycle to prev completion item, or manually invoke completion
+          -- prev = "<c-{>",
+          -- -- Cycle to next completion item, or manually invoke completion
+          -- next = "<c-}>",
+          -- dismiss = '<A-e>',
+        },
+      },
+      provider = "openai_fim_compatible",
+      n_completions = 1,
+      context_window = 512,
+      provider_options = {
+        openai_fim_compatible = {
+          api_key = "TERM",
+          name = "Ollama",
+          end_point = "http://localhost:11434/v1/completions",
+          model = "qwen2.5-coder:1.5b",
+          optional = {
+            max_tokens = 56,
             top_p = 0.9,
           },
         },
       },
     },
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim",
-    },
   },
-  -- {
-  --   "huggingface/llm.nvim",
-  --   event = "VeryLazy",
-  --   opts = {
-  --     backend = "ollama",
-  --     model = "llama3.1",
-  --     url = "http://localhost:11434/api/generate",
-  --     -- cf https://github.com/ollama/ollama/blob/main/docs/api.md#parameters
-  --     request_body = {
-  --       -- Modelfile options for the model you use
-  --       options = {
-  --         num_predict = 512,
-  --         temperature = 1.1,
-  --         top_p = 0.95,
-  --       },
-  --       system = "You are an AI coder. Your job is to complete incomplete code. You must only provide the code requested, no explanations. You must not format the code.",
-  --     },
-  --     lsp = {
-  --       bin_path = vim.api.nvim_call_function("stdpath", { "data" }) .. "/mason/bin/llm-ls",
-  --     },
-  --     fim = {
-  --       enabled = false,
-  --     },
-  --     accept_keymap = "<S-Tab>",
-  --     dismiss_keymap = "<C-Tab>",
-  --   },
-  -- },
   {
     "stevearc/oil.nvim",
     opts = {
       default_file_explorer = true,
     },
   },
-  -- {
-  --   "David-Kunz/gen.nvim",
-  --   opts = {
-  --     model = "phind-codellama",
-  --   },
-  -- },
   "tpope/vim-fugitive",
-  {
-    "sourcegraph/sg.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
-  },
   { "nanotee/zoxide.vim" },
   { "bfrg/vim-jqplay", cmd = { "Jqplay", "JqplayScratch", "JqplayScratchNoInput" } },
   {
@@ -151,22 +120,6 @@ return {
         -- lsp_doc_border = false, -- add a border to hover docs and signature help
       },
     },
-  },
-  {
-    "jackMort/ChatGPT.nvim",
-    config = function()
-      require("chatgpt").setup({
-        api_key_cmd = "pass show openapi/nvim",
-        actions_paths = { "/home/bob/.config/nvim/chatgpt-actions.json" },
-      })
-    end,
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "nvim-lua/plenary.nvim",
-      "folke/trouble.nvim",
-      "nvim-telescope/telescope.nvim",
-    },
-    cmd = { "ChatGPT", "ChatGPTActAs", "ChatGPTRun", "ChatGPTEditWithInstructions", "ChatGPTCompleteCode" },
   },
   -- from LazyVim
   {

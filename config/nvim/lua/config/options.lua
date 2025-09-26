@@ -3,7 +3,7 @@
 
 if vim.g.neovide then
   -- vim.o.guifont = "FantasqueSansM Nerd Font"
-  vim.o.guifont = "VictorMono Nerd Font:h12"
+  vim.o.guifont = "FantasqueSansM Nerd Font:h14"
 
   vim.g.neovide_cursor_animate_in_insert_mode = false
   vim.g.neovide_cursor_animation_length = 0.05
@@ -18,7 +18,11 @@ if vim.g.neovide then
   vim.g.neovide_light_angle_degrees = 45
   vim.g.neovide_light_radius = 5
   vim.g.neovide_refresh_rate = 60
-  vim.g.neovide_scale_factor = 1.00
+  if not vim.fn.has("macunix") then
+    vim.g.neovide_scale_factor = 0.50
+  else
+    vim.g.neovide_scale_factor = 1.00
+  end
   vim.g.neovide_scroll_animation_length = 0.3
 end
 
@@ -30,5 +34,5 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.h
   border = "rounded",
 })
 
--- No fancy animations,
+-- No fancy animations
 vim.g.snacks_animate = false
