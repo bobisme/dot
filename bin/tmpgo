@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Create a temporary directory for the Go project
+TEMP_DIR=$(mktemp -d -t tmpgo-XXXXXX)
+
+# Change to the temporary directory
+cd "$TEMP_DIR"
+
+mise use go@latest
+
+# Initialize a Go module
+mise exec go -- go mod init tmpgo
+
+# Create a basic main.go file
+cat >main.go <<'EOF'
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello from temp Go project!")
+	fmt.Println("Project directory:", ".")
+}
+EOF
+
+echo "✅ Go project created in: $TEMP_DIR"
+echo ""
+echo "To use this project:"
+echo "  cd $TEMP_DIR"
+echo "  go run ."
+
+# Optionally change to the directory (comment out if you don't want this)
+cd "$TEMP_DIR"

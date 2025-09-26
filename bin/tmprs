@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Create a temporary directory for the Go project
+TEMP_DIR=$(mktemp -d -t tmprs-XXXXXX)
+
+# Change to the temporary directory
+cd "$TEMP_DIR"
+
+cargo init --name tmprs --bin .
+
+echo "✅ Rust project created in: $TEMP_DIR"
+echo ""
+echo "To use this project:"
+echo "  cd $TEMP_DIR"
+echo "  cargo run"
+
+# Optionally change to the directory (comment out if you don't want this)
+cd "$TEMP_DIR"
