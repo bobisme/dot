@@ -1,5 +1,6 @@
+# vim:ft=toml
 background-blur-radius = 20
-background-opacity = 0.9
+background-opacity = 1.0
 
 clipboard-trim-trailing-spaces = true
 clipboard-paste-protection = false
@@ -9,7 +10,7 @@ cursor-style = block
 
 # custom-shader = "./ghostty-shaders/bettercrt.glsl"
 
-font-family = "FantasqueSansM Nerd Font Mono"
+font-family = "FantasqueSansM Nerd Font Propo"
 font-size = 15
 font-thicken = true
 
