@@ -1,7 +1,7 @@
 [user]
 	name = Bob
 	email = bob@standardinput.co
-	signingkey = 75C36CB01EF1B1CF
+  signingkey = EDBA87EEE9CDD99F
 [alias]
 	backup = push dropbox --all --prune --follow-tags
   cb = checkout -b
@@ -16,6 +16,7 @@
 	lg = !git lg0
 	lz = !lazygit
 	omain = "!f(){ git branch --remotes | grep origin/HEAD | awk '{ print $3 }'; }; f"
+  patch1 = !git --no-pager show --patch
 	s = status --short --branch
   staged = diff --name-only --relative --cached
 	wat = "!f(){ local=$(git symbolic-ref --short -q HEAD); remote=$(git for-each-ref --format '%(upstream:short)' $(git symbolic-ref -q HEAD) 2>/dev/null); if [ \"$local\" ] && [ \"$remote\" ] && [ $(git rev-parse HEAD) = $(git rev-parse $(git for-each-ref --format '%(upstream:short)' $(git symbolic-ref -q HEAD) 2>/dev/null)) ]; then out=\"$local:$remote\"; elif [ \"$local\" ]; then out=$local; else out=$(git describe --tags --exact-match HEAD 2>/dev/null) || out=$(git for-each-ref --format '%(upstream:short)' $(git symbolic-ref -q HEAD) 2>/dev/null) || out=$(git rev-parse --short HEAD 2>/dev/null); fi; echo \"$out\" | awk '{$1=$1};1' | sed '/^$/d'; }; f"
