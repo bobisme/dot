@@ -11,7 +11,6 @@ $directory\
 $vcsh\
 $fossil_branch\
 $fossil_metrics\
-${custom.git_remote_branch}\
 $git_branch\
 $git_commit\
 $git_state\
@@ -101,10 +100,10 @@ symbol = '🅰  '
 truncation_length = 6
 truncate_to_repo = false
 
-[git_branch]
-always_show_remote = true
-format = 'on [$symbol$branch(:$remote_name/$remote_branch)]($style) '
-disabled = true
+# [git_branch]
+# always_show_remote = true
+# format = 'on [$symbol$branch(:$remote_name/$remote_branch)]($style) '
+# disabled = true
 
 [jobs]
 symbol = "✦jobs:"
@@ -114,12 +113,12 @@ symbol_threshold = 1
 [time]
 disabled = false
 
-[custom.git_remote_branch]
-command = 'git wat | tail -n1 | head -c32'
-symbol = ''
-format = "on [$symbol ($output )]($style)"
-when = true
-require_repo = true
-# detect_files = ['.git']
-style = 'bold green'
-disabled = false
+# [custom.git_remote_branch]
+# command = 'git wat | tail -n1 | head -c32'
+# symbol = ''
+# format = "on [$symbol ($output )]($style)"
+# when = true
+# require_repo = true
+# # detect_files = ['.git']
+# style = 'bold green'
+# disabled = false
