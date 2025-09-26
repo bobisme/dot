@@ -135,3 +135,4 @@ end
 
 # HOME bin, keep last
 set -x PATH $HOME/bin $HOME/.local/bin $PATH
+set -x GPG_TTY (tty)
