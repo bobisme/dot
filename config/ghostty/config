@@ -32,6 +32,6 @@ scrollback-limit = 100000000
 
 shell-integration = fish
 
-theme = catppuccin-mocha
+theme = Catppuccin Mocha
 
-window-decoration = true
+window-decoration = false
