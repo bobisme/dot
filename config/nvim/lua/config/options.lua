@@ -26,13 +26,7 @@ if vim.g.neovide then
   vim.g.neovide_scroll_animation_length = 0.3
 end
 
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-  border = "rounded",
-})
-
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.hover, {
-  border = "rounded",
-})
+vim.o.winborder = "rounded"
 
 -- No fancy animations
 vim.g.snacks_animate = false
