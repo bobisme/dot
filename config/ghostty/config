@@ -10,6 +10,7 @@ cursor-style = block
 cursor-invert-fg-bg = true
 
 # custom-shader = "./ghostty-shaders/bettercrt.glsl"
+custom-shader = "./cursor-warp.glsl"
 
 font-family = "FantasqueSansM Nerd Font Propo"
 font-size = 15
