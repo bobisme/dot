@@ -1,5 +1,5 @@
 configuration{
-    modi: "drun,run,window,calc:/usr/lib/rofi/libcalc.so";
+    modi: "drun,run,calc,filebrowser";
     icon-theme: "Oranchelo";
     show-icons: true;
     terminal: "ghostty";
@@ -9,13 +9,11 @@ configuration{
     hide-scrollbar: true;
     display-drun: "   Apps ";
     display-run: "   Run ";
-    display-window: " 󰕰  Window";
-    display-Network: " 󰤨  Network";
+    display-window: " 󰕰  Window ";
+    display-calc: " 󰃬  Calculate ";
+    display-Network: " 󰤨  Network ";
+    display-filebrowser: " 󰉋  Files ";
     sidebar-mode: true;
-    calc {
-        hint-result: "Res: ";
-        hint-welcome: "Calc";
-    }
 }
 
 @theme "catppuccin-mocha"
