@@ -21,8 +21,8 @@
     "custom/power_btn",
   ],
   "modules-right": [
-    "custom/lizzy",
-    "custom/gen_wallpaper",
+    // "custom/lizzy",
+    // "custom/gen_wallpaper",
     "temperature",
     "battery",
     "backlight",
@@ -62,15 +62,15 @@
     "on-click": "sh -c '(sleep 0.1s; swaylock)' & disown",
     "tooltip": false,
   },
-  "custom/gen_wallpaper": {
-    "escape": true,
-    "format": "{icon}",
-    "format-icons": {
-      "default": "󰐾",
-    },
-    "on-click": "gen-wallpaper",
-    "tooltip": false,
-  },
+  // "custom/gen_wallpaper": {
+  //   "escape": true,
+  //   "format": "{icon}",
+  //   "format-icons": {
+  //     "default": "󰐾",
+  //   },
+  //   "on-click": "gen-wallpaper",
+  //   "tooltip": false,
+  // },
   "custom/power_btn": {
     "format": "{icon}",
     "format-icons": {
@@ -83,7 +83,7 @@
     "interval": 10,
     "format": "  {usage}%",
     "max-length": 10,
-    "on-click": "kitty --title btop sh -c 'btop'",
+    "on-click": "ghostty --title=btop -e sh -c 'btop'",
   },
   "disk": {
     "interval": 30,
@@ -91,7 +91,7 @@
     "path": "/",
     "tooltip": true,
     "tooltip-format": "HDD - {used} used out of {total} on {path} ({percentage_used}%)",
-    "on-click": "kitty --title btop sh -c 'btop'",
+    "on-click": "ghostty --title=btop -e sh -c 'btop'",
   },
   "memory": {
     "interval": 30,
@@ -99,7 +99,7 @@
     "max-length": 10,
     "tooltip": true,
     "tooltip-format": "Memory - {used:0.1f}GB used",
-    "on-click": "kitty --title btop sh -c 'btop'",
+    "on-click": "ghostty --title=btop -e sh -c 'btop'",
   },
   // "custom/updates": {
   //   "format": "{}",
@@ -151,8 +151,8 @@
   },
   "clock": {
     "format": "{:%I:%M %p}",
-    "tooltip": true,
-    "tooltip-format": "{:  %A, %B %e %Y}",
+    // "tooltip": true,
+    // "tooltip-format": "{:  %A, %B %e %Y}",
   },
   "backlight": {
     "device": "intel_backlight",
@@ -192,16 +192,16 @@
       "default": [" ", " ", " "],
     },
   },
-  "custom/lizzy": {
-    "format": "{icon} {}",
-    "exec": "lizzy",
-    "return-type": "json",
-    "format-icons": {
-      "Playing": "󰐊",
-      "Paused": "󰏤",
-    },
-    "max-length": 45,
-  },
+  // "custom/lizzy": {
+  //   "format": "{icon} {}",
+  //   "exec": "lizzy",
+  //   "return-type": "json",
+  //   "format-icons": {
+  //     "Playing": "󰐊",
+  //     "Paused": "󰏤",
+  //   },
+  //   "max-length": 45,
+  // },
   "pulseaudio#microphone": {
     "format": "{format_source}",
     "format-source": " {volume}%",
@@ -217,6 +217,6 @@
     "format": " {temperatureF}°F",
     "critical-threshold": 70,
     "format-critical": " {temperatureC}°C",
-    "on-click": "kitty --title btop sh -c 'btop'",
+    "on-click": "ghostty --title=btop -e sh -c 'btop'",
   },
 }
