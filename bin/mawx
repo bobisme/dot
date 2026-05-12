@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# mawx - shorthand for maw exec <ws> -- <cmd>
+# Defaults to "default" workspace.
+
+set -euo pipefail
+
+ws=default
+if [[ "${1:-}" == "-w" || "${1:-}" == "--workspace" ]]; then
+  ws="${2:?mawx: --workspace requires a value}"
+  shift 2
+fi
+
+if [[ $# -eq 0 ]]; then
+  echo "usage: mawx [-w|--workspace <ws>] <cmd> [args...]" >&2
+  exit 1
+fi
+
+exec maw exec "$ws" -- "$@"
