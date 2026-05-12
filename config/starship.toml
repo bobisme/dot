@@ -100,6 +100,9 @@ symbol = '🅰  '
 truncation_length = 6
 truncate_to_repo = false
 
+[gcloud]
+disabled = true
+
 # [git_branch]
 # always_show_remote = true
 # format = 'on [$symbol$branch(:$remote_name/$remote_branch)]($style) '
@@ -112,6 +115,11 @@ symbol_threshold = 1
 
 [time]
 disabled = false
+
+[custom.maw_status]
+command = "maw status --status-bar"
+when = "ls -1 .manifold >/dev/null 2>&1"
+format = "$output "
 
 # [custom.git_remote_branch]
 # command = 'git wat | tail -n1 | head -c32'
