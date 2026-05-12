@@ -1,7 +1,14 @@
+function fish_greeting
+end
+
 if type -q xdg-open
     abbr -a o xdg-open
 else if type -q open
     abbr -a o open
+end
+
+if type -q nsxiv
+    abbr -a n nsxiv
 end
 
 if test -e /opt/homebrew/bin
@@ -14,6 +21,14 @@ else if type -q vim
     set -x EDITOR vim
 else if type -q vi
     set -x EDITOR vi
+end
+
+if type -q sbcl
+    if type -q rlwrap
+        alias lisp="rlwrap sbcl --noinform"
+    else
+        alias lisp="sbcl --noinform"
+    end
 end
 
 alias e=$EDITOR
@@ -36,16 +51,8 @@ if type -q rg
     set -x RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/ripgreprc
 end
 
-if type -q timew
-    abbr -a t timew
-end
-
 if type -q zoxide
     zoxide init fish | source
-end
-
-if type -q joshuto
-    abbr -a j joshuto
 end
 
 if type -q direnv
@@ -56,12 +63,49 @@ if type -q mise
     mise activate fish | source
 end
 
-if type -q kitten
-    abbr -a icat "kitten icat"
+if type -q chief
+    chief completions fish | source
 end
 
-if type -q podman
-    abbr -a pm podman
+if type -q bn
+    bn completions fish | source
+end
+
+if type -q maw
+    maw completions fish | source
+end
+
+if type -q otel-tui
+    alias otel 'otel-tui --from-json-file ~/.local/share/otelcol/traces.jsonl --disable-internal-metrics --http 0'
+end
+
+abbr -a icat "kitten icat"
+abbr -a pm podman
+abbr -a t timew
+abbr -a y yazi
+abbr -a yay paru
+
+# claude code alias
+if type -q claude
+    function claude_abbr
+        echo AGENT=(basename $PWD)-dev claude --dangerously-skip-permissions
+    end
+    abbr -a cl --function claude_abbr
+end
+
+# opencode alias
+if type -q opencode
+    function opencode_abbr
+        echo AGENT=(basename $PWD)-dev opencode
+    end
+    abbr -a oc --function opencode_abbr
+end
+
+if type -q codex
+    function codex_abbr
+        echo AGENT=(basename $PWD)-dev codex --yolo
+    end
+    abbr -a co --function codex_abbr
 end
 
 # bun
@@ -136,3 +180,8 @@ end
 # HOME bin, keep last
 set -x PATH $HOME/bin $HOME/.local/bin $PATH
 set -x GPG_TTY (tty)
+
+# peon-ping quick controls
+function peon
+    bash /home/bob/.claude/hooks/peon-ping/peon.sh $argv
+end

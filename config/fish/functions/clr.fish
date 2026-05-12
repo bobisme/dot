@@ -1,6 +1,6 @@
 function clr --description 'Fuzzy-pick a Claude Code session for $PWD and prefill `claude --resume <id>`'
     set -l cwd (pwd -P)
-    set -l encoded (string replace -a / - -- $cwd)
+    set -l encoded (string replace -ra '[/.]' - -- $cwd)
     set -l project_dir $HOME/.claude/projects/$encoded
 
     if not test -d $project_dir
