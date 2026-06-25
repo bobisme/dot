@@ -117,8 +117,9 @@ symbol_threshold = 1
 disabled = false
 
 [custom.maw_status]
+shell = ["sh"]
 command = "maw status --status-bar"
-when = "ls -1 .manifold >/dev/null 2>&1"
+when = "test -e .maw -o -e .manifold"
 format = "$output "
 
 # [custom.git_remote_branch]
